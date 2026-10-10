@@ -42,10 +42,11 @@ export async function register(input: { fullName: string; email: string; passwor
 
   const passwordHash = await hashPassword(input.password);
   const emailVerified = env.AUTO_VERIFY_EMAIL;
+  const consentAt = new Date();
   if (existing) {
     await prisma.user.update({
       where: { id: existing.id },
-      data: { fullName: input.fullName, passwordHash, emailVerified },
+      data: { fullName: input.fullName, passwordHash, emailVerified, consentAt },
     });
   } else {
     await prisma.user.create({
@@ -56,6 +57,7 @@ export async function register(input: { fullName: string; email: string; passwor
         handle: await uniqueHandle(input.fullName),
         role,
         emailVerified,
+        consentAt,
       },
     });
   }

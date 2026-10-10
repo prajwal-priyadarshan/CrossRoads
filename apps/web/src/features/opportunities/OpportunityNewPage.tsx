@@ -106,7 +106,7 @@ export function OpportunityNewPage() {
             id="o-title"
             value={title}
             maxLength={200}
-            placeholder="e.g. Summer research internship at the AI lab"
+            placeholder="e.g. Summer research internship at the ML lab"
             onChange={(e) => setTitle(e.target.value)}
             aria-invalid={!!errors.title}
           />

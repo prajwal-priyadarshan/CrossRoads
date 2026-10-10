@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { ArrowRight, BookOpen, BrainCircuit, CheckCircle2, ChevronRight, Clock, Code2, Plus, Target, Trash2, Users } from 'lucide-react';
+import { ArrowRight, BookOpen, Calculator, CheckCircle2, ChevronRight, Clock, Code2, Plus, Target, Trash2, Users } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,7 +19,7 @@ import {
 
 const CATEGORY_ICON: Record<string, React.ComponentType<{ className?: string }>> = {
   OA: Code2,
-  APTITUDE: BrainCircuit,
+  APTITUDE: Calculator,
   TECHNICAL: BookOpen,
   HR: Users,
 };

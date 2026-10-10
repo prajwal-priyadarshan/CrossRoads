@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
-import { Sparkles } from 'lucide-react';
+import { Compass } from 'lucide-react';
 import type { ClubSummary } from '@crossroads/shared';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { PageHeader } from '@/components/layout/PageHeader';
@@ -101,7 +101,7 @@ export function ClubsPage() {
           ))}
         </div>
       ) : !data?.length ? (
-        <EmptyState icon={Sparkles} title="No clubs in this category yet" />
+        <EmptyState icon={Compass} title="No clubs in this category yet" />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {data.map((c) => (

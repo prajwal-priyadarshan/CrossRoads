@@ -20,9 +20,13 @@ const createdReportIds: string[] = [];
 /** Removes everything the smoke run created, including points and notifications it caused. */
 const createdMessageIds: string[] = [];
 const createdSimIds: string[] = [];
+const createdReceipts: string[] = [];
+const createdOfficialPostIds: string[] = [];
 
 async function cleanup() {
   if (createdSimIds.length) await prisma.simSession.deleteMany({ where: { id: { in: createdSimIds } } });
+  if (createdReceipts.length) await prisma.donation.deleteMany({ where: { receipt: { in: createdReceipts } } });
+  if (createdOfficialPostIds.length) await prisma.post.deleteMany({ where: { id: { in: createdOfficialPostIds } } });
   if (createdMessageIds.length) {
     // Remove the smoke messages, then point each thread's preview back at its newest real message
     const touched = await prisma.message.findMany({ where: { id: { in: createdMessageIds } }, select: { conversationId: true } });
@@ -143,7 +147,7 @@ async function main() {
   });
   await check('auth: non-college email follows ALUMNI_OPEN_SIGNUP', async () => {
     const cfg = (await anon.get('/config')).body.data;
-    const r = await anon.post('/auth/register', { fullName: 'Test', email: 'smoke-alumni@gmail.com', password: 'secret123' });
+    const r = await anon.post('/auth/register', { fullName: 'Test', email: 'smoke-alumni@gmail.com', password: 'secret123', consent: true });
     if (cfg.alumniOpenSignup) {
       // Personal emails register as ALUMNI; remove the throwaway account afterwards
       expectStatus(r, 201);
@@ -446,6 +450,74 @@ async function main() {
     const r = expectStatus(await ananya.post('/ai/answer', { title: 'How should a first year start DSA?' }), 200) as any;
     if (!['ok', 'fallback', 'no_sources'].includes(r.status)) throw new Error(`status ${r.status}`);
     return `status ${r.status}, ${r.sources?.length ?? 0} sources`;
+  });
+  await check('events: upcoming list shows seats and RSVP state', async () => {
+    const events = expectStatus(await ananya.get('/events'), 200) as any[];
+    if (!events.every((e) => typeof e.rsvpCount === 'number' && 'mine' in e)) throw new Error('bad event shape');
+    return `${events.length} events`;
+  });
+  await check('events: RSVP and cancel, with a ticket code', async () => {
+    const events = expectStatus(await ananya.get('/events'), 200) as any[];
+    const target = events.find((e) => !e.mine && (e.seatsLeft === null || e.seatsLeft > 0));
+    if (!target) return 'no open event to RSVP to';
+    const rsvp = expectStatus(await ananya.post(`/events/${target.id}/rsvp`), 201) as any;
+    if (!rsvp.mine || !rsvp.myCode) throw new Error('RSVP did not issue a ticket');
+    const tickets = expectStatus(await ananya.get('/me/tickets'), 200) as any[];
+    if (!tickets.some((t) => t.id === target.id)) throw new Error('ticket not listed');
+    const cancelled = expectStatus(await ananya.req('DELETE', `/events/${target.id}/rsvp`), 200) as any;
+    if (cancelled.mine) throw new Error('cancel did not remove the RSVP');
+    return 'RSVP, ticket, cancel';
+  });
+  await check('giving: campaigns, detail and a test-mode donation', async () => {
+    const list = expectStatus(await ananya.get('/giving/campaigns'), 200) as any[];
+    if (!list.length) throw new Error('no campaigns');
+    const detail = expectStatus(await ananya.get(`/giving/campaigns/${list[0].slug}`), 200) as any;
+    if (!detail.story) throw new Error('no story');
+    const receipt = expectStatus(await ananya.post(`/giving/campaigns/${list[0].slug}/donate`, { amountRupees: 100, anonymous: false, message: 'smoke' }), 201) as any;
+    if (!receipt.testMode || !receipt.receipt) throw new Error('donation not recorded in test mode');
+    createdReceipts.push(receipt.receipt);
+    return `receipt ${receipt.receipt}`;
+  });
+  await check('giving: a donation under the minimum is rejected', async () => {
+    const list = expectStatus(await ananya.get('/giving/campaigns'), 200) as any[];
+    expectStatus(await ananya.post(`/giving/campaigns/${list[0].slug}/donate`, { amountRupees: 1 }), 400);
+  });
+  await check('admin: institution analytics, and students are refused', async () => {
+    const admin = await login('admin');
+    const a = expectStatus(await admin.get('/admin/analytics'), 200) as any;
+    if (typeof a.totals.users !== 'number') throw new Error('no totals');
+    expectStatus(await ananya.get('/admin/analytics'), 403);
+    return `${a.totals.users} users, ${a.totals.active30d} active`;
+  });
+  await check('admin: official post is published with its office', async () => {
+    const admin = await login('admin');
+    const created = expectStatus(await admin.post('/admin/official-posts', { title: 'Smoke official notice', body: 'Test body for an office post.', officeName: 'Smoke Office' }), 201) as any;
+    createdOfficialPostIds.push(created.id);
+    const row = await prisma.post.findUnique({ where: { id: created.id }, select: { officeName: true } });
+    if (row?.officeName !== 'Smoke Office') throw new Error('office not saved');
+    expectStatus(await ananya.post('/admin/official-posts', { title: 'Smoke official notice', body: 'x', officeName: 'Nope' }), 403);
+    return 'published; students refused';
+  });
+  await check('account: data export contains no password hash', async () => {
+    const r = await ananya.get('/me/export');
+    expectStatus(r, 200);
+    if (JSON.stringify(r.body).includes('passwordHash')) throw new Error('export leaks the password hash');
+    if (!r.body.data?.profile) throw new Error('no profile in export');
+    return 'profile, posts, messages, tickets, donations';
+  });
+  await check('account: deletion needs the right password', async () => {
+    const throwaway = new Client();
+    const handle = `smoke${Date.now().toString(36)}`;
+    expectStatus(await throwaway.post('/auth/register', { fullName: 'Smoke Delete', email: `${handle}@gmail.com`, password: 'secret123', consent: true }), 201);
+    await prisma.user.update({ where: { email: `${handle}@gmail.com` }, data: { emailVerified: true, onboarded: true } });
+    expectStatus(await throwaway.post('/auth/login', { email: `${handle}@gmail.com`, password: 'secret123' }), 200);
+    expectStatus(await throwaway.req('DELETE', '/me', { password: 'wrong-password' }), 401);
+    expectStatus(await throwaway.req('DELETE', '/me', { password: 'secret123' }), 200);
+    if (await prisma.user.findUnique({ where: { email: `${handle}@gmail.com` } })) throw new Error('account still exists');
+    return 'wrong password refused, account removed';
+  });
+  await check('auth: sign-up without the data notice is refused', async () => {
+    expectStatus(await new Client().post('/auth/register', { fullName: 'No Consent', email: 'noconsent@gmail.com', password: 'secret123' }), 400);
   });
   await check('auth: logout clears the session', async () => {
     const c = await login('meera');

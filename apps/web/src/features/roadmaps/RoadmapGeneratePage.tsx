@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Check, Code2, Database, Lightbulb, Palette, Sparkles } from 'lucide-react';
+import { Check, Code2, Database, Lightbulb, Palette, Layers } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -15,7 +15,7 @@ const GOAL_TRACKS = [
   { value: 'DATA_SCIENCE', label: 'Data Science', icon: Database },
   { value: 'PRODUCT', label: 'Product', icon: Lightbulb },
   { value: 'DESIGN', label: 'Design', icon: Palette },
-  { value: 'OTHER', label: 'Other', icon: Sparkles },
+  { value: 'OTHER', label: 'Other', icon: Layers },
 ] as const;
 
 const TARGET_ROLES = ['SDE', 'SDE-2', 'Data Analyst', 'Data Scientist', 'ML Engineer', 'Product Manager', 'UX Designer', 'DevOps', 'Backend Engineer', 'Frontend Engineer'];

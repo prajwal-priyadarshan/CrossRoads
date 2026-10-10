@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Loader2, Sparkles } from 'lucide-react';
+import { Loader2, Lightbulb } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { api } from '@/lib/api';
@@ -46,7 +46,7 @@ export function AiSummaryCard({ postId, companySlug, companyName }: { postId?: s
           <CardTitle className="flex items-center gap-2 text-sm">
             {data.status === 'ok' ? (
               <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700 dark:bg-slate-950 dark:text-slate-300">
-                <Sparkles className="size-3" /> AI summary
+                <Lightbulb className="size-3" /> Summary
               </span>
             ) : (
               <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
@@ -79,7 +79,7 @@ export function AiSummaryCard({ postId, companySlug, companyName }: { postId?: s
         onClick={() => { setExpanded(true); threadMut.mutate(); }}
         className="inline-flex items-center gap-1.5 self-start rounded-full border border-primary/30 bg-primary-soft px-3 py-1.5 text-sm font-medium text-primary transition hover:border-primary/50"
       >
-        <Sparkles className="size-3.5" /> Summarise this discussion
+        <Lightbulb className="size-3.5" /> Summarise this discussion
       </button>
     );
   }
@@ -88,7 +88,7 @@ export function AiSummaryCard({ postId, companySlug, companyName }: { postId?: s
     <Card>
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center gap-2 text-sm">
-          <Sparkles className="size-4 text-primary" /> Discussion summary
+          <Lightbulb className="size-4 text-primary" /> Discussion summary
         </CardTitle>
       </CardHeader>
       <CardContent>

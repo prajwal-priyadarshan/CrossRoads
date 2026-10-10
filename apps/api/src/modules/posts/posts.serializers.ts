@@ -28,6 +28,7 @@ export function toPostCard(p: PostRow, state: ViewerState): PostCard {
     commentCount: p.commentCount,
     hasBestAnswer: p.bestAnswerId !== null,
     hasSeniorAnswer: state.seniorAnswered?.has(p.id) ?? false,
+    officeName: p.officeName,
     opportunityType: p.opportunityType,
     organization: p.organization,
     deadline: p.deadline ? p.deadline.toISOString() : null,

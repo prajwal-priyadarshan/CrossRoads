@@ -40,6 +40,9 @@ const schema = z.object({
   AI_MAX_TOKENS: z.coerce.number().int().positive().default(4_000),
   AI_TIMEOUT_MS: z.coerce.number().default(60_000),
 
+  // Project guide (RAG chatbot): folder of the project's own docs, relative to apps/api. README.md sits one level above it.
+  PROJECT_DOCS_DIR: z.string().default('../../docs'),
+
   // Academic calendar: month (1-12) the odd semester starts, used to compute a student's current semester
   ACADEMIC_YEAR_START_MONTH: z.coerce.number().int().min(1).max(12).default(7),
 

@@ -12,6 +12,8 @@ export const registerSchema = z.object({
   fullName: z.string().trim().min(2, 'Enter your name').max(60),
   email: emailSchema,
   password: passwordSchema,
+  // The data notice must be accepted before an account is created
+  consent: z.literal(true, { errorMap: () => ({ message: 'Please accept the data notice to continue' }) }),
 });
 export const verifySchema = z.object({
   email: emailSchema,

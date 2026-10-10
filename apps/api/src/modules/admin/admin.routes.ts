@@ -6,11 +6,21 @@ import {
   eventUpsertSchema, companyUpsertSchema, clubUpsertSchema, storyUpsertSchema
 } from '@crossroads/shared';
 import * as service from './admin.service';
+import { institutionAnalytics, createOfficialPost } from './analytics';
+import { officialPostSchema } from '@crossroads/shared';
 
 export const adminRouter = Router();
 
 // Secure all admin routes
 adminRouter.use(requireAuth, requireRole('ADMIN'));
+
+// Institution overview and official posts (phase 12)
+adminRouter.get('/analytics', async (_req, res, next) => {
+  try { res.json({ data: await institutionAnalytics() }); } catch (err) { next(err); }
+});
+adminRouter.post('/official-posts', validate({ body: officialPostSchema }), async (req, res, next) => {
+  try { res.status(201).json({ data: await createOfficialPost(req.user!.id, req.valid.body) }); } catch (err) { next(err); }
+});
 
 // Reports
 adminRouter.get('/reports', async (req, res, next) => {

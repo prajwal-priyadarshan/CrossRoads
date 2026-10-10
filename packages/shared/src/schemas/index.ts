@@ -18,3 +18,5 @@ export * from './prep';
 export * from './sim';
 export * from './notifications';
 export * from './chat';
+export * from './engagement';
+export * from './guide';

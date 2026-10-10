@@ -1,6 +1,6 @@
 export const TOPICS = [
   { slug: 'dsa-leetcode', name: 'DSA and LeetCode', icon: 'binary', description: 'Problem solving, patterns, contests and practice plans.', relatedInterests: ['competitive programming'] },
-  { slug: 'ai-ml', name: 'AI/ML and Generative AI', icon: 'brain-circuit', description: 'Machine learning, deep learning, LLMs and projects.', relatedInterests: ['ai/ml', 'data science', 'research'] },
+  { slug: 'ai-ml', name: 'Machine learning and data', icon: 'flask-conical', description: 'Machine learning, deep learning, language models and projects.', relatedInterests: ['ai/ml', 'data science', 'research'] },
   { slug: 'placements', name: 'Placements and Interview Experiences', icon: 'briefcase', description: 'Company processes, rounds and preparation.', relatedInterests: ['product management', 'quant/finance', 'higher studies'] },
   { slug: 'internships', name: 'Internships and Referrals', icon: 'send', description: 'Finding internships, applying and referrals.', relatedInterests: ['startups', 'cloud and devops', 'cybersecurity'] },
   { slug: 'hackathons-projects', name: 'Hackathons and Projects', icon: 'rocket', description: 'Teams, ideas, builds and showcases.', relatedInterests: ['web development', 'app development', 'open source', 'robotics', 'design'] },
@@ -90,7 +90,7 @@ export const BADGES = [
   { slug: 'roadmap-author', name: 'Roadmap Author', icon: 'map', description: 'Published a career roadmap', howToEarn: 'Publish a roadmap' },
   { slug: 'mentor', name: 'Mentor', icon: 'hand-heart', description: 'Completed a mentorship session', howToEarn: 'Complete a mentorship session' },
   { slug: 'bridge-builder', name: 'Bridge Builder', icon: 'waypoints', description: '10 accepted connections', howToEarn: 'Have 10 accepted connections' },
-  { slug: 'spotlight', name: 'Spotlight', icon: 'sparkles', description: 'Featured in a success story', howToEarn: 'Be featured in a success story' },
+  { slug: 'spotlight', name: 'Spotlight', icon: 'star', description: 'Featured in a success story', howToEarn: 'Be featured in a success story' },
 ] as const;
 
 export const PREP_CATEGORIES = [

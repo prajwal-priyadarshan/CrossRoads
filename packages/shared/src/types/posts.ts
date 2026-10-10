@@ -26,6 +26,8 @@ export type PostCard = {
   commentCount: number;
   hasBestAnswer: boolean;
   hasSeniorAnswer: boolean;
+  /** Set for official posts from a college office, e.g. 'Placement Cell' */
+  officeName: string | null;
   opportunityType: OpportunityType | null;
   organization: string | null;
   deadline: string | null;

@@ -169,6 +169,12 @@ enum SimStatus {
   FINISHED
 }
 
+enum CampaignCategory {
+  INFRASTRUCTURE
+  RESEARCH
+  SCHOLARSHIPS
+}
+
 enum CodePurpose {
   VERIFY_EMAIL
 }
@@ -257,6 +263,8 @@ model User {
   storiesFeatured   Story[]            @relation("StoryFeatured")
   prepItems         PrepItem[]
   simSessions       SimSession[]
+  eventRsvps        EventRsvp[]
+  donations         Donation[]
   eventsCreated     Event[]
   conversationsAsA  Conversation[]     @relation("ConversationUserA")
   conversationsAsB  Conversation[]     @relation("ConversationUserB")
@@ -303,6 +311,7 @@ model Post {
   externalUrl     String?
   score           Int              @default(0)
   commentCount    Int              @default(0)
+  officeName      String?
   bestAnswerId    String?          @unique
   isRemoved       Boolean          @default(false)
   createdAt       DateTime         @default(now())
@@ -553,7 +562,11 @@ model Event {
   createdById   String?
   createdAt     DateTime      @default(now())
 
-  createdBy User? @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdBy  User?       @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  capacity   Int?
+  pricePaise Int         @default(0)
+  region     String?
+  rsvps      EventRsvp[]
 
   @@index([startsAt])
 }
@@ -752,4 +765,51 @@ model Message {
   sender       User         @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
 
   @@index([conversationId, createdAt(sort: Desc)])
+}
+
+/// One seat for one person at an event. Paid events also get a ticket code (test mode: no money moves).
+model EventRsvp {
+  id        String   @id @default(uuid())
+  eventId   String
+  userId    String
+  code      String   @unique
+  paidPaise Int      @default(0)
+  createdAt DateTime @default(now())
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([eventId, userId])
+}
+
+/// A fundraising campaign for infrastructure, research or scholarships.
+model Campaign {
+  id        String           @id @default(uuid())
+  slug      String           @unique
+  title     String
+  story     String
+  category  CampaignCategory
+  goalPaise Int
+  endsAt    DateTime?
+  createdAt DateTime         @default(now())
+
+  donations Donation[]
+}
+
+/// A donation. `testMode` stays true until the college's payment gateway is connected.
+model Donation {
+  id          String   @id @default(uuid())
+  campaignId  String
+  userId      String?
+  amountPaise Int
+  anonymous   Boolean  @default(false)
+  message     String   @default("")
+  receipt     String   @unique
+  testMode    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  campaign Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  user     User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([campaignId])
 }

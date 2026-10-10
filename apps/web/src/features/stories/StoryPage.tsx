@@ -1,5 +1,5 @@
 import { useParams } from 'react-router';
-import { Sparkles } from 'lucide-react';
+import { Star } from 'lucide-react';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { ProfileSkeleton } from '@/components/shared/Skeletons';
 import { RelativeTime } from '@/components/shared/RelativeTime';
@@ -28,7 +28,7 @@ export function StoryPage() {
       <div className="flex flex-wrap items-center gap-3">
         {story.isSpotlight && (
           <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-950 dark:text-amber-300">
-            <Sparkles className="size-3" /> Spotlight
+            <Star className="size-3" /> Spotlight
           </span>
         )}
         {story.featuredUser && (

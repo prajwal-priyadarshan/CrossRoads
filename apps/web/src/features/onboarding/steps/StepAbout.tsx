@@ -1,7 +1,7 @@
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { z } from 'zod';
-import { Check, GraduationCap, Sprout, Sparkles, Trophy, Briefcase } from 'lucide-react';
+import { Check, GraduationCap, Sprout, Layers, Trophy, Briefcase } from 'lucide-react';
 import { DEPARTMENTS, stepAboutSchema } from '@crossroads/shared';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -15,7 +15,7 @@ type Out = z.output<typeof stepAboutSchema>;
 
 const STATUSES = [
   { value: 'FIRST_YEAR', label: 'First year', icon: Sprout },
-  { value: 'SECOND_YEAR', label: 'Second year', icon: Sparkles },
+  { value: 'SECOND_YEAR', label: 'Second year', icon: Layers },
   { value: 'THIRD_YEAR', label: 'Third year', icon: Trophy },
   { value: 'FINAL_YEAR', label: 'Final year', icon: GraduationCap },
   { value: 'ALUMNI', label: 'Alumni', icon: Briefcase },

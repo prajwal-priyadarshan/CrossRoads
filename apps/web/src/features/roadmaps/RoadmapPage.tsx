@@ -55,7 +55,7 @@ export function RoadmapPage() {
           <span className="rounded-full bg-primary-soft px-2.5 py-0.5 text-xs font-medium text-primary">{GOAL_LABEL[r.goalTrack]}</span>
           {r.isAi && (
             <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-950 dark:text-amber-300">
-              AI · personal
+              Personal plan
             </span>
           )}
         </div>
@@ -64,7 +64,7 @@ export function RoadmapPage() {
         {r.isAi && (
           <div className="flex flex-wrap items-center gap-2 pt-1">
             <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-950 dark:text-amber-300">
-              AI · built from alumni roadmaps and experiences
+              Built from alumni roadmaps and experiences
             </span>
           </div>
         )}

@@ -12,7 +12,7 @@ export const clubs = [
   },
   {
     slug: 'ai-collective',
-    name: 'AI Collective',
+    name: 'ML Collective',
     category: 'TECH',
     description: 'Reading groups, Kaggle teams and applied ML projects. (Demo data)',
     timeCommitment: '4–6 h/week',

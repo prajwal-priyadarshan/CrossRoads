@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
-import { BrainCircuit, Code2, Cpu, MessageSquare, Users } from 'lucide-react';
+import { Calculator, Code2, Cpu, MessageSquare, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { api } from '@/lib/api';
@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
 import { useStartSimulator } from './api';
 
 const ROUND_TYPES = [
-  { value: 'APTITUDE', label: 'Aptitude', icon: BrainCircuit, desc: 'Quantitative & logical reasoning' },
+  { value: 'APTITUDE', label: 'Aptitude', icon: Calculator, desc: 'Quantitative & logical reasoning' },
   { value: 'CODING', label: 'Coding (approach)', icon: Code2, desc: 'DSA and problem-solving approach' },
   { value: 'CS_FUNDAMENTALS', label: 'CS fundamentals', icon: Cpu, desc: 'OS, DBMS, networks, OOP' },
   { value: 'TECHNICAL', label: 'Technical interview', icon: MessageSquare, desc: 'System design and deep dives' },

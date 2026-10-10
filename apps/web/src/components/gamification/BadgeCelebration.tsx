@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Sparkles } from 'lucide-react';
+import { Award } from 'lucide-react';
 import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
 import type { NotificationItem } from '@crossroads/shared';
@@ -26,7 +26,7 @@ export function BadgeCelebration() {
       celebrated.current.add(n.id);
       toast(n.title, {
         description: n.body,
-        icon: <Sparkles className="size-4 text-amber-500" />,
+        icon: <Award className="size-4 text-amber-500" />,
         duration: 6000,
       });
       markRead.mutate({ ids: [n.id] });

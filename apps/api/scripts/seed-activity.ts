@@ -38,6 +38,9 @@ async function clearPrevious() {
   await prisma.bookmark.deleteMany({ where: { userId: { in: demoIds } } });
   await prisma.post.deleteMany({ where: { authorId: { in: demoIds } } });
   await prisma.conversation.deleteMany({ where: { OR: [{ userAId: { in: demoIds } }, { userBId: { in: demoIds } }] } });
+  await prisma.donation.deleteMany({ where: { OR: [{ userId: { in: demoIds } }, { campaign: { slug: { startsWith: 'demo-' } } }] } });
+  await prisma.campaign.deleteMany({ where: { slug: { startsWith: 'demo-' } } });
+  await prisma.event.deleteMany({ where: { title: { startsWith: 'Demo: ' } } });
 }
 
 async function main() {
@@ -48,6 +51,8 @@ async function main() {
       ['ananya', 'priya', 'vikram', 'arjun', 'dev', 'karthik', 'aditya', 'shreya', 'rahul', 'manoj', 'sneha', 'meera', 'suresh', 'anitha', 'admin'].map(user),
     );
 
+  // Story authors who are not in the main group above
+  const [deepa, imran, vishal] = await Promise.all(['deepa', 'imran', 'vishal'].map((h) => user(h)));
   const dsa = await topicId(/dsa|leetcode/);
   const placements = await topicId(/placement|interview/);
   const campus = await topicId(/campus/);
@@ -193,7 +198,7 @@ async function main() {
   // ── Stories (published, one spotlight) ──
   await prisma.story.create({
     data: {
-      slug: 'demo-from-campus-to-ml-engineer', title: 'From a first-year question to an ML offer', excerpt: 'How one question on Crossroads led to a mentor, a project and an internship.',
+      slug: 'demo-from-campus-to-ml-engineer', title: 'From a first-year question to an ML offer', excerpt: 'How one question on this platform led to a mentor, a project and an internship.',
       body: 'Meera answered my first question in week two. Six months later we had built a small recommendation prototype together and I had a referral to Northwind Labs. The advice was simple: finish one project before starting five.',
       tags: ['ml', 'mentorship'], authorId: meera.id, featuredUserId: ananya.id, isSpotlight: true,
       status: 'PUBLISHED', publishedAt: daysAgo(5),
@@ -206,6 +211,39 @@ async function main() {
       tags: ['placements'], authorId: shreya.id, status: 'PUBLISHED', publishedAt: daysAgo(12),
     },
   });
+
+  // ── More success stories: varied voices, goals and tags for the stories page ──
+  const moreStories = [
+    {
+      slug: 'demo-from-service-to-product-sde', title: 'From a service company offer to a product role', excerpt: 'Two years of DSA, one referral and a lot of mock interviews.',
+      body: 'I joined a service company in my final year and nearly stopped there. What changed was a plan from a senior who had made the same jump.\n\nWe spent three months on arrays, graphs and dynamic programming, with one timed set every weekend. Mock interviews with two alumni showed me where I explained badly, not where I was weak.\n\nThe referral came from a mentee I had helped with a project. Preparation is slow, but it compounds.',
+      tags: ['placements', 'dsa'], author: karthik, featured: aditya, spotlight: false, daysOld: 20,
+    },
+    {
+      slug: 'demo-building-a-campus-startup', title: 'Building a campus startup before graduating', excerpt: 'A tutoring app, three pilot classes and the first thing I would change.',
+      body: 'LearnLoop began as a notes-sharing sheet. Within a semester, forty students were using it for weekly tutoring.\n\nThe hardest part was not the product. It was finding a co-founder who wanted to ship every week, not every term. Being in a campus community made that search possible.\n\nIf I started again, I would validate with ten users before writing any code.',
+      tags: ['startups', 'mentorship'], author: anitha, featured: null, spotlight: false, daysOld: 35,
+    },
+    {
+      slug: 'demo-research-year-to-ms-offer', title: 'A research year that led to an MS offer', excerpt: 'How one professor, one reading group and a small paper opened the door.',
+      body: 'I was unsure whether an MS was worth it. A second-year research project with a professor in the signal processing lab answered that question for me.\n\nI read one paper a week with a reading group, then reproduced a result. The reproduction became a short workshop paper.\n\nThe statement of purpose was easier to write once I had something concrete to point to.',
+      tags: ['higher studies', 'research'], author: deepa, featured: imran, spotlight: false, daysOld: 50,
+    },
+    {
+      slug: 'demo-first-internship-in-finance', title: 'My first internship in quant finance', excerpt: 'Maths was the easy part. Explaining my thinking out loud was the skill I had to build.',
+      body: 'The quant interviews focused on probability and on how I reasoned, not only on the answer. I practised by explaining my steps to a friend before writing anything down.\n\nThe internship taught me to write clean code under pressure and to ask questions early.\n\nIf you are preparing now, start with the explanation habit. It matters more than another hundred problems.',
+      tags: ['quant', 'internships'], author: vishal, featured: null, spotlight: false, daysOld: 65,
+    },
+  ];
+  for (const st of moreStories) {
+    if (!st.author) continue;
+    await prisma.story.create({
+      data: {
+        slug: st.slug, title: st.title, excerpt: st.excerpt, body: st.body, tags: st.tags, authorId: st.author.id,
+        featuredUserId: st.featured?.id ?? null, isSpotlight: st.spotlight, status: 'PUBLISHED', publishedAt: daysAgo(st.daysOld),
+      },
+    });
+  }
 
   // ── Mentorship and connection requests (feeds the alumni dashboard) ──
   const connections = [
@@ -268,6 +306,53 @@ async function main() {
     }
   }
 
+  // ── Events with seats and prices (phase 11) and giving campaigns ──
+  const events = [
+    { title: 'Demo: Chapter meet, Bengaluru', description: 'Alumni in Bengaluru meet over dinner. Ask about careers, cities and companies.', category: 'CHAPTER_MEET', days: 9, region: 'Bengaluru', capacity: 40, pricePaise: 0, location: 'Alumni hall, Bengaluru' },
+    { title: 'Demo: Reunion weekend 2021 batch', description: 'Five years on. Bring your projects and your stories.', category: 'REUNION', days: 24, region: 'Campus', capacity: 120, pricePaise: 50000, location: 'Main auditorium' },
+    { title: 'Demo: Webinar on product-company interviews', description: 'A senior engineer walks through a real interview loop.', category: 'WEBINAR', days: 4, region: 'Online', capacity: null, pricePaise: 0, link: 'https://example.com/webinar' },
+  ];
+  for (const e of events) {
+    const row = await prisma.event.create({
+      data: {
+        title: e.title, description: e.description, category: e.category as any, startsAt: daysAhead(e.days),
+        endsAt: new Date(daysAhead(e.days).getTime() + 2 * 3600_000), region: e.region, capacity: e.capacity,
+        pricePaise: e.pricePaise, location: (e as any).location ?? null, link: (e as any).link ?? null, createdById: admin.id,
+      },
+    });
+    if (e.title.startsWith('Demo: Chapter')) {
+      for (const who of [ananya, priya, arjun]) {
+        await prisma.eventRsvp.create({ data: { eventId: row.id, userId: who.id, code: `DEMO${who.handle.slice(0, 4).toUpperCase()}${row.id.slice(0, 4).toUpperCase()}`, paidPaise: 0 } });
+      }
+    }
+  }
+  const campaigns = [
+    { slug: 'demo-library-upgrade', title: 'Upgrade the library reading rooms', category: 'INFRASTRUCTURE', goalPaise: 2500000_00, story: 'New desks, better lighting and a quiet room for exam season.', endsIn: 60 },
+    { slug: 'demo-research-fellowships', title: 'Undergraduate research fellowships', category: 'RESEARCH', goalPaise: 1000000_00, story: 'Stipends for students who want to spend a summer on a research project with a professor.', endsIn: 90 },
+    { slug: 'demo-first-gen-scholarships', title: 'Scholarships for first-generation students', category: 'SCHOLARSHIPS', goalPaise: 500000_00, story: 'Tuition support for students who are the first in their family to attend college.', endsIn: 45 },
+  ];
+  for (const c of campaigns) {
+    const campaign = await prisma.campaign.create({
+      data: { slug: c.slug, title: c.title, category: c.category as any, goalPaise: c.goalPaise, story: c.story, endsAt: daysAhead(c.endsIn) },
+    });
+    for (const [i, donor] of [meera, suresh, anitha, sneha].entries()) {
+      await prisma.donation.create({
+        data: {
+          campaignId: campaign.id, userId: donor.id, amountPaise: (500 + i * 250) * 100, anonymous: i === 3,
+          message: i === 0 ? 'Happy to help the next batch.' : '', receipt: `RCPT-DEMO-${campaign.slug.slice(5, 11).toUpperCase()}-${i}`,
+          testMode: true, createdAt: daysAgo(i + 1),
+        },
+      });
+    }
+  }
+  // An official post from the placement cell, shown with its office badge
+  await prisma.post.create({
+    data: {
+      authorId: admin.id, kind: 'DISCUSSION', title: 'Placement drives for the next two weeks', body: 'Registration opens Monday for three drives. Check eligibility on the companies page before you apply.',
+      officeName: 'Placement Cell', tags: ['official'], createdAt: daysAgo(1),
+    },
+  });
+
   // ── Prep tracker and one finished simulator session for Ananya ──
   const northwind = await prisma.company.findUnique({ where: { slug: 'northwind-labs' } });
   await prisma.prepItem.createMany({
@@ -300,7 +385,7 @@ async function main() {
     data: { reporterId: priya.id, targetType: 'POST', targetId: allPosts[0]?.id ?? 'none', reason: 'MISLEADING', details: 'The deadline in this post looks wrong. Please check.', status: 'OPEN' },
   });
 
-  console.log(`Seeded ${questions.length} questions, 1 discussion, ${opportunities.length} opportunities, 3 teams, 2 stories, ${connections.length} connections, ${threads.length} chat threads. Admin: ${admin.handle}`);
+  console.log(`Seeded ${questions.length} questions, 1 discussion, ${opportunities.length} opportunities, 3 teams, 2 stories, ${connections.length} connections, ${threads.length} chat threads. ${events.length} events, ${campaigns.length} campaigns, 1 official post. Admin: ${admin.handle}`);
 }
 
 main()

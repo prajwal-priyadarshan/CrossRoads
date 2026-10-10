@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { useQueryClient } from '@tanstack/react-query';
-import { ExternalLink, Info, Loader2, Sparkles } from 'lucide-react';
+import { ExternalLink, Info, Loader2, Compass } from 'lucide-react';
 import { toast } from 'sonner';
 import { clubReviewSchema, type ClubDetail } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
@@ -116,7 +116,7 @@ export function ClubPage() {
   if (error || !club) {
     return (
       <EmptyState
-        icon={Sparkles}
+        icon={Compass}
         title="Club not found"
         action={
           <Button asChild>

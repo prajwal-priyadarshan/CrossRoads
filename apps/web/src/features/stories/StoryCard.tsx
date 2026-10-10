@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import { Sparkles } from 'lucide-react';
+import { Star } from 'lucide-react';
 import type { StorySummary } from '@crossroads/shared';
 import { RelativeTime } from '@/components/shared/RelativeTime';
 import { UserAvatar } from '@/components/shared/UserAvatar';
@@ -15,13 +15,13 @@ export function StoryCard({ story }: { story: StorySummary }) {
         <img src={story.coverUrl} alt="" className="aspect-[16/9] w-full object-cover" />
       ) : (
         <div className="grid aspect-[16/9] w-full place-items-center bg-muted text-muted-foreground">
-          <Sparkles className="size-8" />
+          <Star className="size-8" />
         </div>
       )}
       <div className="flex flex-1 flex-col gap-2 p-4">
         {story.isSpotlight && (
           <span className="inline-flex w-fit items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-950 dark:text-amber-300">
-            <Sparkles className="size-3" /> Spotlight
+            <Star className="size-3" /> Spotlight
           </span>
         )}
         <p className="font-semibold leading-snug">{story.title}</p>

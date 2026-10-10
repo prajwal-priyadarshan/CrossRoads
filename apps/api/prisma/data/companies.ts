@@ -130,8 +130,8 @@ export const companies = [
   },
   {
     slug: 'neuronest-ai',
-    name: 'NeuroNest AI',
-    description: desc('Applied AI/ML startup building language and vision products.'),
+    name: 'NeuroNest Labs',
+    description: desc('Applied machine learning startup building language and vision products.'),
     website: null,
     visitMonth: 'December',
     roles: ['ml engineer', 'research engineer'],

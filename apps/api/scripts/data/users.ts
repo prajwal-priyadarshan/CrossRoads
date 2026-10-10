@@ -59,7 +59,7 @@ export const users: SeedUser[] = [
   // ───────────── First years (7) ─────────────
   {
     ...base('ananya', 'Ananya Iyer'), role: 'STUDENT', currentYear: 1, batchYear: 2030, department: 'CSE-AI',
-    bio: 'First year, curious about AI. Looking for a mentor and teammates for my first hackathon.',
+    bio: 'First year, curious about machine learning. Looking for a mentor and teammates for my first hackathon.',
     skills: ['python', 'c'], interests: ['ai/ml', 'research', 'web development'], targetRoles: ['ml engineer'],
     targetCompanies: ['northwind-labs', 'neuronest-ai'], goalTrack: 'PRODUCT', canHelpWith: ['campus life'],
     lookingFor: ['mentorship', 'teammates', 'projects'], followTopics: ['ai-ml', 'campus-life', 'hackathons-projects'],
@@ -270,17 +270,17 @@ export const users: SeedUser[] = [
     targetRoles: ['ml engineer', 'research engineer'], goalTrack: 'RESEARCH',
     canHelpWith: ['research', 'higher studies', 'projects', 'resume review'], lookingFor: [],
     mentorAvailable: true, mentorTopics: ['research internships', 'nlp projects'], mentorSlots: 'Wed 7–8 pm',
-    company: 'NeuroNest AI', jobTitle: 'ML Engineer (incoming)', points: 260, ...social('aishwarya'),
+    company: 'NeuroNest Labs', jobTitle: 'ML Engineer (incoming)', points: 260, ...social('aishwarya'),
     projects: [{ title: 'Low-resource translation', description: 'NLP translation model for regional languages, co-authored workshop paper.' }],
     achievements: ['Workshop paper at an NLP venue'],
     followTopics: ['ai-ml', 'internships'],
     milestones: [
       m(1, 'COURSE', 'Deep learning specialisation'),
       m(2, 'PROJECT', 'Built a translation model'),
-      m(2, 'CLUB', 'Joined AI Collective'),
+      m(2, 'CLUB', 'Joined ML Collective'),
       m(3, 'INTERNSHIP', 'Research intern at an NLP lab'),
       m(3, 'ACHIEVEMENT', 'Workshop paper accepted'),
-      m(4, 'JOB', 'Placed at NeuroNest AI'),
+      m(4, 'JOB', 'Placed at NeuroNest Labs'),
     ],
   },
   {
@@ -342,7 +342,7 @@ export const users: SeedUser[] = [
     achievements: ['Alumni mentor of the year'],
     followTopics: ['ai-ml', 'placements', 'internships'],
     milestones: [
-      m(1, 'CLUB', 'Joined AI Collective'),
+      m(1, 'CLUB', 'Joined ML Collective'),
       m(2, 'PROJECT', 'Built an image captioning model'),
       m(3, 'INTERNSHIP', 'ML intern at Northwind Labs'),
       m(4, 'JOB', 'Placed at Northwind Labs'),

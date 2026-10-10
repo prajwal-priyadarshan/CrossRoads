@@ -1,7 +1,7 @@
 import type { ComponentType } from 'react';
 import {
   Binary,
-  BrainCircuit,
+  Calculator,
   Briefcase,
   BriefcaseBusiness,
   Building2,
@@ -19,12 +19,14 @@ import {
   Trophy,
   UserCheck,
   Users,
+  Star,
 } from 'lucide-react';
 
 // Icons referenced by name from shared constants and the database. Add here as new names appear.
 const ICONS: Record<string, ComponentType<{ className?: string }>> = {
   binary: Binary,
-  'brain-circuit': BrainCircuit,
+  'calculator': Calculator,
+  'star': Star,
   briefcase: Briefcase,
   'briefcase-business': BriefcaseBusiness,
   'building-2': Building2,

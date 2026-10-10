@@ -1,5 +1,7 @@
 import { Router } from 'express';
-import { onboardingSchema, profileUpdateSchema, milestoneSchema } from '@crossroads/shared';
+import { onboardingSchema, profileUpdateSchema, milestoneSchema, deleteAccountSchema } from '@crossroads/shared';
+import { clearSessionCookie } from '../../lib/cookies';
+import { deleteMyAccount, exportMyData } from './account.service';
 import { requireAuth, requireOnboarded } from '../../middleware/auth';
 import { prisma } from '../../lib/prisma';
 import { notFound } from '../../lib/errors';
@@ -29,5 +31,17 @@ usersRouter.post('/me/milestones', requireOnboarded, validate({ body: milestoneS
 usersRouter.delete('/me/milestones/:id', requireOnboarded, async (req, res) => {
   const r = await prisma.milestone.deleteMany({ where: { id: String(req.params.id), userId: req.user!.id } }); // owner-only
   if (!r.count) throw notFound();
+  res.json({ data: { ok: true } });
+});
+
+// Your data (phase 12): a full export, and account deletion after confirming the password
+usersRouter.get('/me/export', requireAuth, async (req, res) => {
+  const data = await exportMyData(req.user!.id);
+  res.set('Content-Disposition', 'attachment; filename="crossroads-my-data.json"').json({ data });
+});
+
+usersRouter.delete('/me', requireAuth, validate({ body: deleteAccountSchema }), async (req, res) => {
+  await deleteMyAccount(req.user!.id, req.valid.body.password);
+  clearSessionCookie(res);
   res.json({ data: { ok: true } });
 });

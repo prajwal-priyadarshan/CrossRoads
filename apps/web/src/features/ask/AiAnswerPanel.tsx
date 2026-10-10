@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { useMutation } from '@tanstack/react-query';
-import { Loader2, Sparkles } from 'lucide-react';
+import { Loader2, Lightbulb } from 'lucide-react';
 import { api, ApiError } from '@/lib/api';
 import { UserAvatar } from '@/components/shared/UserAvatar';
 import { RoleBadge } from '@/components/shared/RoleBadge';
@@ -41,7 +41,7 @@ export function AiAnswerPanel({ questionId }: { questionId: string }) {
         }}
         className="inline-flex items-center gap-1.5 self-start rounded-full border border-primary/30 bg-primary-soft px-3 py-1.5 text-sm font-medium text-primary transition hover:border-primary/50"
       >
-        <Sparkles className="size-3.5" /> Ask AI (grounded in past answers)
+        <Lightbulb className="size-3.5" /> Get a suggested answer
       </button>
     );
   }
@@ -49,7 +49,7 @@ export function AiAnswerPanel({ questionId }: { questionId: string }) {
   return (
     <div className="space-y-3 rounded-2xl border bg-card p-4">
       <p className="flex items-center gap-1.5 text-sm font-semibold">
-        <Sparkles className="size-4 text-primary" /> AI answer
+        <Lightbulb className="size-4 text-primary" /> Suggested answer
       </p>
 
       {ask.isPending && (
@@ -73,7 +73,7 @@ export function AiAnswerPanel({ questionId }: { questionId: string }) {
           {ask.data.status === 'ok' && <p className="whitespace-pre-wrap text-sm">{ask.data.answer}</p>}
           {ask.data.status === 'fallback' && (
             <p className="text-sm text-muted-foreground">
-              AI generation isn't available right now — here are the similar answers it would have cited.
+              Suggested answers aren't available right now. Here are the similar answers they draw on.
             </p>
           )}
 
