@@ -175,7 +175,7 @@ sequenceDiagram
 |---|---|---|
 | ![Groq](https://img.shields.io/badge/Groq-F55036?style=flat&logo=groq&logoColor=white) | **Groq** (free tier) | LLM inference provider |
 | ![OpenAI SDK](https://img.shields.io/badge/OpenAI_SDK-412991?style=flat&logo=openai&logoColor=white) | **openai SDK** | OpenAI-compatible client |
-| 🦙 | **Llama 3.3 70B** | Default model (`llama-3.3-70b-versatile`) |
+| 🦙 | **Llama 3.3 70B** | Default model (`openai/gpt-oss-120b`) |
 | 🔍 | **PostgreSQL FTS** | Retrieval (RAG sources) |
 | 💾 | **In-memory cache** | 60-min TTL per question key |
 

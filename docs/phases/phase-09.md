@@ -22,7 +22,7 @@
 > - Before committing: `npm run typecheck && npm test && npm run build`, then `npm run smoke` against a running API.
 
 
-> **AI calls (OpenAI-compatible, free tier).** Use the `generateJSON` wrapper from `TRD.md` §12.2: `client.chat.completions.create()` with `response_format: { type: 'json_object' }`, a JSON-only instruction in the system prompt, `{ timeout: env.AI_TIMEOUT_MS }` as a request option, then `schema.safeParse(JSON.parse(...))` and explicit handling of `finish_reason` `length`. Key, endpoint, model and limits come from `AI_API_KEY`, `AI_BASE_URL` (default Groq), `AI_MODEL` (default `llama-3.3-70b-versatile`), `AI_MAX_TOKENS`. Read JSON columns through zod (`.catch([])`) instead of `as any`.
+> **AI calls (OpenAI-compatible, free tier).** Use the `generateJSON` wrapper from `TRD.md` §12.2: `client.chat.completions.create()` with `response_format: { type: 'json_object' }`, a JSON-only instruction in the system prompt, `{ timeout: env.AI_TIMEOUT_MS }` as a request option, then `schema.safeParse(JSON.parse(...))` and explicit handling of `finish_reason` `length`. Key, endpoint, model and limits come from `AI_API_KEY`, `AI_BASE_URL` (default Groq), `AI_MODEL` (default `openai/gpt-oss-120b`), `AI_MAX_TOKENS`. Read JSON columns through zod (`.catch([])`) instead of `as any`.
 
 ---
 
@@ -92,7 +92,7 @@
 npm i openai -w apps/api
 ```
 
-`.env`: `AI_API_KEY=…` (free key from https://console.groq.com/keys), `AI_BASE_URL=https://api.groq.com/openai/v1`, `AI_MODEL=llama-3.3-70b-versatile`, `AI_TIMEOUT_MS=20000`. Any other OpenAI-compatible provider works by changing these three.
+`.env`: `AI_API_KEY=…` (free key from https://console.groq.com/keys), `AI_BASE_URL=https://api.groq.com/openai/v1`, `AI_MODEL=openai/gpt-oss-120b`, `AI_TIMEOUT_MS=20000`. Any other OpenAI-compatible provider works by changing these three.
 
 1. Copy `generateJSON` from `TRD.md` §12.2 into `src/lib/ai.ts`.
 2. `src/lib/cache.ts`:

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-export const aiAnswerOut = z.object({ answer: z.string().min(1).max(1500), citations: z.array(z.number().int()).max(6) });
-export const aiSummaryOut = z.object({ bullets: z.array(z.string()).max(5), citations: z.array(z.number().int()) });
+export const aiAnswerOut = z.object({ answer: z.string().min(1).max(1500), citations: z.array(z.number().int()).max(6).default([]) });
+export const aiSummaryOut = z.object({ bullets: z.array(z.string()).max(5), citations: z.array(z.number().int()).default([]) });
 export const aiRoadmapOut = z.object({
   title: z.string().max(120), summary: z.string().max(800),
   gaps: z.array(z.object({ skill: z.string(), why: z.string().max(300), priority: z.enum(['high', 'medium', 'low']) })).max(10),

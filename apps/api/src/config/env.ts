@@ -36,7 +36,7 @@ const schema = z.object({
   // Any OpenAI-compatible provider; defaults to Groq's free tier
   AI_API_KEY: z.string().optional(),
   AI_BASE_URL: z.string().url().default('https://api.groq.com/openai/v1'),
-  AI_MODEL: z.string().default('llama-3.3-70b-versatile'),
+  AI_MODEL: z.string().default('openai/gpt-oss-120b'),
   AI_MAX_TOKENS: z.coerce.number().int().positive().default(4_000),
   AI_TIMEOUT_MS: z.coerce.number().default(60_000),
 

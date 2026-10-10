@@ -3,11 +3,12 @@ import { prisma } from '../../lib/prisma';
 import { AppError } from '../../lib/errors';
 import { cached } from '../../lib/cache';
 import { generateJSON } from '../../lib/ai';
+import { logger } from '../../lib/logger';
 import { getRelatedAnswers } from '../../services/retrieval';
 import { aiAnswerOut, aiSummaryOut } from '@crossroads/shared';
 import { env, aiEnabled } from '../../config/env';
 
-const ANSWER_SYSTEM_PROMPT = `You are a helpful campus assistant. Answer the student's question using ONLY the provided sources from seniors. Use citation format [n] to reference sources. Keep the answer under 300 words. Return only valid JSON.`;
+const ANSWER_SYSTEM_PROMPT = `You are a helpful campus assistant. Answer the student's question using ONLY the provided sources from seniors. Use citation format [n] to reference sources. Keep the answer under 300 words. Return only valid JSON with exactly two keys: "answer" (string) and "citations" (array of source numbers, empty if none).`;
 
 const SUMMARY_SYSTEM_PROMPT = `You are a helpful campus assistant. Summarise the thread or experiences in 3–5 concise bullet points using ONLY the provided content. Use citation format [n] to reference specific items. Return only valid JSON.`;
 
@@ -46,7 +47,8 @@ export async function answer(viewerId: string, input: { questionId?: string; tit
     );
     const valid = out.citations.filter((c: number) => sources.some((s: any) => s.n === c));
     return { status: 'ok' as const, answer: out.answer, citations: valid, sources };
-  } catch {
+  } catch (err) {
+    logger.warn({ err }, 'AI call failed, serving the non-AI fallback');
     return { status: 'fallback' as const, sources };
   }
 }
@@ -111,7 +113,8 @@ export async function summary(viewerId: string, input: { postId?: string; compan
         });
       });
       return { status: 'ok' as const, bullets: out.bullets, citations: out.citations, expCount };
-    } catch {
+    } catch (err) {
+      logger.warn({ err }, 'AI call failed, serving the non-AI fallback');
       return { status: 'deterministic' as const, bullets: deterministicBullets, expCount };
     }
   }
@@ -149,7 +152,8 @@ export async function summary(viewerId: string, input: { postId?: string; compan
         });
       });
       return { status: 'ok' as const, bullets: out.bullets, citations: out.citations };
-    } catch {
+    } catch (err) {
+      logger.warn({ err }, 'AI call failed, serving the non-AI fallback');
       return { status: 'fallback' as const };
     }
   }

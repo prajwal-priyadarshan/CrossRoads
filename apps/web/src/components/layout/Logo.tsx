@@ -1,10 +1,16 @@
 import { Link } from 'react-router';
+import { useMe } from '@/hooks/useMe';
 import { cn } from '@/lib/utils';
 
-/** The brand mark only. `onDark` forces the cream version for dark panels, regardless of theme. */
-export function Logo({ className, to = '/home', onDark = false }: { className?: string; to?: string; onDark?: boolean }) {
+/**
+ * The brand mark only. Signed-in users go to the app; everyone else goes to the landing page.
+ * `onDark` forces the cream version for dark panels, regardless of theme.
+ */
+export function Logo({ className, to, onDark = false }: { className?: string; to?: string; onDark?: boolean }) {
+  const { data: me } = useMe();
+  const target = to ?? (me ? '/home' : '/');
   return (
-    <Link to={to} aria-label="Home" className={cn('flex items-center', className)}>
+    <Link to={target} aria-label="Home" className={cn('flex items-center', className)}>
       {onDark ? (
         <img src="/brand/crossroads-mark-dark.png" alt="" className="h-8 w-auto" />
       ) : (

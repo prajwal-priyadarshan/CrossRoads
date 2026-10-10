@@ -4,6 +4,7 @@ import { AppShell } from '@/components/layout/AppShell';
 import { PublicOnly, RequireAdmin, RequireAuth, RequireOnboarded } from '@/components/guards/Guards';
 import { FullPageSpinner } from '@/components/shared/FullPageSpinner';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { RouteErrorPage } from './pages/RouteErrorPage';
 
 /**
  * Route pages are code-split: each one is loaded the first time it is visited.
@@ -74,6 +75,7 @@ const appRoutes: RouteObject[] = [
 export const router = createBrowserRouter([
   {
     hydrateFallbackElement: <FullPageSpinner />,
+    errorElement: <RouteErrorPage />,
     children: [
       {
         element: <PublicOnly />,

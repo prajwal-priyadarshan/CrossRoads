@@ -212,7 +212,7 @@ The repository root is the npm-workspaces root. This tree reflects the verified 
 | `DEMO_MODE` | `true` | Enables the demo-login endpoint and console codes; **turn off for any real launch** |
 | `AI_API_KEY` | — | Server only; AI features fall back gracefully if missing (free key: console.groq.com) |
 | `AI_BASE_URL` | `https://api.groq.com/openai/v1` | Any OpenAI-compatible endpoint |
-| `AI_MODEL` | `llama-3.3-70b-versatile` | Any model id the provider offers; smaller models fit free-tier limits better |
+| `AI_MODEL` | `openai/gpt-oss-120b` | Any model id the provider offers; smaller models fit free-tier limits better |
 | `AI_MAX_TOKENS` | `4000` | Per-call output ceiling |
 | `AI_TIMEOUT_MS` | `20000` | Abort slow AI calls |
 | `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET` | test keys | Phase 11 only |
@@ -1810,7 +1810,7 @@ export async function generateJSON<T extends z.ZodTypeAny>(opts: {
 }
 ```
 
-Environment (all validated in `config/env.ts`): `AI_API_KEY` (empty = AI off, every feature uses its fallback), `AI_BASE_URL` (default `https://api.groq.com/openai/v1`; any OpenAI-compatible endpoint works), `AI_MODEL` (default `llama-3.3-70b-versatile`; use a smaller model such as `llama-3.1-8b-instant` if you hit free-tier limits), `AI_MAX_TOKENS` (default `4000`; don't set it low, a truncated reply fails validation), `AI_TIMEOUT_MS`.
+Environment (all validated in `config/env.ts`): `AI_API_KEY` (empty = AI off, every feature uses its fallback), `AI_BASE_URL` (default `https://api.groq.com/openai/v1`; any OpenAI-compatible endpoint works), `AI_MODEL` (default `openai/gpt-oss-120b`; use a smaller model such as `llama-3.1-8b-instant` if you hit free-tier limits), `AI_MAX_TOKENS` (default `4000`; don't set it low, a truncated reply fails validation), `AI_TIMEOUT_MS`.
 
 Notes:
 - JSON mode only guarantees syntactically valid JSON, so keep the exact field names and types in the prompt and always validate with zod.
