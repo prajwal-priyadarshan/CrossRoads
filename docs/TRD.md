@@ -58,7 +58,7 @@ The stack is chosen for the best balance of **speed of development, polish, perf
 | Email | **Resend** (or any SMTP via nodemailer) for verification codes; **console fallback** in demo mode | Verification without blocking the demo if email fails |
 | Security middleware | **helmet**, **cors**, **cookie-parser**, **express-rate-limit** | Sensible defaults in minutes |
 | Logging | **pino** + **pino-http** | Fast structured logs with request IDs |
-| AI | **Anthropic Claude API** via `@anthropic-ai/sdk` (server only) | Grounded answers, roadmaps, simulator questions; JSON output validated with zod |
+| AI | **OpenAI-compatible LLM API, Groq free tier by default** via `openai` SDK (server only) | Grounded answers, roadmaps, simulator questions; JSON output validated with zod |
 | Monorepo | **npm workspaces** | No extra tooling; shared package imported by both apps |
 | Dev runner | **tsx** (API dev), **concurrently** (run both apps) | Zero-config TypeScript execution |
 | API bundling | **tsup** | Bundles the API (and the shared package) into one JS file for production |
@@ -99,11 +99,11 @@ The stack is chosen for the best balance of **speed of development, polish, perf
 │ auth middleware (JWT cookie → req.user)                                     │
 │ routes → validate(zod) → services → Prisma                                  │
 │ cross-cutting services: gamification, notifications, matching, feed, twins, │
-│ quests, readiness, search (raw SQL), AI (Claude API), simulator             │
+│ quests, readiness, search (raw SQL), AI (LLM API), simulator             │
 └───────────────┬───────────────────────────────────────┬─────────────────────┘
                 ▼                                       ▼
 ┌──────── PostgreSQL (Neon) ────────┐        ┌──────── External ────────┐
-│ tables via Prisma migrations      │        │ Claude API (AI features)  │
+│ tables via Prisma migrations      │        │ LLM API (AI features)     │
 │ pg_trgm + full-text GIN indexes   │        │ Resend (email codes)      │
 │ (prisma/sql/search.sql)           │        │ Razorpay test (Phase 11)  │
 └───────────────────────────────────┘        └───────────────────────────┘
@@ -210,10 +210,10 @@ The repository root is the npm-workspaces root. This tree reflects the verified 
 | `RESEND_API_KEY` | — | Only when `EMAIL_MODE=resend` |
 | `EMAIL_FROM` | `BridgeUp <onboarding@yourdomain>` | Must be a verified sender in Resend ⚠️ |
 | `DEMO_MODE` | `true` | Enables the demo-login endpoint and console codes; **turn off for any real launch** |
-| `ANTHROPIC_API_KEY` | — | Server only; AI features fall back gracefully if missing |
-| `AI_MODEL` | `claude-opus-5-5` | Any current model id; `claude-sonnet-5-5` / `claude-haiku-5-5` cost less |
-| `AI_EFFORT` | `medium` | `low` \| `medium` \| `high` |
-| `AI_MAX_TOKENS` | `16000` | Per-call output ceiling |
+| `AI_API_KEY` | — | Server only; AI features fall back gracefully if missing (free key: console.groq.com) |
+| `AI_BASE_URL` | `https://api.groq.com/openai/v1` | Any OpenAI-compatible endpoint |
+| `AI_MODEL` | `llama-3.3-70b-versatile` | Any model id the provider offers; smaller models fit free-tier limits better |
+| `AI_MAX_TOKENS` | `4000` | Per-call output ceiling |
 | `AI_TIMEOUT_MS` | `20000` | Abort slow AI calls |
 | `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`, `RAZORPAY_WEBHOOK_SECRET` | test keys | Phase 11 only |
 
@@ -1761,20 +1761,21 @@ simBoost = if the user has finished simulator sessions for this company in the l
 
 ### 12.2 Client wrapper (`lib/ai.ts`)
 
-Use the SDK's structured outputs (`client.messages.parse` + `zodOutputFormat`) instead of asking for JSON in the prompt and parsing text: the API constrains the reply to the schema and the SDK validates it. Timeouts and retries are per-request options (TypeScript timeouts are in **milliseconds**).
+Use the `openai` SDK against any OpenAI-compatible endpoint (default: Groq's free tier). Ask for JSON mode, then validate the reply with zod; on any failure the caller uses its fallback. Timeouts and retries are per-request options (TypeScript timeouts are in **milliseconds**).
 
 ```ts
-import Anthropic from '@anthropic-ai/sdk';
-import { zodOutputFormat } from '@anthropic-ai/sdk/helpers/zod';
+import OpenAI from 'openai';
 import type { z } from 'zod';
 import { env, aiEnabled } from '../config/env';
 
-// Reads ANTHROPIC_API_KEY; created only when AI is enabled so the app runs without a key
-const client = aiEnabled ? new Anthropic({ apiKey: env.ANTHROPIC_API_KEY, maxRetries: 2 }) : null;
+// Created only when AI is enabled so the app runs without a key
+const client = aiEnabled
+  ? new OpenAI({ apiKey: env.AI_API_KEY, baseURL: env.AI_BASE_URL, maxRetries: 2 })
+  : null;
 
 export class AIError extends Error {}
 
-/** One structured call: the reply is constrained to `schema` and validated by the SDK. */
+/** One JSON-mode call: the reply is parsed and validated against `schema`. */
 export async function generateJSON<T extends z.ZodTypeAny>(opts: {
   system: string;
   user: string;
@@ -1783,35 +1784,38 @@ export async function generateJSON<T extends z.ZodTypeAny>(opts: {
 }): Promise<z.infer<T>> {
   if (!client) throw new AIError('AI disabled');
   try {
-    const res = await client.messages.parse(
+    const res = await client.chat.completions.create(
       {
         model: env.AI_MODEL,
         max_tokens: opts.maxTokens ?? env.AI_MAX_TOKENS,
-        system: opts.system,
-        messages: [{ role: 'user', content: opts.user }],
-        output_config: { format: zodOutputFormat(opts.schema), effort: env.AI_EFFORT },
+        response_format: { type: 'json_object' },
+        messages: [
+          { role: 'system', content: `${opts.system}\nRespond with a single JSON object only.` },
+          { role: 'user', content: opts.user },
+        ],
       },
       { timeout: env.AI_TIMEOUT_MS },
     );
-    if (res.stop_reason === 'refusal') throw new AIError('Model declined the request');
-    if (res.stop_reason === 'max_tokens') throw new AIError('Output was cut off; raise maxTokens');
-    if (!res.parsed_output) throw new AIError('AI output failed validation');
-    return res.parsed_output;
+    const choice = res.choices[0];
+    if (choice?.finish_reason === 'length') throw new AIError('Output was cut off; raise maxTokens');
+    const parsed = opts.schema.safeParse(JSON.parse(choice?.message?.content ?? ''));
+    if (!parsed.success) throw new AIError('AI output failed validation');
+    return parsed.data;
   } catch (e) {
     if (e instanceof AIError) throw e;
-    if (e instanceof Anthropic.RateLimitError) throw new AIError('AI is busy, try again shortly');
-    if (e instanceof Anthropic.APIError) throw new AIError(`AI error ${e.status}`);
+    if (e instanceof OpenAI.RateLimitError) throw new AIError('AI is busy, try again shortly');
+    if (e instanceof OpenAI.APIError) throw new AIError(`AI error ${e.status}`);
     throw new AIError((e as Error).message);
   }
 }
 ```
 
-Environment (all validated in `config/env.ts`): `ANTHROPIC_API_KEY` (empty = AI off, every feature uses its fallback), `AI_MODEL` (default `claude-opus-5-5`; any current model id works, e.g. `claude-sonnet-5-5` or `claude-haiku-5-5` for lower cost), `AI_EFFORT` (`low` | `medium` | `high`, default `medium`), `AI_MAX_TOKENS` (default `16000`; don't set it low, a truncated reply fails validation), `AI_TIMEOUT_MS`.
+Environment (all validated in `config/env.ts`): `AI_API_KEY` (empty = AI off, every feature uses its fallback), `AI_BASE_URL` (default `https://api.groq.com/openai/v1`; any OpenAI-compatible endpoint works), `AI_MODEL` (default `llama-3.3-70b-versatile`; use a smaller model such as `llama-3.1-8b-instant` if you hit free-tier limits), `AI_MAX_TOKENS` (default `4000`; don't set it low, a truncated reply fails validation), `AI_TIMEOUT_MS`.
 
 Notes:
-- Prompts no longer need "respond with JSON only" instructions; the schema does that. Keep the field descriptions in the prompts so the model knows what each field means.
+- JSON mode only guarantees syntactically valid JSON, so keep the exact field names and types in the prompt and always validate with zod.
 - Never send emails, phone numbers or other contact details to the model. Treat user-written text inside prompts as data (say so in the system prompt).
-- Optional, recommended once it compiles against your SDK version: refusal fallbacks (`fallbacks: 'default'` with the `server-side-fallback-2026-07-01` beta on `client.beta.messages`), so a declined request is retried on another model automatically. Check the SDK docs for the beta parse helper.
+- Free tiers are rate limited: keep the per-user hourly limit and the response cache, and let callers fall back on `AIError`.
 
 ### 12.3 Prompts
 
@@ -2242,7 +2246,7 @@ The smoke script removes everything it creates (posts, votes, bookmarks, notific
 - Current major versions and setup commands: Vite React template, React Router, TanStack Query, Tailwind v4 Vite plugin, shadcn/ui CLI for Vite, Express 5, Prisma (generator + config changes), `motion` package name.
 - Prisma + Neon: pooled vs direct URLs, and whether `directUrl` is still configured in the schema or in `prisma.config.ts` for your Prisma version.
 - Prisma behaviour with the extra search indexes (review `--create-only` migrations).
-- `@anthropic-ai/sdk` usage and the current model id list.
+- `openai` SDK usage and the provider's current model id list and free-tier limits.
 - Resend sender verification and free-tier limits (or keep `EMAIL_MODE=console` for the demo).
 - Your college's real email domain(s).
 - Render free-tier sleep behaviour and Vercel monorepo install settings.

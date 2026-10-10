@@ -29,10 +29,11 @@ const schema = z.object({
   EMAIL_FROM: z.string().default('BridgeUp <no-reply@example.com>'),
 
   // AI (Phase 09)
-  ANTHROPIC_API_KEY: z.string().optional(),
-  AI_MODEL: z.string().default('claude-opus-5-5'),
-  AI_EFFORT: z.enum(['low', 'medium', 'high']).default('medium'),
-  AI_MAX_TOKENS: z.coerce.number().int().positive().default(16_000),
+  // Any OpenAI-compatible provider; defaults to Groq's free tier
+  AI_API_KEY: z.string().optional(),
+  AI_BASE_URL: z.string().url().default('https://api.groq.com/openai/v1'),
+  AI_MODEL: z.string().default('llama-3.3-70b-versatile'),
+  AI_MAX_TOKENS: z.coerce.number().int().positive().default(4_000),
   AI_TIMEOUT_MS: z.coerce.number().default(60_000),
 
   // Academic calendar: month (1-12) the odd semester starts, used to compute a student's current semester
@@ -47,9 +48,9 @@ const schema = z.object({
   API_DOCS_ENABLED: z.enum(['true', 'false']).optional(),
 });
 
-// Empty strings in .env (placeholders such as ANTHROPIC_API_KEY=) mean "not set"
+// Empty strings in .env (placeholders such as AI_API_KEY=) mean "not set"
 const raw = Object.fromEntries(Object.entries(process.env).filter(([, v]) => v !== ''));
 export const env = schema.parse(raw);
 export const isProd = env.NODE_ENV === 'production';
-export const aiEnabled = Boolean(env.ANTHROPIC_API_KEY);
+export const aiEnabled = Boolean(env.AI_API_KEY);
 export const docsEnabled = env.API_DOCS_ENABLED ? env.API_DOCS_ENABLED === 'true' : !isProd;

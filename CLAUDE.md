@@ -33,7 +33,7 @@ API docs: Swagger UI at `/api/docs`, OpenAPI JSON at `/api/openapi.json` (on by 
 - **Layout:** `apps/api/src/modules/<domain>/{routes,service,serializers}.ts`; cross-cutting logic in `src/services/` (matching, feedRank, twins, quests, gamification, notify); `src/config/env.ts` is the only reader of `process.env`; `src/config/constants.ts` holds tuning `LIMITS`; `src/docs/openapi.ts` builds the OpenAPI document from the shared zod schemas. Web: `src/app/` (router with lazy pages, providers), `src/features/<name>/` (pages + `api.ts` TanStack hooks), `src/components/{ui,layout,guards,shared}`. Shared: `packages/shared/src/{constants.ts,schemas/,types/}`. Full tree: `docs/TRD.md` §3.
 - **Business rules run in service functions inside `prisma.$transaction`** (points, badges, counters, notifications). Unique constraints (e.g. `PointsLedger(userId, action, refId)`) prevent double awards.
 - **Search:** PostgreSQL full-text + trigram through parameterised `$queryRaw` (`Prisma.sql` / `Prisma.empty` for dynamic parts). No vector DB.
-- **AI (Phase 09):** `@anthropic-ai/sdk` server-side only, `client.messages.parse` + `zodOutputFormat` structured outputs (TRD §12.2); every feature has a non-AI fallback when `ANTHROPIC_API_KEY` is empty.
+- **AI (Phase 09):** `openai` SDK pointed at an OpenAI-compatible free-tier provider (Groq by default, `AI_BASE_URL`), server-side only; JSON-mode replies validated with zod (TRD §12.2); every feature has a non-AI fallback when `AI_API_KEY` is empty.
 
 ## Rules
 

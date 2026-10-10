@@ -4,12 +4,12 @@
 |---|---|
 | **Time box** | 1:20 (cumulative 10:20) |
 | **Goal** | AI that is grounded in your college's own knowledge — instant answers from seniors' past answers with citations, summaries of threads and company experiences, an Experience-to-Roadmap generator that explains skill gaps — plus a personalised placement dashboard (OA, aptitude, technical and HR prep tracked separately) and a campus-specific simulator whose questions come from alumni experiences |
-| **Prerequisites** | Phase 08 complete; seeded answers, roadmaps, journeys and experiences exist; an Anthropic API key (optional — every feature has a fallback) |
+| **Prerequisites** | Phase 08 complete; seeded answers, roadmaps, journeys and experiences exist; a free Groq API key from console.groq.com (optional — every feature has a fallback) |
 | **PRD features** | F40 AI answer assistant, F41 AI summaries, F42 Experience-to-Roadmap, F25 Roadmaps by goal (AI part), F43 Placement dashboard, F44 OA and interview simulator |
 | **Requirements** | FR-AI-1…3, FR-RMGEN-1, FR-DASH-1, FR-SIM-1…3; your priority row "AI-generated summaries" and the whole "Campus-Specific Placement Intelligence" section |
 | **Reference** | `TRD.md` §12 (AI design and prompts), §11.5 (readiness), §11.6 (simulator), §8.9 (endpoints) |
 
-> ⚠️ **Verify before coding:** the `@anthropic-ai/sdk` package's current `messages.create` options, content block types, request options for cancellation, and the current model ids in the Claude docs. Don't rely on remembered syntax. Build and test each feature's **fallback first**, then add AI on top.
+> ⚠️ **Verify before coding:** the `openai` package's current `chat.completions.create` options, JSON-mode support for your chosen model, request options for cancellation, and the provider's current model ids and free-tier rate limits. Don't rely on remembered syntax. Build and test each feature's **fallback first**, then add AI on top.
 
 
 > **Codebase conventions (verified build).** The repository is the source of truth; when this guide and the code differ, follow the code.
@@ -22,7 +22,7 @@
 > - Before committing: `npm run typecheck && npm test && npm run build`, then `npm run smoke` against a running API.
 
 
-> **AI calls (verified against the current Anthropic SDK).** Use the `generateJSON` wrapper from `TRD.md` §12.2: `client.messages.parse()` with `output_config.format: zodOutputFormat(schema)` (structured outputs, so no JSON-only prompt instructions or manual `JSON.parse`), `{ timeout: env.AI_TIMEOUT_MS }` as a request option, and explicit handling of `stop_reason` `refusal` / `max_tokens`. Model, effort and limits come from `AI_MODEL` (default `claude-opus-5-5`), `AI_EFFORT`, `AI_MAX_TOKENS`. Read JSON columns through zod (`.catch([])`) instead of `as any`.
+> **AI calls (OpenAI-compatible, free tier).** Use the `generateJSON` wrapper from `TRD.md` §12.2: `client.chat.completions.create()` with `response_format: { type: 'json_object' }`, a JSON-only instruction in the system prompt, `{ timeout: env.AI_TIMEOUT_MS }` as a request option, then `schema.safeParse(JSON.parse(...))` and explicit handling of `finish_reason` `length`. Key, endpoint, model and limits come from `AI_API_KEY`, `AI_BASE_URL` (default Groq), `AI_MODEL` (default `llama-3.3-70b-versatile`), `AI_MAX_TOKENS`. Read JSON columns through zod (`.catch([])`) instead of `as any`.
 
 ---
 
@@ -89,10 +89,10 @@
 ### Step 1 — AI wrapper, cache and limits (8 min)
 
 ```bash
-npm i @anthropic-ai/sdk -w apps/api
+npm i openai -w apps/api
 ```
 
-`.env`: `ANTHROPIC_API_KEY=…`, `AI_MODEL=<current model id from the Claude docs, e.g. claude-sonnet-5-5>`, `AI_TIMEOUT_MS=20000`.
+`.env`: `AI_API_KEY=…` (free key from https://console.groq.com/keys), `AI_BASE_URL=https://api.groq.com/openai/v1`, `AI_MODEL=llama-3.3-70b-versatile`, `AI_TIMEOUT_MS=20000`. Any other OpenAI-compatible provider works by changing these three.
 
 1. Copy `generateJSON` from `TRD.md` §12.2 into `src/lib/ai.ts`.
 2. `src/lib/cache.ts`:
@@ -506,7 +506,7 @@ git add -A && git commit -m "phase-09: ai answers, summaries, roadmap generator,
 ## 7. Completion criteria
 
 - [ ] With the API key: answers cite only real sources (invalid citation numbers removed); summaries return ≤ 5 bullets; roadmaps validate and save; simulator generates, grades and adapts.
-- [ ] **With `ANTHROPIC_API_KEY` unset:** answer panel shows sources; company summary shows deterministic bullets; roadmap uses the deterministic builder; simulator uses the question bank with self-check grading. Nothing crashes.
+- [ ] **With `AI_API_KEY` unset:** answer panel shows sources; company summary shows deterministic bullets; roadmap uses the deterministic builder; simulator uses the question bank with self-check grading. Nothing crashes.
 - [ ] AI key never appears in the web bundle (search `apps/web/dist` for part of the key: no match).
 - [ ] Rate limit returns a friendly 429 after 20 AI calls in an hour.
 - [ ] Dashboard: targets save; readiness changes when skills or prep items change; four tracks are separate; next actions make sense for year 1 vs year 3.
@@ -530,7 +530,7 @@ git add -A && git commit -m "phase-09: ai answers, summaries, roadmap generator,
 | 9.10 | Answer 2 wrong in a row | Difficulty decreases |
 | 9.11 | Technical round, write a short answer | Score ring, rubric ✓/✗ and feedback |
 | 9.12 | Finish → "Add revision topics to my prep" | Items appear in the matching prep track |
-| 9.13 | Remove `ANTHROPIC_API_KEY`, restart, repeat 9.1, 9.5, 9.9, 9.11 | Fallbacks work; written answers use self-check |
+| 9.13 | Remove `AI_API_KEY`, restart, repeat 9.1, 9.5, 9.9, 9.11 | Fallbacks work; written answers use self-check |
 | 9.14 | Call `POST /api/ai/answer` 21 times | 21st returns 429 with a friendly message |
 | 9.15 | Signed out, `POST /api/sim/sessions` | 401 |
 | 9.16 | Mobile 375px dashboard and simulator | Cards stack; options are large tap targets; charts fit |

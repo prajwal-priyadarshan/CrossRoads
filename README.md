@@ -6,7 +6,7 @@ Specification and build plan: [`docs/`](docs/README.md) (PRD, TRD and the phase 
 
 ## Stack
 
-React 19 + Vite 8 + TypeScript, Tailwind v4, shadcn/ui (Radix), TanStack Query, React Router · Node 22 + Express 5, zod, Prisma 7 · PostgreSQL (Neon) · Claude API for AI features · Vercel (web) + Render (API).
+React 19 + Vite 8 + TypeScript, Tailwind v4, shadcn/ui (Radix), TanStack Query, React Router · Node 22 + Express 5, zod, Prisma 7 · PostgreSQL (Neon) · Groq free-tier LLM API (OpenAI-compatible) for AI features · Vercel (web) + Render (API).
 
 ## Repository layout
 
@@ -54,4 +54,4 @@ With the API running: **Swagger UI at http://localhost:4000/api/docs** (also thr
 
 ## Configuration
 
-All API settings are environment variables validated at startup in `apps/api/src/config/env.ts`; `apps/api/.env.example` documents each one, including the optional keys (Anthropic, Resend, Razorpay). The web app has no runtime settings in its bundle: it reads public settings from `GET /api/config`.
+All API settings are environment variables validated at startup in `apps/api/src/config/env.ts`; `apps/api/.env.example` documents each one, including the optional keys (AI provider, Resend, Razorpay). The web app has no runtime settings in its bundle: it reads public settings from `GET /api/config`.

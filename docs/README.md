@@ -20,7 +20,7 @@ Read in this order:
 | — | Buffer | 0:40 → total 12:00 |
 | 14 | `phases/phase-11.md` | Later features (after the hackathon): events and ticketing, donations |
 
-**Stack:** React (Vite, TypeScript, Tailwind v4, shadcn/ui, TanStack Query, React Router) · Node.js (Express 5, TypeScript, zod) · PostgreSQL (Neon) with Prisma · Claude API for AI features · Vercel + Render.
+**Stack:** React (Vite, TypeScript, Tailwind v4, shadcn/ui, TanStack Query, React Router) · Node.js (Express 5, TypeScript, zod) · PostgreSQL (Neon) with Prisma · Groq free-tier LLM API (OpenAI-compatible) for AI features · Vercel + Render.
 
 **Rule for every phase:** build → run the phase's manual tests → meet its completion criteria → commit and tag → move on. If a phase runs more than 15 minutes over, use its "If you're behind" section.
 
