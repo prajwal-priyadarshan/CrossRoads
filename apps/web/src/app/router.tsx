@@ -1,5 +1,5 @@
 import type { ComponentType } from 'react';
-import { createBrowserRouter, Navigate, type RouteObject } from 'react-router';
+import { createBrowserRouter, type RouteObject } from 'react-router';
 import { AppShell } from '@/components/layout/AppShell';
 import { PublicOnly, RequireAdmin, RequireAuth, RequireOnboarded } from '@/components/guards/Guards';
 import { FullPageSpinner } from '@/components/shared/FullPageSpinner';
@@ -56,7 +56,7 @@ const appRoutes: RouteObject[] = [
   { path: '/notifications', ...page(() => import('@/features/notifications/NotificationsPage'), 'NotificationsPage') },
 
   // Admin (Phase 08)
-  { element: <RequireAdmin />, children: [{ path: '/admin/*', element: <Navigate to="/home" replace /> }] },
+  { element: <RequireAdmin />, children: [{ path: '/admin', ...page(() => import('@/features/admin/AdminPage'), 'AdminPage') }] },
 ];
 
 export const router = createBrowserRouter([

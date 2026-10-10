@@ -16,6 +16,7 @@ import { personSubline, yearLabel } from '@/lib/people';
 import { isSafeUrl, titleCase } from '@/lib/utils';
 import { UserX } from 'lucide-react';
 import { JourneyTimeline } from './JourneyTimeline';
+import { Contributions } from './Contributions';
 import { useProfile } from './api';
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
@@ -243,12 +244,8 @@ export function ProfilePage() {
               </div>
             </Section>
           )}
-          {(p.role === 'SENIOR' || p.role === 'ALUMNI' || owner) && p.points !== null && (
-            <Section title="Contributions">
-              <p className="text-sm text-muted-foreground">
-                <span className="tabular font-semibold text-foreground">{p.points}</span> points. Badges arrive soon.
-              </p>
-            </Section>
+          {(p.role === 'SENIOR' || p.role === 'ALUMNI' || owner) && (
+            <Contributions handle={p.handle} isOwner={owner} points={p.points} />
           )}
         </aside>
       </div>

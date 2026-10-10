@@ -5,10 +5,10 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { BadgeGrid } from '@/components/gamification/BadgeGrid';
 import { LevelProgress } from '@/components/gamification/LevelProgress';
 
-export function Contributions({ handle, isOwner, points }: { handle: string; isOwner: boolean; points: number | null }) {
+export function Contributions({ handle, points }: { handle: string; isOwner: boolean; points: number | null }) {
   const { data, isLoading } = useQuery({
     queryKey: ['contributions', handle],
-    queryFn: () => api<{ counts: Record<string, number>; helped: number; badges: any[]; recent: any[] }>(`/users/${handle}/contributions`).then(r => r.data)
+    queryFn: () => api<{ counts: Record<string, number>; helped: number; badges: any[]; recent: any[] }>(`/users/${handle}/contributions`)
   });
 
   if (isLoading || !data) return null;
@@ -50,7 +50,7 @@ export function Contributions({ handle, isOwner, points }: { handle: string; isO
             <div className="space-y-3 border-t pt-4">
               <h4 className="text-sm font-semibold">Recent Contributions</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                {data.recent.map(r => (
+                {data.recent.map((r: any) => (
                   <li key={r.id} className="flex justify-between">
                     <span className="capitalize">{r.action.replace('_', ' ').toLowerCase()}</span>
                     <span className="text-amber-600 dark:text-amber-400">+{r.points}</span>
@@ -67,7 +67,7 @@ export function Contributions({ handle, isOwner, points }: { handle: string; isO
           <CardTitle className="text-lg">Badges</CardTitle>
         </CardHeader>
         <CardContent>
-          <BadgeGrid earnedSlugs={data.badges.map(b => b.slug)} />
+          <BadgeGrid earnedSlugs={data.badges.map((b: any) => b.slug)} />
         </CardContent>
       </Card>
     </div>

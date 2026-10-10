@@ -25,7 +25,7 @@ export function ReportButton({ targetType, targetId, variant = 'icon', className
   const [details, setDetails] = useState('');
 
   const mutation = useMutation({
-    mutationFn: () => api.post('/reports', { json: { targetType, targetId, reason, details } }),
+    mutationFn: () => api('/reports', { method: 'POST', json: { targetType, targetId, reason, details } }),
     onSuccess: () => {
       setOpen(false);
       toast.success('Thanks — a moderator will review this.');

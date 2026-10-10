@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { AppIcon } from '@/components/shared/AppIcon';
 import { BookmarkButton } from '@/components/shared/BookmarkButton';
+import { ReportButton } from '@/components/shared/ReportButton';
 import { RelativeTime } from '@/components/shared/RelativeTime';
 import { UserAvatar } from '@/components/shared/UserAvatar';
 import { VoteButtons } from '@/components/shared/VoteButtons';
@@ -148,6 +149,9 @@ export function PostCard({ post, reason }: { post: Post; reason?: ReactNode }) {
             <span className="text-xs font-medium text-primary">Answered by a senior</span>
           )}
           <BookmarkButton targetType="POST" targetId={post.id} bookmarked={post.bookmarked} className="ml-auto" />
+          {!canDelete && (
+            <ReportButton targetType="POST" targetId={post.id} variant="icon" className="size-7 text-muted-foreground hover:text-destructive hover:bg-destructive/10" />
+          )}
           {canDelete && (
             <div>
               <DropdownMenu>
