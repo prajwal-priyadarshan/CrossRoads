@@ -34,6 +34,9 @@ export function UserMenu() {
         <DropdownMenuItem asChild>
           <Link to="/bookmarks">Bookmarks</Link>
         </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/settings/data">Your data</Link>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => logout.mutate()}>Sign out</DropdownMenuItem>
       </DropdownMenuContent>

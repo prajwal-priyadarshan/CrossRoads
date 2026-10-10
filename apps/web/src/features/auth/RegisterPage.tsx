@@ -23,7 +23,7 @@ export function RegisterPage() {
     handleSubmit,
     setError,
     formState: { errors },
-  } = useForm<RegisterInput>({ resolver: zodResolver(registerSchema) });
+  } = useForm<RegisterInput>({ resolver: zodResolver(registerSchema), defaultValues: { consent: false as unknown as true } });
 
   const onSubmit = handleSubmit((values) =>
     register.mutate(values, {
@@ -96,6 +96,14 @@ export function RegisterPage() {
             </button>
           </div>
         </FormField>
+        <label className="flex items-start gap-3 text-sm text-muted-foreground">
+          <input type="checkbox" className="mt-1 size-4 accent-primary" {...field('consent')} />
+          <span>
+            I have read how my data is used. Profile details and messages are shared only with people I connect with,
+            and I can export or delete my data at any time.
+          </span>
+        </label>
+        {errors.consent && <p className="text-sm text-destructive">{errors.consent.message}</p>}
         <Button type="submit" className="w-full" disabled={register.isPending}>
           {register.isPending && <Loader2 className="animate-spin" />} Create account
         </Button>

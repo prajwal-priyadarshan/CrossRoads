@@ -60,7 +60,12 @@ const rsvpsInclude = { rsvps: { select: { userId: true, code: true } } } as cons
 
 export async function upcomingEvents(viewerId: string, region?: string): Promise<EventCard[]> {
   const rows = await prisma.event.findMany({
-    where: { startsAt: { gte: new Date(Date.now() - 864e5) }, ...(region ? { region } : {}) },
+    // Community events only: the deadlines, exams and placement items stay in This Week
+    where: {
+      startsAt: { gte: new Date(Date.now() - 864e5) },
+      category: { in: ['REUNION', 'CHAPTER_MEET', 'WEBINAR'] },
+      ...(region ? { region } : {}),
+    },
     orderBy: { startsAt: 'asc' },
     take: 60,
     include: rsvpsInclude,

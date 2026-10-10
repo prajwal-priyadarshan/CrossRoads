@@ -24,6 +24,10 @@ const appRoutes: RouteObject[] = [
   { path: '/settings/profile', ...page(() => import('@/features/profile/ProfileEditPage'), 'ProfileEditPage') },
   { path: '/requests', ...page(() => import('@/features/requests/RequestsPage'), 'RequestsPage') },
   { path: '/messages', ...page(() => import('@/features/chat/MessagesPage'), 'MessagesPage') },
+  { path: '/events', ...page(() => import('@/features/events/EventsPage'), 'EventsPage') },
+  { path: '/give', ...page(() => import('@/features/giving/GivingPage'), 'GivingPage') },
+  { path: '/give/:slug', ...page(() => import('@/features/giving/CampaignPage'), 'CampaignPage') },
+  { path: '/settings/data', ...page(() => import('@/features/account/DataPage'), 'DataPage') },
   { path: '/messages/:id', ...page(() => import('@/features/chat/MessagesPage'), 'MessagesPage') },
 
   // Ask a Senior and community

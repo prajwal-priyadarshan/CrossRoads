@@ -103,6 +103,11 @@ export function PostCard({ post, reason }: { post: Post; reason?: ReactNode }) {
             </Link>
           )}
           <AuthorLine author={post.author} />
+          {post.officeName && (
+            <span className="rounded-full bg-accent px-2 py-0.5 text-[11px] font-medium text-accent-foreground">
+              Official · {post.officeName}
+            </span>
+          )}
           <span aria-hidden>·</span>
           <RelativeTime iso={post.createdAt} />
           {reason}

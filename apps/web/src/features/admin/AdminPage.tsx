@@ -1,3 +1,4 @@
+import { InstitutionPanel } from './InstitutionPanel';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '@/lib/api';
 import { Button } from '@/components/ui/button';
@@ -62,7 +63,10 @@ export function AdminPage() {
   return (
     <div className="max-w-4xl mx-auto py-8">
       <h1 className="text-3xl font-display font-bold mb-6">Admin Panel</h1>
-      <AdminReports />
+      <InstitutionPanel />
+      <div className="mt-10">
+        <AdminReports />
+      </div>
     </div>
   );
 }
