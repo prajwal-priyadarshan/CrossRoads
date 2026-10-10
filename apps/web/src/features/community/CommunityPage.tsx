@@ -4,6 +4,7 @@ import { PageHeader } from '@/components/layout/PageHeader';
 import { RightRail } from '@/components/layout/RightRail';
 import { AppIcon } from '@/components/shared/AppIcon';
 import { Button } from '@/components/ui/button';
+import { MentorWall } from '@/components/gamification/MentorWall';
 import { useFollowTopic, useTopics } from './api';
 import { COMMUNITY_SORTS, SortToggle } from './SortToggle';
 import { Composer } from './Composer';
@@ -46,7 +47,14 @@ export function CommunityPage() {
       <PageHeader title="Community" description="Discuss, share and learn with your campus." />
       <div className="space-y-4">
         <TopicTabs />
-        <RightRail rail={<YourTopics />}>
+        <RightRail
+          rail={
+            <>
+              <YourTopics />
+              <MentorWall />
+            </>
+          }
+        >
           <div className="space-y-4">
             <div className="flex justify-between gap-2">
               <SortToggle value={sort} onChange={setSort} options={COMMUNITY_SORTS} />

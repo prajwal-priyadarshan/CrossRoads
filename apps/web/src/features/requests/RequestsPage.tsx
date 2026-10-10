@@ -4,9 +4,11 @@ import { Handshake, Inbox, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PageHeader } from '@/components/layout/PageHeader';
+import { RightRail } from '@/components/layout/RightRail';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { ListSkeleton } from '@/components/shared/Skeletons';
 import { useMe } from '@/hooks/useMe';
+import { MentorWall } from '@/components/gamification/MentorWall';
 import { useConnections, type Box } from './api';
 import { RequestRow } from './RequestRow';
 
@@ -64,25 +66,27 @@ export function RequestsPage() {
   return (
     <div>
       <PageHeader title="Requests" description="Connections, mentorship and collaboration requests, all in one place." />
-      <Tabs value={tab} onValueChange={(v) => setTab(v as Box)}>
-        <TabsList>
-          <TabsTrigger value="incoming">
-            Incoming
-            {pending > 0 && (
-              <span className="tabular ml-1.5 rounded-full bg-primary px-1.5 text-[11px] font-semibold text-primary-foreground">
-                {pending}
-              </span>
-            )}
-          </TabsTrigger>
-          <TabsTrigger value="outgoing">Outgoing</TabsTrigger>
-          <TabsTrigger value="completed">Completed</TabsTrigger>
-        </TabsList>
-        {(['incoming', 'outgoing', 'completed'] as const).map((b) => (
-          <TabsContent key={b} value={b} className="mt-6">
-            <Box box={b} meId={me.id} />
-          </TabsContent>
-        ))}
-      </Tabs>
+      <RightRail rail={<MentorWall />}>
+        <Tabs value={tab} onValueChange={(v) => setTab(v as Box)}>
+          <TabsList>
+            <TabsTrigger value="incoming">
+              Incoming
+              {pending > 0 && (
+                <span className="tabular ml-1.5 rounded-full bg-primary px-1.5 text-[11px] font-semibold text-primary-foreground">
+                  {pending}
+                </span>
+              )}
+            </TabsTrigger>
+            <TabsTrigger value="outgoing">Outgoing</TabsTrigger>
+            <TabsTrigger value="completed">Completed</TabsTrigger>
+          </TabsList>
+          {(['incoming', 'outgoing', 'completed'] as const).map((b) => (
+            <TabsContent key={b} value={b} className="mt-6">
+              <Box box={b} meId={me.id} />
+            </TabsContent>
+          ))}
+        </Tabs>
+      </RightRail>
     </div>
   );
 }
