@@ -111,6 +111,50 @@ const ROUTES: Row[] = [
   { method: 'get', path: '/notifications', tag: 'Notifications', summary: 'Your notifications (cursor paginated, filterable)', auth: 'auth', query: S.notificationListQuerySchema },
   { method: 'get', path: '/notifications/unread-count', tag: 'Notifications', summary: 'Unread count for the bell badge', auth: 'auth' },
   { method: 'post', path: '/notifications/read', tag: 'Notifications', summary: 'Mark some or all notifications read', auth: 'auth', body: S.markReadSchema },
+
+  // Success stories (public)
+  { method: 'get', path: '/stories', tag: 'Stories', summary: 'Published stories, newest first', auth: 'public' },
+  { method: 'get', path: '/stories/:slug', tag: 'Stories', summary: 'One story with related stories', auth: 'public' },
+
+  // Reporting and moderation
+  { method: 'post', path: '/reports', tag: 'Moderation', summary: 'Report a post, comment, experience, profile, team or story', auth: 'auth', body: S.reportCreateSchema },
+
+  // Gamification
+  { method: 'get', path: '/mentor-wall', tag: 'Gamification', summary: 'Top mentors by points this month (opted-in seniors/alumni)', auth: 'auth' },
+  { method: 'get', path: '/users/:handle/contributions', tag: 'Gamification', summary: 'Contribution counts, badges and recent points for a profile', auth: 'auth' },
+
+  // Admin
+  { method: 'get', path: '/admin/reports', tag: 'Admin', summary: 'Open content reports', auth: 'admin' },
+  { method: 'patch', path: '/admin/reports/:id', tag: 'Admin', summary: 'Resolve a report (remove the content or dismiss)', auth: 'admin', body: S.reportResolveSchema },
+  { method: 'get', path: '/admin/users', tag: 'Admin', summary: 'Users for moderation', auth: 'admin' },
+  { method: 'patch', path: '/admin/users/:id', tag: 'Admin', summary: 'Update a user\'s role or verification', auth: 'admin', body: S.adminUserUpdateSchema },
+  { method: 'post', path: '/admin/allowlist', tag: 'Admin', summary: 'Invite an alumni email outside the college domain', auth: 'admin', body: S.allowlistSchema },
+  { method: 'get', path: '/admin/events', tag: 'Admin', summary: 'All events for management', auth: 'admin' },
+  { method: 'post', path: '/admin/events', tag: 'Admin', summary: 'Create an event', auth: 'admin', body: S.eventUpsertSchema, status: 201 },
+  { method: 'patch', path: '/admin/events/:id', tag: 'Admin', summary: 'Update an event', auth: 'admin', body: S.eventUpsertSchema },
+  { method: 'delete', path: '/admin/events/:id', tag: 'Admin', summary: 'Delete an event', auth: 'admin' },
+  { method: 'get', path: '/admin/companies', tag: 'Admin', summary: 'All companies for management', auth: 'admin' },
+  { method: 'post', path: '/admin/companies', tag: 'Admin', summary: 'Create a company', auth: 'admin', body: S.companyUpsertSchema, status: 201 },
+  { method: 'patch', path: '/admin/companies/:id', tag: 'Admin', summary: 'Update a company', auth: 'admin', body: S.companyUpsertSchema },
+  { method: 'get', path: '/admin/clubs', tag: 'Admin', summary: 'All clubs for management', auth: 'admin' },
+  { method: 'post', path: '/admin/clubs', tag: 'Admin', summary: 'Create a club', auth: 'admin', body: S.clubUpsertSchema, status: 201 },
+  { method: 'patch', path: '/admin/clubs/:id', tag: 'Admin', summary: 'Update a club', auth: 'admin', body: S.clubUpsertSchema },
+  { method: 'get', path: '/admin/stories', tag: 'Admin', summary: 'All stories including drafts', auth: 'admin' },
+  { method: 'post', path: '/admin/stories', tag: 'Admin', summary: 'Create a story', auth: 'admin', body: S.storyUpsertSchema, status: 201 },
+  { method: 'patch', path: '/admin/stories/:id', tag: 'Admin', summary: 'Update a story', auth: 'admin', body: S.storyUpsertSchema },
+  { method: 'get', path: '/admin/experiences', tag: 'Admin', summary: 'All interview experiences for verification', auth: 'admin' },
+  { method: 'patch', path: '/admin/experiences/:id', tag: 'Admin', summary: 'Mark an experience verified', auth: 'admin' },
+
+  // AI (Phase 09) — no-op without ANTHROPIC_API_KEY; see the non-AI fallback in each service
+  { method: 'post', path: '/ai/answer', tag: 'AI', summary: 'AI answer to a question, grounded in past answers with citations', auth: 'onboarded' },
+  { method: 'post', path: '/ai/summary', tag: 'AI', summary: 'AI summary of a thread or a company\'s interview experiences', auth: 'onboarded' },
+
+  // Placement prep dashboard (Phase 09)
+  { method: 'get', path: '/prep/dashboard', tag: 'Prep', summary: 'Readiness per target company and the four prep tracks', auth: 'onboarded' },
+  { method: 'put', path: '/prep/targets', tag: 'Prep', summary: 'Set target companies and roles', auth: 'onboarded', body: S.targetsSchema },
+
+  // OA / interview simulator (Phase 09)
+  { method: 'post', path: '/sim/sessions', tag: 'Prep', summary: 'Start a simulator session and get the first question', auth: 'onboarded', body: S.simStartSchema },
 ];
 
 const errorSchema = z.object({

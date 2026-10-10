@@ -177,6 +177,8 @@ async function main() {
     ['notifications: list', '/notifications', (d) => `${d.items.length}`],
     ['notifications: unread count', '/notifications/unread-count', (d) => `${d.count} unread`],
     ['stories: list', '/stories', (d) => `${d.items.length} stories`],
+    ['gamification: mentor wall', '/mentor-wall', (d) => `${d.length} mentors`],
+    ['gamification: contributions', '/users/rahul/contributions', (d) => `helped ${d.helped}, ${d.badges.length} badges`],
   ];
   for (const [name, path, describe] of reads) {
     await check(name, async () => describe(expectStatus(await ananya.get(path), 200, path)));
