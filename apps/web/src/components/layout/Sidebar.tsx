@@ -1,5 +1,8 @@
 import type { ComponentType } from 'react';
-import { Link, NavLink } from 'react-router';
+import { useEffect } from 'react';
+import { Link, NavLink, useLocation } from 'react-router';
+import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
+import { useUiStore } from '@/stores/uiStore';
 import { useMe } from '@/hooks/useMe';
 import { cn } from '@/lib/utils';
 import { Logo } from './Logo';
@@ -39,8 +42,16 @@ function Group({ label, items }: { label?: string; items: Item[] }) {
 
 export function Sidebar() {
   const { data: me } = useMe();
+  const open = useUiStore((s) => s.sidebarOpen);
+  const setOpen = useUiStore((s) => s.setSidebarOpen);
+  const { pathname } = useLocation();
+  // Picking a page closes the panel, so the content is what you see next
+  useEffect(() => setOpen(false), [pathname, setOpen]);
   return (
-    <aside className="fixed inset-y-0 left-0 z-40 hidden w-[248px] flex-col border-r bg-card/60 px-3 py-4 backdrop-blur lg:flex">
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetContent side="left" className="flex w-[280px] flex-col gap-0 px-3 py-4">
+        <SheetTitle className="sr-only">Menu</SheetTitle>
+        <div className="flex h-full flex-col">
       <Logo className="px-3 pb-2" />
       <div className="flex-1 overflow-y-auto">
         <Group items={PRIMARY_NAV} />
@@ -58,7 +69,9 @@ export function Sidebar() {
             </div>
           </Link>
         )}
-      </div>
-    </aside>
+        </div>
+        </div>
+      </SheetContent>
+    </Sheet>
   );
 }

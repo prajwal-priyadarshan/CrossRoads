@@ -1,4 +1,6 @@
 import { Link } from 'react-router';
+import { useMe } from '@/hooks/useMe';
+import { CAMPUS_NAV, CAREER_NAV, PRIMARY_NAV } from '@/components/layout/nav';
 import { motion } from 'motion/react';
 import { Building2, HeartHandshake, MessageCircleQuestion, ThumbsUp, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -7,6 +9,31 @@ import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { MatchRing } from '@/components/shared/MatchRing';
 import { ReasonChip } from '@/components/shared/ReasonChip';
 import { UserAvatar } from '@/components/shared/UserAvatar';
+
+/** One line per page, so the landing page can show everything the app does. Labels and links come from the app's own nav. */
+const FEATURE_BLURBS: Record<string, string> = {
+  '/home': 'Your feed, this week, and what needs your attention',
+  '/ask': 'Questions answered by seniors and alumni, with the best answer marked',
+  '/community': 'Discussions by topic, with votes and comments',
+  '/people': 'Find people by skills, goals and target companies, with reasons for each match',
+  '/requests': 'Connections, mentorship and collaboration requests in one place',
+  '/messages': 'Chat with the people you are connected to',
+  '/prep': 'Your readiness per company, prep tracks and a practice simulator',
+  '/companies': 'Campus company pages with roles, rounds and real interview experiences',
+  '/roadmaps': 'Step-by-step paths from people who reached the same goal',
+  '/path-twins': 'People who started where you did, and where they went',
+  '/clubs': 'Honest reviews of clubs: time, skills gained and when to join',
+  '/opportunities': 'Internships, hackathons, research and referrals shared on campus',
+  '/teams': 'Find teammates for hackathons, projects, startups and study circles',
+  '/stories': 'Journeys from your campus: placements, startups and research',
+  '/support': 'Wellbeing resources and how to get help',
+};
+
+const FEATURE_GROUPS = [
+  { title: 'Learn and ask', items: PRIMARY_NAV },
+  { title: 'Career', items: CAREER_NAV },
+  { title: 'Campus', items: CAMPUS_NAV },
+];
 
 const VALUE_CARDS = [
   {
@@ -68,6 +95,7 @@ function PreviewCluster() {
 }
 
 export function LandingPage() {
+  const { data: me } = useMe();
   return (
     <div className="min-h-dvh bg-background">
       <header className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 md:px-8">
@@ -78,12 +106,20 @@ export function LandingPage() {
         </nav>
         <div className="ml-auto flex items-center gap-2">
           <ThemeToggle />
-          <Button variant="ghost" asChild>
-            <Link to="/login">Log in</Link>
-          </Button>
-          <Button asChild className="hidden sm:inline-flex">
-            <Link to="/register">Join with college email</Link>
-          </Button>
+          {me ? (
+            <Button asChild>
+              <Link to="/home">Open the app</Link>
+            </Button>
+          ) : (
+            <>
+              <Button variant="ghost" asChild>
+                <Link to="/login">Log in</Link>
+              </Button>
+              <Button asChild className="hidden sm:inline-flex">
+                <Link to="/register">Join with college email</Link>
+              </Button>
+            </>
+          )}
         </div>
       </header>
 
@@ -123,6 +159,37 @@ export function LandingPage() {
               </div>
               <h3 className="font-display text-lg font-semibold">{title}</h3>
               <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 py-12 md:px-8" aria-labelledby="features-heading">
+        <h2 id="features-heading" className="font-display text-2xl font-semibold tracking-tight md:text-3xl">
+          Everything in one place
+        </h2>
+        <div className="mt-8 space-y-10">
+          {FEATURE_GROUPS.map((group) => (
+            <div key={group.title}>
+              <h3 className="mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">{group.title}</h3>
+              <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {group.items.map(({ to, label, icon: Icon }) => (
+                  <li key={to}>
+                    <Link
+                      to={me ? to : '/login'}
+                      className="flex h-full gap-4 rounded-2xl border bg-card p-5 transition hover:border-primary/40"
+                    >
+                      <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary">
+                        <Icon className="size-4" />
+                      </span>
+                      <span className="min-w-0">
+                        <span className="block font-semibold">{label}</span>
+                        <span className="mt-0.5 block text-sm text-muted-foreground">{FEATURE_BLURBS[to]}</span>
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
           ))}
         </div>

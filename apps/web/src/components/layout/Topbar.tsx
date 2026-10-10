@@ -1,4 +1,4 @@
-import { Search } from 'lucide-react';
+import { PanelLeft, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useUiStore } from '@/stores/uiStore';
 import { Logo } from './Logo';
@@ -8,9 +8,13 @@ import { UserMenu } from './UserMenu';
 
 export function Topbar() {
   const setPaletteOpen = useUiStore((s) => s.setPaletteOpen);
+  const setSidebarOpen = useUiStore((s) => s.setSidebarOpen);
   return (
     <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b bg-background/80 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:px-8">
-      <Logo className="lg:hidden" />
+      <Button variant="ghost" size="icon" aria-label="Open menu" onClick={() => setSidebarOpen(true)}>
+        <PanelLeft className="size-5" />
+      </Button>
+      <Logo />
       <Button
         variant="outline"
         className="hidden w-full max-w-md justify-start text-muted-foreground lg:flex"

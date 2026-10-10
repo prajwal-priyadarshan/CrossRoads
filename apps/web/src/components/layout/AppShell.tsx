@@ -13,7 +13,7 @@ export function AppShell() {
   return (
     <div className="min-h-dvh bg-background">
       <Sidebar />
-      <div className="lg:pl-[248px]">
+      <div>
         <Topbar />
         <main className="mx-auto w-full max-w-[1120px] px-4 pb-24 pt-6 md:px-8 lg:pb-10">
           <Outlet />

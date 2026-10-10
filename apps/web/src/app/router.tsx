@@ -80,12 +80,13 @@ export const router = createBrowserRouter([
       {
         element: <PublicOnly />,
         children: [
-          { path: '/', ...page(() => import('@/features/landing/LandingPage'), 'LandingPage') },
           { path: '/login', ...page(() => import('@/features/auth/LoginPage'), 'LoginPage') },
           { path: '/register', ...page(() => import('@/features/auth/RegisterPage'), 'RegisterPage') },
           { path: '/verify', ...page(() => import('@/features/auth/VerifyPage'), 'VerifyPage') },
         ],
       },
+      // The landing page lists every feature; open to everyone, signed in or not
+      { path: '/', ...page(() => import('@/features/landing/LandingPage'), 'LandingPage') },
       // Phase 10: /support (public)
       { path: '/support', ...page(() => import('@/features/support/SupportPage'), 'SupportPage') },
       {
