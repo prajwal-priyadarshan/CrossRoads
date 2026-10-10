@@ -1,5 +1,8 @@
 import { CalendarDays, HeartHandshake, Home, MessageCircle, MessageCircleQuestion, MessagesSquare, Users, Building2, Compass, Route, Map, Briefcase, UsersRound, Handshake, Target, BookOpen, LifeBuoy, Shield } from 'lucide-react';
 
+/** Items that only make sense for students. Alumni do not see them in the menu. */
+export const STUDENT_ONLY = new Set(['/prep', '/path-twins', '/clubs']);
+
 export const PRIMARY_NAV = [
   { to: '/home', label: 'Home', icon: Home },
   { to: '/ask', label: 'Ask a Senior', icon: MessageCircleQuestion },

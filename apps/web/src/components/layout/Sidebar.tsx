@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 import { Logo } from './Logo';
 import { UserAvatar } from '@/components/shared/UserAvatar';
 import { RoleBadge } from '@/components/shared/RoleBadge';
-import { PRIMARY_NAV, CAREER_NAV, CAMPUS_NAV, FOOTER_NAV } from './nav';
+import { PRIMARY_NAV, CAREER_NAV, CAMPUS_NAV, FOOTER_NAV, STUDENT_ONLY } from './nav';
 
 type Item = { to: string; label: string; icon: ComponentType<{ className?: string }> };
 
@@ -43,6 +43,7 @@ function Group({ label, items }: { label?: string; items: Item[] }) {
 export function Sidebar() {
   const { data: me } = useMe();
   const open = useUiStore((s) => s.sidebarOpen);
+  const forStudent = (items: Item[]) => (me?.role === 'ALUMNI' ? items.filter((i) => !STUDENT_ONLY.has(i.to)) : items);
   const setOpen = useUiStore((s) => s.setSidebarOpen);
   const { pathname } = useLocation();
   // Picking a page closes the panel, so the content is what you see next
@@ -55,8 +56,8 @@ export function Sidebar() {
       <Logo className="px-3 pb-2" />
       <div className="flex-1 overflow-y-auto">
         <Group items={PRIMARY_NAV} />
-        <Group label="Career" items={CAREER_NAV} />
-        <Group label="Campus" items={CAMPUS_NAV} />
+        <Group label="Career" items={forStudent(CAREER_NAV)} />
+        <Group label="Campus" items={forStudent(CAMPUS_NAV)} />
       </div>
       <div className="space-y-3 border-t pt-3">
         <Group items={FOOTER_NAV.filter((i) => !i.adminOnly || me?.role === 'ADMIN')} />
