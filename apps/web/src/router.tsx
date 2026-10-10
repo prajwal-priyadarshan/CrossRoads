@@ -9,6 +9,10 @@ import { OnboardingPage } from '@/features/onboarding/OnboardingPage';
 import { HomePage } from '@/features/home/HomePage';
 import { NotFoundPage } from '@/pages/NotFoundPage';
 import { MeRedirect } from '@/pages/MeRedirect';
+import { PeoplePage } from '@/features/people/PeoplePage';
+import { ProfilePage } from '@/features/profile/ProfilePage';
+import { ProfileEditPage } from '@/features/profile/ProfileEditPage';
+import { RequestsPage } from '@/features/requests/RequestsPage';
 
 export const router = createBrowserRouter([
   {
@@ -33,7 +37,10 @@ export const router = createBrowserRouter([
             children: [
               { path: '/home', element: <HomePage /> },
               { path: '/me', element: <MeRedirect /> },
-              // Phase 03+: /people, /u/:handle, /requests, …
+              { path: '/people', element: <PeoplePage /> },
+              { path: '/u/:handle', element: <ProfilePage /> },
+              { path: '/settings/profile', element: <ProfileEditPage /> },
+              { path: '/requests', element: <RequestsPage /> },
               { element: <RequireAdmin />, children: [{ path: '/admin/*', element: <Navigate to="/home" replace /> }] },
             ],
           },

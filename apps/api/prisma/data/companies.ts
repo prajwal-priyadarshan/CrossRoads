@@ -45,7 +45,7 @@ export const companies = [
     ],
   },
   {
-    slug: 'meridian-infosys-group',
+    slug: 'meridian-technology-services',
     name: 'Meridian Technology Services',
     description: desc('Large IT services and consulting firm.'),
     website: null,

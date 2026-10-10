@@ -54,7 +54,8 @@ npm run typecheck                  # api + web
 npm run format                     # prettier --write .
 npm run db:deploy -w apps/api      # prisma migrate deploy
 npm run db:search -w apps/api      # apply search.sql (FTS + trigram indexes)
-npm run db:seed -w apps/api        # seed data
+npm run db:seed -w apps/api        # base seed (topics, badges, companies, clubs, events, admin)
+npm run seed:users -w apps/api     # 30 demo users (password demo12345); idempotent
 ```
 
 Tests: Vitest unit tests for algorithms (`scoreMatch`, `rankFeed`, `levelFor`, `adaptDifficulty`, `readiness`); API smoke via `apps/api/scripts/smoke.http`; otherwise manual per-phase test tables.

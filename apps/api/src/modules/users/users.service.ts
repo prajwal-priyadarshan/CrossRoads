@@ -1,8 +1,10 @@
-import type { OnboardingInput } from '@bridgeup/shared';
+import type { OnboardingInput, ProfileUpdateInput } from '@bridgeup/shared';
 import type { User } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
 import { normalizeTag } from '../../lib/text';
-import { badRequest } from '../../lib/errors';
+import { badRequest, notFound } from '../../lib/errors';
+import { scoreMatch } from '../../services/matching';
+import { asMatchProfile, toPublicProfile } from './users.serializers';
 
 /** Serializer for the signed-in user. Never leaks the password hash. */
 export function toMe(u: User) {
@@ -71,4 +73,51 @@ export async function completeOnboarding(userId: string, input: OnboardingInput)
     });
     return user;
   });
+}
+
+export async function updateProfile(userId: string, input: ProfileUpdateInput) {
+  const uniq = (xs?: string[]) => (xs ? [...new Set(xs.map(normalizeTag).filter(Boolean))] : undefined);
+  const blankToNull = (v?: string) => (v === '' ? null : v);
+  const { projects, ...rest } = input;
+  return prisma.user.update({
+    where: { id: userId },
+    data: {
+      ...rest,
+      ...(projects ? { projects } : {}),
+      skills: uniq(input.skills),
+      interests: uniq(input.interests),
+      targetRoles: uniq(input.targetRoles),
+      canHelpWith: uniq(input.canHelpWith),
+      lookingFor: uniq(input.lookingFor),
+      mentorTopics: uniq(input.mentorTopics),
+      company: blankToNull(input.company),
+      jobTitle: blankToNull(input.jobTitle),
+      linkedinUrl: blankToNull(input.linkedinUrl),
+      githubUrl: blankToNull(input.githubUrl),
+    },
+  });
+}
+
+export async function getPublicProfile(handle: string, viewer: { id: string }) {
+  const [user, me] = await Promise.all([
+    prisma.user.findUnique({
+      where: { handle },
+      include: { milestones: { orderBy: [{ yearOfStudy: 'asc' }, { createdAt: 'asc' }] } },
+    }),
+    prisma.user.findUniqueOrThrow({ where: { id: viewer.id } }),
+  ]);
+  if (!user || !user.onboarded) throw notFound('Profile not found');
+  const profile = toPublicProfile(user, viewer.id);
+  const match = user.id === me.id ? null : scoreMatch(asMatchProfile(me), asMatchProfile(user));
+  const connection = await prisma.connection.findFirst({
+    where: {
+      OR: [
+        { requesterId: me.id, recipientId: user.id },
+        { requesterId: user.id, recipientId: me.id },
+      ],
+    },
+    orderBy: { createdAt: 'desc' },
+    select: { id: true, kind: true, status: true, requesterId: true },
+  });
+  return { ...profile, match, connection };
 }
