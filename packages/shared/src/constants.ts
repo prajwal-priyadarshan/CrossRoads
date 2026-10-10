@@ -13,7 +13,8 @@ export const SKILLS = [
   'computer vision', 'nlp', 'generative ai', 'llms', 'data analysis', 'statistics', 'power bi', 'excel', 'cloud', 'aws',
   'docker', 'kubernetes', 'linux', 'git', 'system design', 'cybersecurity', 'blockchain', 'embedded systems', 'iot',
   'robotics', 'figma', 'ui/ux', 'product management', 'finance', 'quant', 'public speaking', 'writing', 'marketing',
-  'business strategy', 'video editing',
+  'business strategy', 'video editing', 'operating systems', 'dbms', 'oop', 'aptitude', 'probability', 'communication',
+  'digital electronics', 'c programming', 'networking',
 ] as const;
 
 export const INTERESTS = [

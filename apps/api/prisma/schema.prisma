@@ -1,0 +1,717 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ───────────── Enums ─────────────
+enum Role {
+  STUDENT
+  SENIOR
+  ALUMNI
+  ADMIN
+}
+
+enum GoalTrack {
+  PRODUCT
+  SERVICE
+  QUANT_FINANCE
+  RESEARCH
+  STARTUP
+  MS
+  MBA
+  UNDECIDED
+}
+
+enum PostKind {
+  DISCUSSION
+  QUESTION
+  OPPORTUNITY
+}
+
+enum OpportunityType {
+  INTERNSHIP
+  HACKATHON
+  RESEARCH
+  EVENT
+  REFERRAL
+  STUDY_GROUP
+  COLLABORATION
+  CAREER_GUIDANCE
+}
+
+enum VoteTarget {
+  POST
+  COMMENT
+}
+
+enum BookmarkTarget {
+  POST
+  EXPERIENCE
+  ROADMAP
+  STORY
+}
+
+enum ConnectionKind {
+  CONNECT
+  MENTORSHIP
+  COLLAB
+  PEER_GUIDANCE
+}
+
+enum ConnectionStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+  COMPLETED
+}
+
+enum Outcome {
+  SELECTED
+  NOT_SELECTED
+  WITHHELD
+}
+
+enum MilestoneCategory {
+  CLUB
+  PROJECT
+  INTERNSHIP
+  COURSE
+  ACHIEVEMENT
+  JOB
+  STARTUP
+}
+
+enum TeamKind {
+  HACKATHON
+  PROJECT
+  STARTUP
+  STUDY_CIRCLE
+}
+
+enum TeamStatus {
+  OPEN
+  CLOSED
+}
+
+enum ApplicationStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum EventCategory {
+  DEADLINE
+  CLUB
+  EXAM
+  HACKATHON
+  PLACEMENT
+  EVENT
+  REUNION
+  CHAPTER_MEET
+  WEBINAR
+}
+
+enum ReportTarget {
+  POST
+  COMMENT
+  EXPERIENCE
+  PROFILE
+  TEAM
+  STORY
+}
+
+enum ReportReason {
+  SPAM
+  MISLEADING
+  INAPPROPRIATE
+  HARASSMENT
+  OTHER
+}
+
+enum ReportStatus {
+  OPEN
+  RESOLVED
+  DISMISSED
+}
+
+enum StoryStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum PrepCategory {
+  OA
+  APTITUDE
+  TECHNICAL
+  HR
+}
+
+enum SimRoundType {
+  APTITUDE
+  CODING
+  CS_FUNDAMENTALS
+  TECHNICAL
+  HR
+}
+
+enum SimFormat {
+  MCQ
+  SHORT
+  CODING_APPROACH
+}
+
+enum SimStatus {
+  ACTIVE
+  FINISHED
+}
+
+enum CodePurpose {
+  VERIFY_EMAIL
+}
+
+// ───────────── Auth helpers ─────────────
+model AllowedEmail {
+  email     String   @id
+  role      Role     @default(ALUMNI)
+  createdAt DateTime @default(now())
+}
+
+model EmailCode {
+  id        String      @id @default(uuid())
+  email     String
+  codeHash  String
+  purpose   CodePurpose @default(VERIFY_EMAIL)
+  attempts  Int         @default(0)
+  expiresAt DateTime
+  createdAt DateTime    @default(now())
+
+  @@index([email, purpose])
+}
+
+// ───────────── Users ─────────────
+model User {
+  id               String     @id @default(uuid())
+  email            String     @unique
+  passwordHash     String
+  emailVerified    Boolean    @default(false)
+  handle           String     @unique
+  fullName         String
+  avatarUrl        String?
+  role             Role       @default(STUDENT)
+  department       String?
+  batchYear        Int? // graduation year
+  currentYear      Int? // 1–5; null for alumni
+  company          String? // current company (alumni, interns)
+  jobTitle         String?
+  bio              String     @default("")
+  skills           String[]   @default([])
+  interests        String[]   @default([])
+  targetRoles      String[]   @default([])
+  targetCompanies  String[]   @default([]) // company slugs
+  goalTrack        GoalTrack?
+  canHelpWith      String[]   @default([])
+  lookingFor       String[]   @default([])
+  projects         Json       @default("[]") // [{ title, description, url? }]
+  achievements     String[]   @default([])
+  linkedinUrl      String?
+  githubUrl        String?
+  showEmail        Boolean    @default(false)
+  showLinkedin     Boolean    @default(true)
+  showGithub       Boolean    @default(true)
+  mentorAvailable  Boolean    @default(false)
+  mentorTopics     String[]   @default([])
+  mentorSlots      String     @default("") // e.g. "Sat 5–6 pm, Sun 11–12"
+  showOnMentorWall Boolean    @default(true)
+  isVerified       Boolean    @default(false)
+  onboarded        Boolean    @default(false)
+  consentAt        DateTime?
+  points           Int        @default(0)
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+
+  posts             Post[]
+  comments          Comment[]
+  votes             Vote[]
+  bookmarks         Bookmark[]
+  topicFollows      TopicFollow[]
+  sentRequests      Connection[]       @relation("SentRequests")
+  receivedRequests  Connection[]       @relation("ReceivedRequests")
+  experiences       Experience[]
+  clubReviews       ClubReview[]
+  milestones        Milestone[]
+  roadmaps          Roadmap[]
+  roadmapSaves      RoadmapSave[]
+  teams             Team[]
+  applications      TeamApplication[]
+  notifications     Notification[]
+  ledger            PointsLedger[]
+  badges            UserBadge[]
+  reports           Report[]
+  alertSubscription AlertSubscription?
+  storiesAuthored   Story[]            @relation("StoryAuthor")
+  storiesFeatured   Story[]            @relation("StoryFeatured")
+  prepItems         PrepItem[]
+  simSessions       SimSession[]
+  eventsCreated     Event[]
+
+  @@index([role])
+  @@index([department])
+  @@index([batchYear])
+}
+
+// ───────────── Topics ─────────────
+model Topic {
+  id          Int           @id @default(autoincrement())
+  slug        String        @unique
+  name        String
+  description String        @default("")
+  icon        String        @default("hash") // lucide icon name
+  posts       Post[]
+  followers   TopicFollow[]
+}
+
+model TopicFollow {
+  userId    String
+  topicId   Int
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  topic     Topic    @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  @@id([userId, topicId])
+}
+
+// ───────────── Posts, comments, votes, bookmarks ─────────────
+model Post {
+  id              String           @id @default(uuid())
+  authorId        String
+  kind            PostKind
+  title           String
+  body            String           @default("")
+  topicId         Int?
+  tags            String[]         @default([])
+  opportunityType OpportunityType?
+  organization    String?
+  deadline        DateTime?
+  externalUrl     String?
+  score           Int              @default(0)
+  commentCount    Int              @default(0)
+  bestAnswerId    String?          @unique
+  isRemoved       Boolean          @default(false)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  author     User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  topic      Topic?    @relation(fields: [topicId], references: [id])
+  comments   Comment[] @relation("PostComments")
+  bestAnswer Comment?  @relation("BestAnswer", fields: [bestAnswerId], references: [id], onDelete: SetNull)
+
+  @@index([kind, createdAt(sort: Desc)])
+  @@index([topicId])
+  @@index([authorId])
+  @@index([deadline])
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  postId    String
+  authorId  String
+  parentId  String?
+  body      String
+  score     Int      @default(0)
+  isRemoved Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  post         Post      @relation("PostComments", fields: [postId], references: [id], onDelete: Cascade)
+  author       User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  parent       Comment?  @relation("Replies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies      Comment[] @relation("Replies")
+  bestAnswerOf Post?     @relation("BestAnswer")
+
+  @@index([postId, createdAt])
+  @@index([authorId])
+}
+
+model Vote {
+  userId     String
+  targetType VoteTarget
+  targetId   String
+  value      Int // -1 or 1 (validated in the API)
+  createdAt  DateTime   @default(now())
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, targetType, targetId])
+  @@index([targetType, targetId])
+}
+
+model Bookmark {
+  userId     String
+  targetType BookmarkTarget
+  targetId   String
+  createdAt  DateTime       @default(now())
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([userId, targetType, targetId])
+}
+
+// ───────────── Connections and mentorship ─────────────
+model Connection {
+  id          String           @id @default(uuid())
+  requesterId String
+  recipientId String
+  kind        ConnectionKind
+  message     String
+  topic       String? // the specific question for mentorship / peer guidance
+  status      ConnectionStatus @default(PENDING)
+  followUps   Json             @default("[]") // [{ id, text, done, by }]
+  sessionNote String?
+  createdAt   DateTime         @default(now())
+  respondedAt DateTime?
+  completedAt DateTime?
+
+  requester User @relation("SentRequests", fields: [requesterId], references: [id], onDelete: Cascade)
+  recipient User @relation("ReceivedRequests", fields: [recipientId], references: [id], onDelete: Cascade)
+
+  @@unique([requesterId, recipientId, kind])
+  @@index([recipientId, status])
+}
+
+// ───────────── Companies and experiences ─────────────
+model Company {
+  id           String   @id @default(uuid())
+  slug         String   @unique
+  name         String
+  description  String   @default("")
+  website      String?
+  roles        String[] @default([])
+  rounds       Json     @default("[]") // [{ name, type, description }]
+  skillsTested String[] @default([])
+  prepRoadmap  Json     @default("[]") // [{ title, detail, category }]
+  visitMonth   String?
+
+  experiences Experience[]
+  prepItems   PrepItem[]
+  simSessions SimSession[]
+}
+
+model Experience {
+  id         String   @id @default(uuid())
+  authorId   String
+  companyId  String
+  role       String
+  year       Int
+  rounds     Json     @default("[]") // [{ name, type: SimRoundType, topics: string[], difficulty: 1-5, notes }]
+  difficulty Int      @default(3)
+  prepWeeks  Int?
+  resources  String[] @default([])
+  tips       String   @default("")
+  outcome    Outcome  @default(WITHHELD)
+  isVerified Boolean  @default(false)
+  isRemoved  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  author  User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([companyId, year])
+}
+
+// ───────────── Clubs ─────────────
+model Club {
+  id               String       @id @default(uuid())
+  slug             String       @unique
+  name             String
+  category         String // TECH | CULTURAL | SPORTS | ENTREPRENEURSHIP | SOCIAL
+  description      String       @default("")
+  timeCommitment   String       @default("")
+  skillsGained     String[]     @default([])
+  recruitmentMonth String?
+  joinUrl          String?
+  reviews          ClubReview[]
+}
+
+model ClubReview {
+  id         String   @id @default(uuid())
+  clubId     String
+  authorId   String
+  usefulness Int // 1–5
+  timeCost   Int // 1–5
+  review     String   @default("")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  club   Club @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@unique([clubId, authorId])
+}
+
+// ───────────── Journeys (Path Twins) ─────────────
+model Milestone {
+  id          String            @id @default(uuid())
+  userId      String
+  yearOfStudy Int // 1–4, 5 = after graduation
+  category    MilestoneCategory
+  title       String
+  description String            @default("")
+  createdAt   DateTime          @default(now())
+  user        User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, yearOfStudy])
+}
+
+// ───────────── Roadmaps ─────────────
+model Roadmap {
+  id        String    @id @default(uuid())
+  authorId  String?
+  goalTrack GoalTrack
+  title     String
+  summary   String    @default("")
+  steps     Json      @default("[]") // [{ id, title, detail, semester, kind: SKILL|PROJECT|RESOURCE|PRACTICE, resources: string[] }]
+  mistakes  String[]  @default([])
+  gaps      Json      @default("[]") // AI/deterministic: [{ skill, why, priority }]
+  sources   Json      @default("{}") // { roadmaps: n, experiences: n, journeys: n }
+  isAi      Boolean   @default(false)
+  isPublic  Boolean   @default(true)
+  saveCount Int       @default(0)
+  createdAt DateTime  @default(now())
+
+  author User?         @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  saves  RoadmapSave[]
+
+  @@index([goalTrack, isPublic])
+}
+
+model RoadmapSave {
+  userId         String
+  roadmapId      String
+  completedSteps String[] @default([])
+  createdAt      DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  roadmap Roadmap @relation(fields: [roadmapId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roadmapId])
+}
+
+// ───────────── Teams, founder track, study circles ─────────────
+model Team {
+  id             String     @id @default(uuid())
+  ownerId        String
+  kind           TeamKind
+  title          String
+  description    String     @default("")
+  requiredSkills String[]   @default([])
+  rolesNeeded    String[]   @default([])
+  commitment     String     @default("")
+  maxMembers     Int        @default(4)
+  meetingDetails String     @default("")
+  schedule       String     @default("")
+  openJoin       Boolean    @default(false) // study circles: join instantly
+  status         TeamStatus @default(OPEN)
+  isRemoved      Boolean    @default(false)
+  createdAt      DateTime   @default(now())
+
+  owner        User              @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  applications TeamApplication[]
+
+  @@index([kind, status])
+}
+
+model TeamApplication {
+  id          String            @id @default(uuid())
+  teamId      String
+  applicantId String
+  message     String            @default("")
+  status      ApplicationStatus @default(PENDING)
+  createdAt   DateTime          @default(now())
+
+  team      Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  applicant User @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, applicantId])
+}
+
+// ───────────── Events (This Week; extended in Phase 11) ─────────────
+model Event {
+  id            String        @id @default(uuid())
+  title         String
+  description   String        @default("")
+  category      EventCategory
+  startsAt      DateTime
+  endsAt        DateTime?
+  link          String?
+  location      String?
+  audienceYears Int[]         @default([1, 2, 3, 4, 5])
+  createdById   String?
+  createdAt     DateTime      @default(now())
+
+  createdBy User? @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([startsAt])
+}
+
+// ───────────── Notifications and alerts ─────────────
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  type      String // ANSWER | COMMENT | REQUEST | REQUEST_RESPONSE | APPLICATION | BADGE | OPPORTUNITY | MENTION | SYSTEM
+  title     String
+  body      String   @default("")
+  link      String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRead, createdAt(sort: Desc)])
+}
+
+model AlertSubscription {
+  userId           String            @id
+  enabled          Boolean           @default(true)
+  opportunityTypes OpportunityType[] @default([])
+  topicIds         Int[]             @default([])
+  tags             String[]          @default([])
+  updatedAt        DateTime          @updatedAt
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// ───────────── Gamification ─────────────
+model PointsLedger {
+  id        String   @id @default(uuid())
+  userId    String
+  action    String
+  points    Int
+  refId     String // what earned it (comment id, experience id…); never null so the unique key works
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, action, refId])
+  @@index([createdAt])
+}
+
+model Badge {
+  slug        String      @id
+  name        String
+  description String
+  icon        String // lucide icon name
+  howToEarn   String
+  users       UserBadge[]
+}
+
+model UserBadge {
+  userId    String
+  badgeSlug String
+  awardedAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  badge     Badge    @relation(fields: [badgeSlug], references: [slug], onDelete: Cascade)
+
+  @@id([userId, badgeSlug])
+}
+
+// ───────────── Stories ─────────────
+model Story {
+  id             String      @id @default(uuid())
+  slug           String      @unique
+  title          String
+  excerpt        String
+  body           String
+  coverUrl       String?
+  tags           String[]    @default([])
+  authorId       String?
+  featuredUserId String?
+  isSpotlight    Boolean     @default(false)
+  status         StoryStatus @default(DRAFT)
+  isRemoved      Boolean     @default(false)
+  publishedAt    DateTime?
+  createdAt      DateTime    @default(now())
+
+  author       User? @relation("StoryAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  featuredUser User? @relation("StoryFeatured", fields: [featuredUserId], references: [id], onDelete: SetNull)
+
+  @@index([status, publishedAt(sort: Desc)])
+}
+
+// ───────────── Moderation ─────────────
+model Report {
+  id         String       @id @default(uuid())
+  reporterId String
+  targetType ReportTarget
+  targetId   String
+  reason     ReportReason
+  details    String       @default("")
+  status     ReportStatus @default(OPEN)
+  resolvedAt DateTime?
+  createdAt  DateTime     @default(now())
+  reporter   User         @relation(fields: [reporterId], references: [id], onDelete: Cascade)
+
+  @@index([status, createdAt])
+}
+
+// ───────────── Placement prep and simulator ─────────────
+model PrepItem {
+  id        String       @id @default(uuid())
+  userId    String
+  companyId String?
+  category  PrepCategory
+  title     String
+  done      Boolean      @default(false)
+  source    String       @default("custom") // custom | company | roadmap
+  createdAt DateTime     @default(now())
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company Company? @relation(fields: [companyId], references: [id], onDelete: SetNull)
+
+  @@index([userId, category])
+}
+
+model SimSession {
+  id            String       @id @default(uuid())
+  userId        String
+  companyId     String
+  roundType     SimRoundType
+  difficulty    Int          @default(2) // 1–5
+  correctStreak Int          @default(0)
+  wrongStreak   Int          @default(0)
+  score         Int          @default(0)
+  total         Int          @default(0)
+  maxQuestions  Int          @default(5)
+  status        SimStatus    @default(ACTIVE)
+  summary       Json? // { strengths: [], revise: [], experienceIds: [] }
+  createdAt     DateTime     @default(now())
+
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company   Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  questions SimQuestion[]
+
+  @@index([userId, createdAt(sort: Desc)])
+}
+
+model SimQuestion {
+  id                 String    @id @default(uuid())
+  sessionId          String
+  order              Int
+  format             SimFormat
+  topic              String
+  difficulty         Int
+  prompt             String
+  options            Json? // MCQ: string[]
+  correctAnswer      String? // MCQ: option index as string
+  explanation        String    @default("")
+  rubric             Json? // SHORT / CODING_APPROACH: [{ point, weight }]
+  sourceExperienceId String?
+  sourceYear         Int?
+  sourceRole         String?
+  userAnswer         String?
+  isCorrect          Boolean?
+  scorePct           Int? // 0–100 for rubric-graded answers
+  feedback           String?
+  answeredAt         DateTime?
+
+  session SimSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+
+  @@unique([sessionId, order])
+}
