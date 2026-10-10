@@ -2,7 +2,7 @@
 
 > **Working name:** BridgeUp (final name to be decided)
 > **Version:** 2.0 · **Date:** 2026-10-10 · **Build window:** 10–12 hours for the core product
-> **Companion files:** `TRD.md` (technical design) · `phases/phase-00.md` … `phases/phase-11.md` (step-by-step build guide)
+> **Companion files:** `TRD.md` (technical design) · `phases/phase-00.md` … `phases/phase-11.md` (step-by-step build guide) · `phases/phase-12.md` (institutional layer, after every other phase: see F49–F57 below)
 > **Stack in one line:** React (Vite + TypeScript) frontend · Node.js (Express + TypeScript) backend · PostgreSQL with Prisma · deployed on Vercel + Render + Neon
 
 ---
@@ -196,6 +196,15 @@ These are **starting goals for a pilot, not industry benchmarks**. Adjust them a
 | F46 | Polished UI | Dark mode, responsive, empty states, skeletons, toasts, motion, accessibility | P0 | 0 + 10 |
 | F47 | Event management and ticketing | Create and track reunions, regional chapter meets and webinars; RSVPs; paid tickets in test mode; QR check-in | L | 11 |
 | F48 | Donation and fundraising gateway | Campaigns for infrastructure, research and scholarships; secure payments in test mode; progress, receipts, donor wall | L | 11 |
+| F49 | Official channel | Verified "Official" posts and badges for the registrar, placement cell, alumni relations, departments and clubs; distinct from student posts; surfaced in This Week and personalized home | P0 | 12 |
+| F50 | Placement cell data ownership | Placement-cell-owned company records, drive calendar and eligibility criteria; bulk import; "Verified by placement cell" state for interview experiences | P0 | 12 |
+| F51 | Institution analytics dashboard | Staff-facing dashboard: engagement, questions, mentorship sessions, alumni response rate, per-department/batch breakdowns; CSV/PDF export | P0 | 12 |
+| F52 | Alumni engagement record | Per-alumnus record of hours given, areas helped, students helped; auto-generated acknowledgement/certificate; feeds Mentor Wall | P1 | 12 |
+| F53 | Faculty and staff role | `FACULTY_STAFF` role distinct from `ADMIN`: posts as a department/office, sees aggregate department analytics, no platform-wide moderation unless also admin | P1 | 12 |
+| F54 | Safeguarding escalation path | Dedicated harassment/safety report category routed to a designated student-welfare contact; staff-coordinator visibility into first-year mentor–mentee threads, disclosed at request time | P0 | 12 |
+| F55 | Consent and data rights | Sign-up consent screen, self-serve data export, self-serve account/data deletion, public data-processing notice | P0 | 12 |
+| F56 | Vendor/landscape comparison note | Internal, re-verified-per-pitch comparison against existing institutional alumni platforms the college may already use | P2 | 12 |
+| F57 | Pilot scorecard | Fixed, pre-agreed pilot success metrics tracked on the institution dashboard from day one of a pilot | P1 | 12 |
 
 ---
 

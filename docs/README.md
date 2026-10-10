@@ -19,6 +19,7 @@ Read in this order:
 | 13 | `phases/phase-10.md` | Seed content, polish, deploy, demo (1:00) |
 | — | Buffer | 0:40 → total 12:00 |
 | 14 | `phases/phase-11.md` | Later features (after the hackathon): events and ticketing, donations |
+| 15 | `phases/phase-12.md` | Institutional layer (after the hackathon, after every other phase): official channel, placement cell integration, analytics dashboard, safeguarding, consent/data rights, faculty role |
 
 **Stack:** React (Vite, TypeScript, Tailwind v4, shadcn/ui, TanStack Query, React Router) · Node.js (Express 5, TypeScript, zod) · PostgreSQL (Neon) with Prisma · Groq free-tier LLM API (OpenAI-compatible) for AI features · Vercel + Render.
 
