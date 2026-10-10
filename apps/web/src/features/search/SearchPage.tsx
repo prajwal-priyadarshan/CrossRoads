@@ -11,19 +11,9 @@ import { ListSkeleton } from '@/components/shared/Skeletons';
 import { useDebounce } from '@/hooks/useDebounce';
 import { cn } from '@/lib/utils';
 import { GROUPS, useSearch } from './api';
+import { useCompanies } from '@/features/companies/api';
 
 const ANY = '__any__';
-// Seeded demo companies; replaced by GET /companies in Phase 06.
-const COMPANY_SLUGS = [
-  'northwind-labs',
-  'orbit-cloudworks',
-  'meridian-technology-services',
-  'harbor-digital-solutions',
-  'quantis-capital',
-  'insightly-analytics',
-  'neuronest-ai',
-  'ironclad-engineering',
-];
 const thisYear = new Date().getFullYear();
 const BATCHES = Array.from({ length: 12 }, (_, i) => thisYear + 4 - i);
 
@@ -98,6 +88,7 @@ export function SearchPage() {
   const q = sp.get('q') ?? '';
   const type = sp.get('type') ?? 'all';
   const [input, setInput] = useState(q);
+  const { data: companies } = useCompanies();
   const debounced = useDebounce(input, 300);
 
   const set = (patch: Record<string, string>) =>
@@ -177,7 +168,7 @@ export function SearchPage() {
             label="Company"
             value={sp.get('company') ?? ''}
             onChange={(v) => set({ company: v })}
-            options={COMPANY_SLUGS.map((s) => ({ value: s, label: s.replace(/-/g, ' ').replace(/\b\w/g, (m) => m.toUpperCase()) }))}
+            options={(companies ?? []).map((c) => ({ value: c.slug, label: c.name }))}
           />
         )}
         {showPeopleFilters && (

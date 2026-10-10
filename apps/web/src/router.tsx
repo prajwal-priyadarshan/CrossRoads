@@ -22,6 +22,15 @@ import { TagPage } from '@/features/community/TagPage';
 import { PostPage } from '@/features/community/PostPage';
 import { BookmarksPage } from '@/features/bookmarks/BookmarksPage';
 import { SearchPage } from '@/features/search/SearchPage';
+import { CompaniesPage } from '@/features/companies/CompaniesPage';
+import { CompanyPage } from '@/features/companies/CompanyPage';
+import { ExperienceNewPage } from '@/features/companies/ExperienceNewPage';
+import { ClubsPage } from '@/features/clubs/ClubsPage';
+import { ClubPage } from '@/features/clubs/ClubPage';
+import { PathTwinsPage } from '@/features/twins/PathTwinsPage';
+import { RoadmapsPage } from '@/features/roadmaps/RoadmapsPage';
+import { RoadmapPage } from '@/features/roadmaps/RoadmapPage';
+import { RoadmapNewPage } from '@/features/roadmaps/RoadmapNewPage';
 
 export const router = createBrowserRouter([
   {
@@ -59,6 +68,15 @@ export const router = createBrowserRouter([
               { path: '/post/:id', element: <PostPage /> },
               { path: '/bookmarks', element: <BookmarksPage /> },
               { path: '/search', element: <SearchPage /> },
+              { path: '/companies', element: <CompaniesPage /> },
+              { path: '/companies/:slug', element: <CompanyPage /> },
+              { path: '/experiences/new', element: <ExperienceNewPage /> },
+              { path: '/clubs', element: <ClubsPage /> },
+              { path: '/clubs/:slug', element: <ClubPage /> },
+              { path: '/path-twins', element: <PathTwinsPage /> },
+              { path: '/roadmaps', element: <RoadmapsPage /> },
+              { path: '/roadmaps/new', element: <RoadmapNewPage /> },
+              { path: '/roadmaps/:id', element: <RoadmapPage /> },
               { element: <RequireAdmin />, children: [{ path: '/admin/*', element: <Navigate to="/home" replace /> }] },
             ],
           },

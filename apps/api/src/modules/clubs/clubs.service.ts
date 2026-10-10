@@ -42,7 +42,11 @@ export async function getClub(slug: string, viewerId: string) {
   if (!club) throw notFound('Club not found');
   // "Seniors who were members", taken from journey milestones that mention the club
   const members = await prisma.milestone.findMany({
-    where: { category: 'CLUB', title: { contains: club.name, mode: 'insensitive' }, user: { onboarded: true } },
+    where: {
+      category: 'CLUB',
+      title: { contains: club.name, mode: 'insensitive' },
+      user: { onboarded: true, OR: [{ role: { in: ['SENIOR', 'ALUMNI'] } }, { currentYear: { gte: 2 } }] },
+    },
     take: 12,
     include: { user: { select: userLiteSelect } },
   });

@@ -29,6 +29,7 @@ import { useMe } from '@/hooks/useMe';
 import { cn } from '@/lib/utils';
 import { JourneyEditor } from './JourneyEditor';
 import { ProjectsEditor } from './ProjectsEditor';
+import { CompanyMultiSelect } from '@/features/companies/CompanyMultiSelect';
 import { useProfile, useUpdateProfile } from './api';
 
 type Tab = 'basics' | 'skills' | 'connect' | 'projects' | 'journey' | 'mentoring';
@@ -186,14 +187,8 @@ function SkillsGoals({ me }: { me: Me }) {
       <FormField label="Target roles">
         <ChipPicker value={s.state.targetRoles ?? []} onChange={(v) => s.set('targetRoles', v)} options={TARGET_ROLES} max={5} />
       </FormField>
-      <FormField label="Target companies" hint="Used for Find my alumni mentor. Company names are matched by slug, e.g. northwind-labs.">
-        <ChipPicker
-          value={s.state.targetCompanies ?? []}
-          onChange={(v) => s.set('targetCompanies', v)}
-          options={[]}
-          max={8}
-          placeholder="Add a company slug"
-        />
+      <FormField label="Target companies" hint="Used by Find my alumni mentor and company pages.">
+        <CompanyMultiSelect value={s.state.targetCompanies ?? []} onChange={(v) => s.set('targetCompanies', v)} />
       </FormField>
       <SaveBar onSave={s.save} saving={s.saving} error={s.error} />
     </div>

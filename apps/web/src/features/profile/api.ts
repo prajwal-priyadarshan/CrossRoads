@@ -14,6 +14,7 @@ export function useUpdateProfile() {
       qc.setQueryData(qk.me, me);
       qc.invalidateQueries({ queryKey: ['user'] });
       qc.invalidateQueries({ queryKey: ['people'] });
+      qc.invalidateQueries({ queryKey: ['company'] });
     },
   });
 }

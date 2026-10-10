@@ -6,6 +6,7 @@ import { Check } from 'lucide-react';
 import { GOAL_TRACKS, TARGET_ROLES, TOPICS, stepGoalsSchema } from '@bridgeup/shared';
 import { FormField } from '@/components/shared/FormField';
 import { ChipPicker } from '@/components/shared/ChipPicker';
+import { CompanyMultiSelect } from '@/features/companies/CompanyMultiSelect';
 import { cn } from '@/lib/utils';
 import { AppIcon as Icon } from '@/components/shared/AppIcon';
 import type { StepProps } from './types';
@@ -90,6 +91,14 @@ export function StepGoals({ draft, onSubmit, formId, interests }: StepProps<'goa
               placeholder="Search or add a role"
             />
           )}
+        />
+      </FormField>
+
+      <FormField label="Target companies (optional)">
+        <Controller
+          control={control}
+          name="targetCompanies"
+          render={({ field }) => <CompanyMultiSelect value={field.value ?? []} onChange={field.onChange} />}
         />
       </FormField>
 

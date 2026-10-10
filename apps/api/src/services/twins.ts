@@ -78,11 +78,13 @@ export async function findTwins(viewerId: string) {
     .sort((a, b) => b.score - a.score);
 
   const top = scored.slice(0, 3);
-  const pool = scored.slice(0, 5).flatMap((t) => t.person.milestones.filter((m) => m.yearOfStudy === 1));
+  const pool = scored
+    .slice(0, 5)
+    .flatMap((t) => t.person.milestones.filter((m) => m.yearOfStudy === 1).map((m) => ({ ...m, ownerId: t.person.id })));
   const year1 = Object.entries(groupBy(pool, (m) => m.category))
     .map(([category, items]) => ({
       category,
-      count: new Set(items.map((i) => i.id)).size,
+      count: new Set(items.map((i) => i.ownerId)).size, // how many twins, not how many milestones
       examples: [...new Set(items.map((i) => i.title))].slice(0, 3),
     }))
     .sort((a, b) => b.count - a.count);
