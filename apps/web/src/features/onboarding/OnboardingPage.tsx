@@ -39,7 +39,7 @@ export function OnboardingPage() {
     complete.mutate(full, {
       onSuccess: (updated) => {
         reset();
-        toast.success(`Welcome to Crossroads, ${updated.fullName.split(' ')[0]}! 🎉`);
+        toast.success(`Welcome, ${updated.fullName.split(' ')[0]}!`);
         navigate('/home', { replace: true });
       },
       onError: (e) => {

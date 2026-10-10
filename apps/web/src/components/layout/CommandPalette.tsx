@@ -46,7 +46,7 @@ export function CommandPalette() {
   const groups = data ? GROUPS.filter((g) => data[g.key].length > 0) : [];
 
   return (
-    <CommandDialog open={open} onOpenChange={setOpen} title="Search Crossroads" description="Search questions, people, companies and more">
+    <CommandDialog open={open} onOpenChange={setOpen} title="Search" description="Search questions, people, companies and more">
       {/* Results come from the server, so cmdk must not re-filter them */}
       <Command shouldFilter={false}>
         <CommandInput value={q} onValueChange={setQ} placeholder="Search questions, people, companies…" />

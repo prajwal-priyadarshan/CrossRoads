@@ -48,7 +48,7 @@ export function RegisterPage() {
 
   return (
     <AuthLayout
-      title="Join Crossroads"
+      title="Create your account"
       subtitle="Students: use your college email. Alumni: use your personal email."
       footer={
         <>

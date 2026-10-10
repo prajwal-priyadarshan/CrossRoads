@@ -20,7 +20,7 @@ export function PersonCard({ person, featured = false }: { person: Person; featu
     <article
       onClick={() => navigate(`/u/${person.handle}`)}
       className={`flex h-full cursor-pointer flex-col gap-3 rounded-2xl border p-4 transition hover:-translate-y-0.5 hover:shadow-md ${
-        featured ? 'bg-gradient-to-br from-primary-soft to-card' : 'bg-card'
+        featured ? 'bg-primary-soft' : 'bg-card'
       }`}
     >
       <div className="flex items-start gap-3">

@@ -9,8 +9,9 @@ export function SupportPage() {
     <div className="min-h-screen bg-background">
       <header className="border-b bg-card/50 px-6 py-4 backdrop-blur">
         <div className="mx-auto flex max-w-4xl items-center justify-between">
-          <Link to="/" className="text-xl font-bold tracking-tight text-primary">
-            Crossroads
+          <Link to="/" aria-label="Home" className="flex items-center">
+            <img src="/brand/crossroads-mark.png" alt="" className="block h-7 w-auto dark:hidden" />
+            <img src="/brand/crossroads-mark-dark.png" alt="" className="hidden h-7 w-auto dark:block" />
           </Link>
           <Button variant="ghost" asChild>
             <Link to="/home">Go to App</Link>
@@ -51,10 +52,10 @@ export function SupportPage() {
           {/* What Crossroads is */}
           <Card className="p-6">
             <h3 className="flex items-center gap-2 text-lg font-semibold">
-              <Info className="h-5 w-5 text-primary" /> What Crossroads is (and isn't)
+              <Info className="h-5 w-5 text-primary" /> What this is (and isn't)
             </h3>
             <p className="mt-3 text-sm text-muted-foreground">
-              Crossroads provides peer guidance from seniors and alumni. It is <strong>not</strong> a substitute for professional counselling, medical, or legal advice.
+              This space provides peer guidance from seniors and alumni. It is <strong>not</strong> a substitute for professional counselling, medical, or legal advice.
             </p>
             <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
               <li className="flex items-center gap-2">
@@ -74,7 +75,7 @@ export function SupportPage() {
             <div className="mt-4 grid gap-4 text-sm text-muted-foreground sm:grid-cols-2">
               <div>
                 <strong className="text-foreground">Be kind and constructive.</strong>
-                <p>No ragging, bullying, or harassment will be tolerated. Crossroads is a safe space.</p>
+                <p>No ragging, bullying, or harassment will be tolerated. This is a safe space.</p>
               </div>
               <div>
                 <strong className="text-foreground">Respect confidentiality.</strong>

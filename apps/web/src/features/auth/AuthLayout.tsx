@@ -17,14 +17,14 @@ export function AuthLayout({
 }) {
   return (
     <div className="grid min-h-dvh lg:grid-cols-2">
-      <div className="relative hidden flex-col justify-between overflow-hidden bg-gradient-to-br from-slate-600 via-slate-700 to-amber-800 p-10 text-white lg:flex">
-        <Logo to="/" className="[&_span]:text-white" />
+      <div className="relative hidden flex-col justify-between overflow-hidden bg-primary p-10 text-primary-foreground lg:flex">
+        <Logo to="/" onDark />
         <div className="space-y-8">
-          <figure className="rounded-2xl bg-white/10 p-6 backdrop-blur">
+          <figure className="rounded-2xl border border-white/10 p-6">
             <blockquote className="font-display text-xl font-semibold leading-snug">
               &ldquo;I wish I had this in my first year.&rdquo;
             </blockquote>
-            <figcaption className="mt-3 text-sm text-white/70">Example quote, not a real testimonial</figcaption>
+            <figcaption className="mt-3 text-sm opacity-70">Example quote, not a real testimonial</figcaption>
           </figure>
           <ul className="space-y-3">
             {BENEFITS.map((b) => (

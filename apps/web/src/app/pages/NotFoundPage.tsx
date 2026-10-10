@@ -12,7 +12,7 @@ export function NotFoundPage() {
         description="The link may be broken or the page may have moved."
         action={
           <Button asChild>
-            <Link to="/">Back to Crossroads</Link>
+            <Link to="/">Back to home</Link>
           </Button>
         }
       />

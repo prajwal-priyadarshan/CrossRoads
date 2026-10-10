@@ -6,55 +6,55 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --radius: 0.875rem;
-  /* Crossroads palette: navy ink, sunrise amber, warm paper (from the logo) */
-  --background: #FBF8F4;
-  --foreground: #1B2631;
-  --card: #FFFFFF;
-  --card-foreground: #1B2631;
-  --popover: #FFFFFF;
-  --popover-foreground: #1B2631;
-  --primary: #1E2D3D;
-  --primary-foreground: #FBF8F4;
-  --primary-soft: #E6EBF1;
-  --secondary: #F3EFE8;
-  --secondary-foreground: #1E2D3D;
-  --muted: #F3EFE8;
-  --muted-foreground: #6B6A66;
-  --accent: #FBEBD0;             /* shadcn "accent" = subtle hover bg; amber tint */
-  --accent-foreground: #7A4E12;
-  --warm: #E8A33C;               /* sunrise amber for points, badges and highlights */
-  --success: #2F7D5B;
-  --warning: #C2652A;
-  --destructive: #B4343F;
-  --border: #E6E0D6;
-  --input: #E6E0D6;
-  --ring: #E8A33C;
+  --radius: 0.75rem;
+  /* Brand palette: deep green ink, tan accents, cream paper */
+  --background: #F4F1EA;
+  --foreground: #13201A;
+  --card: #FBFAF6;
+  --card-foreground: #13201A;
+  --popover: #FBFAF6;
+  --popover-foreground: #13201A;
+  --primary: #1F3028;
+  --primary-foreground: #F4F1EA;
+  --primary-soft: #E7E9DF;
+  --secondary: #ECE8DC;
+  --secondary-foreground: #1F3028;
+  --muted: #ECE8DC;
+  --muted-foreground: #6A6F63;
+  --accent: #E3D4A8;
+  --accent-foreground: #4A3A14;
+  --warm: #C4A56A;
+  --success: #3E7558;
+  --warning: #B7682B;
+  --destructive: #A8373F;
+  --border: #E2DCCB;
+  --input: #E2DCCB;
+  --ring: #C4A56A;
 }
 
 .dark {
-  --background: #11161D;
-  --foreground: #F2EEE7;
-  --card: #19202A;
-  --card-foreground: #F2EEE7;
-  --popover: #19202A;
-  --popover-foreground: #F2EEE7;
-  --primary: #A9BED3;
-  --primary-foreground: #11161D;
-  --primary-soft: #1E2A38;
-  --secondary: #1E2733;
-  --secondary-foreground: #F2EEE7;
-  --muted: #1E2733;
-  --muted-foreground: #A7A9AE;
-  --accent: #2B2112;
-  --accent-foreground: #F5C978;
-  --warm: #F2B454;
-  --success: #4CC28F;
-  --warning: #E8864F;
-  --destructive: #F0737B;
-  --border: #2A3442;
-  --input: #2A3442;
-  --ring: #E8A33C;
+  --background: #101712;
+  --foreground: #F4F1EA;
+  --card: #17201A;
+  --card-foreground: #F4F1EA;
+  --popover: #17201A;
+  --popover-foreground: #F4F1EA;
+  --primary: #E3D4A8;
+  --primary-foreground: #101712;
+  --primary-soft: #22302A;
+  --secondary: #1B2620;
+  --secondary-foreground: #F4F1EA;
+  --muted: #1B2620;
+  --muted-foreground: #A3A894;
+  --accent: #2A2A1E;
+  --accent-foreground: #E3D4A8;
+  --warm: #C4A56A;
+  --success: #6FB392;
+  --warning: #D9915A;
+  --destructive: #E07A80;
+  --border: #26342C;
+  --input: #26342C;
+  --ring: #C4A56A;
 }
 
 @theme inline {

@@ -28,7 +28,7 @@ export function TopicTabs({ active, base = '/community' }: { active?: string; ba
           );
         })}
       </div>
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-background md:hidden" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-background md:hidden" />
     </div>
   );
 }
