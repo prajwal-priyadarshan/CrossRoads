@@ -57,7 +57,7 @@ export const usePost = (id: string) =>
 export function useCreatePost() {
   const qc = useQueryClient();
   return useMutation({
-    mutationFn: (b: PostCreateInput) => api<{ id: string }>('/posts', { method: 'POST', json: b }),
+    mutationFn: (b: PostCreateInput) => api<{ id: string; alerted: number }>('/posts', { method: 'POST', json: b }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['posts'] });
       qc.invalidateQueries({ queryKey: ['feed'] });

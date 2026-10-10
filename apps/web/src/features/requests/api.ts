@@ -49,10 +49,14 @@ export function useComplete() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (v: { id: string; sessionNote?: string }) =>
-      api(`/connections/${v.id}/complete`, { method: 'POST', json: { sessionNote: v.sessionNote } }),
-    onSuccess: () => {
-      toast.success('Session marked as completed');
+      api<{ connection: ConnectionRow; pointsEarned: number }>(`/connections/${v.id}/complete`, {
+        method: 'POST',
+        json: { sessionNote: v.sessionNote },
+      }),
+    onSuccess: ({ pointsEarned }) => {
+      toast.success(pointsEarned > 0 ? `+${pointsEarned} helpfulness — thank you for mentoring!` : 'Session marked as completed');
       qc.invalidateQueries({ queryKey: ['connections'] });
+      qc.invalidateQueries({ queryKey: qk.me });
     },
     onError: (e) => toast.error(e.message),
   });

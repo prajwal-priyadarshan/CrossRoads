@@ -47,6 +47,14 @@ const appRoutes: RouteObject[] = [
   { path: '/roadmaps/new', ...page(() => import('@/features/roadmaps/RoadmapNewPage'), 'RoadmapNewPage') },
   { path: '/roadmaps/:id', ...page(() => import('@/features/roadmaps/RoadmapPage'), 'RoadmapPage') },
 
+  // Opportunities, teams and notifications
+  { path: '/opportunities', ...page(() => import('@/features/opportunities/OpportunitiesPage'), 'OpportunitiesPage') },
+  { path: '/opportunities/new', ...page(() => import('@/features/opportunities/OpportunityNewPage'), 'OpportunityNewPage') },
+  { path: '/teams', ...page(() => import('@/features/teams/TeamsPage'), 'TeamsPage') },
+  { path: '/teams/new', ...page(() => import('@/features/teams/TeamNewPage'), 'TeamNewPage') },
+  { path: '/teams/:id', ...page(() => import('@/features/teams/TeamPage'), 'TeamPage') },
+  { path: '/notifications', ...page(() => import('@/features/notifications/NotificationsPage'), 'NotificationsPage') },
+
   // Admin (Phase 08)
   { element: <RequireAdmin />, children: [{ path: '/admin/*', element: <Navigate to="/home" replace /> }] },
 ];

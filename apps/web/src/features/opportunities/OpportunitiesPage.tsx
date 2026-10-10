@@ -5,11 +5,11 @@ import { OPPORTUNITY_TYPES } from '@bridgeup/shared';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { AppIcon } from '@/components/shared/AppIcon';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { FeedSkeleton } from '@/components/shared/Skeletons';
+import { SortToggle } from '@/features/community/SortToggle';
 import { useMe } from '@/hooks/useMe';
 import { cn } from '@/lib/utils';
 import { AlertSettingsDialog } from './AlertSettingsDialog';
@@ -19,7 +19,7 @@ import { useOpportunities } from './api';
 export function OpportunitiesPage() {
   const [params, setParams] = useSearchParams();
   const [type, setType] = useState('');
-  const [sort, setSort] = useState('closing');
+  const [sort, setSort] = useState<'closing' | 'newest'>('closing');
   const [showPast, setShowPast] = useState(false);
   const [alertsOpen, setAlertsOpen] = useState(false);
   const { data: me } = useMe();
@@ -78,17 +78,15 @@ export function OpportunitiesPage() {
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <ToggleGroup
-          type="single"
+        <SortToggle
           value={sort}
-          onValueChange={(v) => v && setSort(v)}
-          variant="outline"
-          size="sm"
-          aria-label="Sort opportunities"
-        >
-          <ToggleGroupItem value="closing">Closing soon</ToggleGroupItem>
-          <ToggleGroupItem value="newest">Newest</ToggleGroupItem>
-        </ToggleGroup>
+          onChange={setSort}
+          label="Sort opportunities"
+          options={[
+            { value: 'closing', label: 'Closing soon' },
+            { value: 'newest', label: 'Newest' },
+          ]}
+        />
         <div className="flex items-center gap-2">
           <Switch id="show-past" checked={showPast} onCheckedChange={setShowPast} />
           <Label htmlFor="show-past" className="text-sm text-muted-foreground">

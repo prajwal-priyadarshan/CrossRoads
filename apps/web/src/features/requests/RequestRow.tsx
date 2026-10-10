@@ -85,6 +85,10 @@ export function RequestRow({ row, meId }: { row: ConnectionRow; meId: string }) 
         </p>
       )}
 
+      {!incoming && row.status === 'COMPLETED' && row.followUps.length === 0 && (
+        <p className="text-xs font-medium text-primary">Add follow-up actions so nothing gets lost ↓</p>
+      )}
+
       {open && <FollowUps connectionId={row.id} initial={row.followUps} />}
 
       {(canRespond || canComplete) && (
