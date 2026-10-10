@@ -91,6 +91,26 @@ const ROUTES: Row[] = [
   { method: 'get', path: '/roadmaps/:id', tag: 'Campus', summary: 'Roadmap with your progress', auth: 'onboarded' },
   { method: 'put', path: '/roadmaps/:id/save', tag: 'Campus', summary: 'Toggle saving a roadmap', auth: 'onboarded' },
   { method: 'patch', path: '/roadmaps/:id/steps/:stepId', tag: 'Campus', summary: 'Tick or untick a step (auto-saves)', auth: 'onboarded', body: S.roadmapStepToggleSchema },
+
+  // Opportunities and alerts
+  { method: 'get', path: '/opportunities', tag: 'Opportunities', summary: 'Open opportunities with deadlines and a reason per item', auth: 'onboarded', query: S.opportunityListQuerySchema },
+  { method: 'get', path: '/me/alerts', tag: 'Opportunities', summary: 'Your opportunity alert preferences', auth: 'onboarded' },
+  { method: 'put', path: '/me/alerts', tag: 'Opportunities', summary: 'Replace your alert preferences (types, topics, keywords)', auth: 'onboarded', body: S.alertPrefsSchema },
+
+  // Teams, founder track and study circles
+  { method: 'get', path: '/teams', tag: 'Teams', summary: 'Open listings with your skill overlap', auth: 'onboarded', query: S.teamListQuerySchema },
+  { method: 'get', path: '/teams/advisors', tag: 'Teams', summary: 'Alumni and seniors who can advise founders', auth: 'onboarded' },
+  { method: 'post', path: '/teams', tag: 'Teams', summary: 'Create a hackathon team, project, startup or study circle', auth: 'onboarded', body: S.teamCreateSchema, status: 201 },
+  { method: 'get', path: '/teams/:id', tag: 'Teams', summary: 'Listing with members; applications for the owner', auth: 'onboarded' },
+  { method: 'post', path: '/teams/:id/apply', tag: 'Teams', summary: 'Apply once with a message', auth: 'onboarded', body: S.teamApplySchema, status: 201 },
+  { method: 'post', path: '/teams/:id/join', tag: 'Teams', summary: 'Join an open study circle instantly', auth: 'onboarded', status: 201 },
+  { method: 'patch', path: '/teams/:id/applications/:appId', tag: 'Teams', summary: 'Accept or reject an applicant (owner only)', auth: 'onboarded', body: S.applicationRespondSchema },
+  { method: 'patch', path: '/teams/:id', tag: 'Teams', summary: 'Close or reopen your listing', auth: 'onboarded', body: S.teamUpdateSchema },
+
+  // Notifications
+  { method: 'get', path: '/notifications', tag: 'Notifications', summary: 'Your notifications (cursor paginated, filterable)', auth: 'auth', query: S.notificationListQuerySchema },
+  { method: 'get', path: '/notifications/unread-count', tag: 'Notifications', summary: 'Unread count for the bell badge', auth: 'auth' },
+  { method: 'post', path: '/notifications/read', tag: 'Notifications', summary: 'Mark some or all notifications read', auth: 'auth', body: S.markReadSchema },
 ];
 
 const errorSchema = z.object({

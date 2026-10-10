@@ -3,4 +3,6 @@ export * from './users';
 export * from './posts';
 export * from './home';
 export * from './campus';
+export * from './teams';
+export * from './notifications';
 export * from './config';

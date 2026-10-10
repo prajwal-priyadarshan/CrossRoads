@@ -5,6 +5,7 @@ import { badRequest, forbidden, notFound } from '../../lib/errors';
 import { normalizeTag } from '../../lib/text';
 import { decodeCursor, encodeCursor } from '../../lib/pagination';
 import { notify, notifyMany } from '../../services/notify';
+import { notifyOpportunityAlerts } from '../../services/alerts';
 import { POINTS, awardPoints, evaluateBadges } from '../../services/gamification';
 import { DAY_MS, LIMITS } from '../../config/constants';
 import {
@@ -125,8 +126,8 @@ export async function createPost(userId: string, input: PostCreateInput) {
         link: `/ask/${post.id}`,
       });
     }
-    // TODO Phase 07: notifyOpportunityAlerts(tx, post) for kind === 'OPPORTUNITY'
-    return { id: post.id };
+    const alerted = input.kind === 'OPPORTUNITY' ? await notifyOpportunityAlerts(tx, post) : 0;
+    return { id: post.id, alerted };
   });
 }
 

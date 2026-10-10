@@ -14,9 +14,15 @@ const BASE = process.env.SMOKE_BASE_URL || `http://localhost:${process.env.PORT 
 type Res = { status: number; body: any };
 const results: { name: string; ok: boolean; detail: string }[] = [];
 const createdPostIds: string[] = [];
+const createdTeamIds: string[] = [];
 
 /** Removes everything the smoke run created, including points and notifications it caused. */
 async function cleanup() {
+  if (createdTeamIds.length) {
+    // Applications cascade with the team; the notifications they caused link to /teams/<id>
+    await prisma.notification.deleteMany({ where: { OR: createdTeamIds.map((id) => ({ link: { contains: id } })) } });
+    await prisma.team.deleteMany({ where: { id: { in: createdTeamIds } } });
+  }
   if (!createdPostIds.length) return;
   const comments = await prisma.comment.findMany({ where: { postId: { in: createdPostIds } }, select: { id: true } });
   const refIds = [...createdPostIds, ...comments.map((c) => c.id)];
@@ -152,6 +158,14 @@ async function main() {
     ['campus: path twins', '/path-twins', (d) => `${d.twins.length} twins`],
     ['campus: roadmaps', '/roadmaps', (d) => `${d.length} roadmaps`],
     ['campus: my roadmaps', '/roadmaps?mine=true', (d) => `${d.length}`],
+    ['opportunities: closing soon', '/opportunities', (d) => `${d.items.length} open`],
+    ['opportunities: filtered and newest', '/opportunities?type=INTERNSHIP&sort=newest', (d) => `${d.items.length}`],
+    ['opportunities: alert preferences', '/me/alerts', (d) => `enabled=${d.enabled} types=${d.opportunityTypes.length}`],
+    ['teams: open listings', '/teams', (d) => `${d.length} listings`],
+    ['teams: study circles', '/teams?kind=STUDY_CIRCLE', (d) => `${d.length}`],
+    ['teams: founder advisors', '/teams/advisors', (d) => `${d.length} advisors`],
+    ['notifications: list', '/notifications', (d) => `${d.items.length}`],
+    ['notifications: unread count', '/notifications/unread-count', (d) => `${d.count} unread`],
   ];
   for (const [name, path, describe] of reads) {
     await check(name, async () => describe(expectStatus(await ananya.get(path), 200, path)));
@@ -207,6 +221,100 @@ async function main() {
     // restore previous state
     expectStatus(await ananya.patch(`/roadmaps/${r.id}/steps/${step}`, { done: false }), 200);
     if (!r.saved) expectStatus(await ananya.put(`/roadmaps/${r.id}/save`), 200);
+  });
+
+  await check('flow: alerts notify a matching opportunity, not its author', async () => {
+    const topics = expectStatus(await ananya.get('/topics'), 200) as Array<{ id: number; slug: string }>;
+    const topicId = topics.find((t) => t.slug === 'hackathons-projects')?.id ?? topics[0]!.id;
+    const before = expectStatus(await ananya.get('/me/alerts'), 200);
+    try {
+      expectStatus(
+        await ananya.put('/me/alerts', { enabled: true, opportunityTypes: ['HACKATHON'], topicIds: [topicId], tags: ['smoke-alert'] }),
+        200,
+        'save alerts',
+      );
+      const deadline = new Date(Date.now() + 3 * 864e5).toISOString();
+      const created = expectStatus(
+        await rahul.post('/posts', {
+          kind: 'OPPORTUNITY',
+          title: 'Smoke test: hackathon teammates wanted',
+          body: 'Smoke test opportunity.',
+          topicId,
+          tags: ['smoke-alert'],
+          opportunityType: 'HACKATHON',
+          organization: 'Smoke Labs',
+          deadline,
+        }),
+        201,
+        'create opportunity',
+      );
+      createdPostIds.push(created.id);
+      if (created.alerted < 1) throw new Error('nobody alerted');
+
+      const mine = expectStatus(await ananya.get('/notifications?group=opportunities&unread=true'), 200);
+      const hit = mine.items.find((n: any) => n.link === `/post/${created.id}`);
+      if (!hit) throw new Error('no alert notification for the subscriber');
+
+      const authorFeed = expectStatus(await rahul.get('/notifications?group=opportunities'), 200);
+      if (authorFeed.items.some((n: any) => n.link === `/post/${created.id}`)) throw new Error('author was alerted');
+
+      const list = expectStatus(await ananya.get('/opportunities?type=HACKATHON'), 200);
+      const row = list.items.find((o: any) => o.id === created.id);
+      if (!row) throw new Error('not in the opportunities list');
+
+      const read = expectStatus(await ananya.post('/notifications/read', { ids: [hit.id] }), 200);
+      if (read.updated !== 1) throw new Error(`marked ${read.updated}`);
+      return `alerted ${created.alerted}, reason "${row.reason}"`;
+    } finally {
+      expectStatus(await ananya.put('/me/alerts', before), 200, 'restore alerts');
+    }
+  });
+
+  await check('flow: team apply, accept, full, close', async () => {
+    const team = expectStatus(
+      await rahul.post('/teams', {
+        kind: 'HACKATHON',
+        title: 'Smoke test hackathon team',
+        description: 'Smoke test listing for the end-to-end checks. Looking for one teammate.',
+        requiredSkills: ['python'],
+        rolesNeeded: ['designer'],
+        commitment: '6 h/week',
+        maxMembers: 2,
+        schedule: 'Tue & Thu 7 pm',
+      }),
+      201,
+      'create team',
+    );
+    createdTeamIds.push(team.id);
+
+    const matching = expectStatus(await ananya.get('/teams?matchesMe=true'), 200) as any[];
+    const mine = matching.find((t) => t.id === team.id);
+    if (!mine) throw new Error('not returned by matchesMe');
+    if (!mine.skillMatch.includes('python')) throw new Error('skill overlap missing');
+
+    expectStatus(await ananya.post(`/teams/${team.id}/join`, {}), 400, 'instant join needs an open listing');
+    expectStatus(await ananya.post(`/teams/${team.id}/apply`, { message: 'I would love to join, I work with python.' }), 201);
+    expectStatus(await ananya.post(`/teams/${team.id}/apply`, { message: 'Applying a second time on purpose.' }), 409);
+
+    const owned = expectStatus(await rahul.get(`/teams/${team.id}`), 200);
+    if (owned.pendingCount !== 1 || owned.applications.length !== 1) throw new Error('owner view wrong');
+    const app = owned.applications[0];
+    if (!app.skillOverlap.includes('python')) throw new Error('applicant overlap missing');
+    expectStatus(await ananya.patch(`/teams/${team.id}/applications/${app.id}`, { status: 'ACCEPTED' }), 404, 'non-owner accept');
+    expectStatus(await rahul.patch(`/teams/${team.id}/applications/${app.id}`, { status: 'ACCEPTED' }), 200, 'accept');
+
+    const full = expectStatus(await ananya.get(`/teams/${team.id}`), 200);
+    if (full.memberCount !== 2 || !full.isFull) throw new Error(`members ${full.memberCount}`);
+    if (full.myApplication?.status !== 'ACCEPTED') throw new Error('applicant status not accepted');
+    const meera = await login('meera');
+    expectStatus(await meera.post(`/teams/${team.id}/apply`, { message: 'Trying to join a full team on purpose.' }), 409);
+
+    expectStatus(await rahul.patch(`/teams/${team.id}`, { status: 'CLOSED' }), 200, 'close');
+    const open = expectStatus(await ananya.get('/teams'), 200) as any[];
+    if (open.some((t) => t.id === team.id)) throw new Error('closed listing still open');
+    const closed = expectStatus(await ananya.get('/teams?includeClosed=true'), 200) as any[];
+    if (!closed.some((t) => t.id === team.id)) throw new Error('closed listing missing with includeClosed');
+    return 'apply, accept, full and close all behave';
   });
 
   await check('auth: logout clears the session', async () => {

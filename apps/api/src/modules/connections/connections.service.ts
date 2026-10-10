@@ -130,12 +130,16 @@ export async function complete(userId: string, id: string, sessionNote?: string)
       userId: c.requesterId,
       type: 'REQUEST_RESPONSE',
       title: `${me.fullName} marked your session as completed`,
-      body: sessionNote ?? '',
-      link: '/requests',
+      body: sessionNote || 'Add follow-up actions so nothing gets lost',
+      link: '/requests?tab=completed',
     });
-    await awardPoints(tx, userId, 'MENTOR_SESSION', POINTS.MENTOR_SESSION, id);
+    // Mentorship earns helpfulness points once; peer guidance is its own reward
+    let pointsEarned = 0;
+    if (c.kind === 'MENTORSHIP' && (await awardPoints(tx, userId, 'MENTOR_SESSION', POINTS.MENTOR_SESSION, id))) {
+      pointsEarned = POINTS.MENTOR_SESSION;
+    }
     await evaluateBadges(tx, userId);
-    return updated;
+    return { connection: updated, pointsEarned };
   });
 }
 

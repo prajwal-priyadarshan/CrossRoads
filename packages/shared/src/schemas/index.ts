@@ -8,3 +8,7 @@ export * from './search';
 export * from './companies';
 export * from './clubs';
 export * from './roadmaps';
+export * from './opportunities';
+export * from './alerts';
+export * from './teams';
+export * from './notifications';

@@ -17,6 +17,10 @@ import { experiencesRouter } from './modules/experiences/experiences.routes';
 import { clubsRouter } from './modules/clubs/clubs.routes';
 import { twinsRouter } from './modules/twins/twins.routes';
 import { roadmapsRouter } from './modules/roadmaps/roadmaps.routes';
+import { opportunitiesRouter } from './modules/opportunities/opportunities.routes';
+import { alertsRouter } from './modules/alerts/alerts.routes';
+import { teamsRouter } from './modules/teams/teams.routes';
+import { notificationsRouter } from './modules/notifications/notifications.routes';
 
 export const routes = Router();
 routes.use('/', systemRouter);
@@ -37,4 +41,8 @@ routes.use('/', experiencesRouter);
 routes.use('/', clubsRouter);
 routes.use('/', twinsRouter);
 routes.use('/', roadmapsRouter);
+routes.use('/', opportunitiesRouter);
+routes.use('/', alertsRouter);
+routes.use('/', teamsRouter);
+routes.use('/', notificationsRouter);
 // Add new module routers here and document them in docs/openapi.ts

@@ -107,3 +107,12 @@ export const SIM_ROUNDS = [
   { value: 'TECHNICAL', label: 'Technical interview' },
   { value: 'HR', label: 'HR interview' },
 ] as const;
+
+/** Filter chips on /notifications: group key → label and the notification types it covers. */
+export const NOTIFICATION_GROUPS = {
+  answers: { label: 'Answers', types: ['ANSWER', 'COMMENT'] },
+  requests: { label: 'Requests', types: ['REQUEST', 'REQUEST_RESPONSE'] },
+  teams: { label: 'Teams', types: ['APPLICATION'] },
+  opportunities: { label: 'Opportunities', types: ['OPPORTUNITY'] },
+  badges: { label: 'Badges', types: ['BADGE'] },
+} as const;
