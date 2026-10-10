@@ -99,7 +99,10 @@ export function LandingPage() {
   return (
     <div className="min-h-dvh bg-background">
       <header className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 md:px-8">
-        <Logo to="/" />
+        <div className="flex items-center gap-2.5">
+          <Logo to="/" />
+          <span className="font-display text-lg font-bold tracking-tight">Crossroads</span>
+        </div>
         <nav className="ml-6 hidden items-center gap-5 text-sm text-muted-foreground md:flex">
           <Link to="/stories" className="hover:text-foreground">Stories</Link>
           <Link to="/support" className="hover:text-foreground">Support</Link>
@@ -231,6 +234,7 @@ export function LandingPage() {
       </section>
 
       <footer className="mx-auto flex max-w-6xl flex-wrap items-center gap-4 border-t px-4 py-8 text-sm text-muted-foreground md:px-8">
+        <span className="font-display font-semibold text-foreground">Crossroads</span>
         <span>© {new Date().getFullYear()}</span>
         <Link to="/support" className="hover:text-foreground">Support</Link>
         <Link to="/stories" className="hover:text-foreground">Stories</Link>
