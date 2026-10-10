@@ -8,11 +8,11 @@ import { RailCard } from './RailCard';
 const DOT: Record<string, string> = {
   CLUB: 'bg-amber-500',
   EXAM: 'bg-rose-500',
-  HACKATHON: 'bg-indigo-500',
+  HACKATHON: 'bg-slate-500',
   PLACEMENT: 'bg-emerald-500',
   DEADLINE: 'bg-orange-500',
   EVENT: 'bg-sky-500',
-  WEBINAR: 'bg-violet-500',
+  WEBINAR: 'bg-amber-500',
   REUNION: 'bg-pink-500',
   CHAPTER_MEET: 'bg-teal-500',
 };

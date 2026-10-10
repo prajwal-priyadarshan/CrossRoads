@@ -13,12 +13,12 @@ import type { Milestone, MilestoneCategory } from '@crossroads/shared';
 import { cn } from '@/lib/utils';
 
 const CATEGORY: Record<MilestoneCategory, { icon: ComponentType<{ className?: string }>; tone: string; label: string }> = {
-  CLUB: { icon: Users, tone: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300', label: 'Club' },
-  PROJECT: { icon: Code2, tone: 'bg-violet-100 text-violet-700 dark:bg-violet-950 dark:text-violet-300', label: 'Project' },
+  CLUB: { icon: Users, tone: 'bg-slate-100 text-slate-700 dark:bg-slate-950 dark:text-slate-300', label: 'Club' },
+  PROJECT: { icon: Code2, tone: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300', label: 'Project' },
   INTERNSHIP: { icon: Briefcase, tone: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300', label: 'Internship' },
   COURSE: { icon: BookOpen, tone: 'bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300', label: 'Course' },
   ACHIEVEMENT: { icon: Trophy, tone: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300', label: 'Achievement' },
-  JOB: { icon: Building2, tone: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300', label: 'Job' },
+  JOB: { icon: Building2, tone: 'bg-slate-100 text-slate-700 dark:bg-slate-950 dark:text-slate-300', label: 'Job' },
   STARTUP: { icon: Rocket, tone: 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300', label: 'Startup' },
 };
 

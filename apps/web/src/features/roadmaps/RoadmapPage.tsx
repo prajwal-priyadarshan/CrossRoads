@@ -54,7 +54,7 @@ export function RoadmapPage() {
         <div className="flex flex-wrap items-center gap-2">
           <span className="rounded-full bg-primary-soft px-2.5 py-0.5 text-xs font-medium text-primary">{GOAL_LABEL[r.goalTrack]}</span>
           {r.isAi && (
-            <span className="rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-medium text-violet-700 dark:bg-violet-950 dark:text-violet-300">
+            <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-950 dark:text-amber-300">
               AI · personal
             </span>
           )}
@@ -63,7 +63,7 @@ export function RoadmapPage() {
         {r.summary && <p className="text-sm text-muted-foreground">{r.summary}</p>}
         {r.isAi && (
           <div className="flex flex-wrap items-center gap-2 pt-1">
-            <span className="rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-medium text-violet-700 dark:bg-violet-950 dark:text-violet-300">
+            <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-950 dark:text-amber-300">
               AI · built from alumni roadmaps and experiences
             </span>
           </div>

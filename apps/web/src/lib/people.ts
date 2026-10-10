@@ -31,7 +31,7 @@ export const CONNECTION_KINDS = {
   COLLAB: {
     label: 'Collaborate',
     hint: 'Work on a project together',
-    pill: 'bg-violet-100 text-violet-700 dark:bg-violet-950 dark:text-violet-300',
+    pill: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300',
   },
   PEER_GUIDANCE: {
     label: 'Peer guidance',

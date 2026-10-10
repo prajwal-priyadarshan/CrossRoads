@@ -319,7 +319,7 @@ function SessionSummary({ session, questions, company }: { session: any; questio
                 <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 10 }} unit="%" />
                 <YAxis dataKey="name" type="category" tick={{ fontSize: 10 }} width={120} />
                 <Tooltip formatter={(v) => [`${v}%`, 'Accuracy']} />
-                <Bar dataKey="accuracy" fill="hsl(var(--primary))" radius={[0, 3, 3, 0]} />
+                <Bar dataKey="accuracy" fill="var(--primary)" radius={[0, 3, 3, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>

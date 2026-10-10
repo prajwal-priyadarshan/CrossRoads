@@ -17,7 +17,7 @@ export function AuthLayout({
 }) {
   return (
     <div className="grid min-h-dvh lg:grid-cols-2">
-      <div className="relative hidden flex-col justify-between overflow-hidden bg-gradient-to-br from-indigo-600 via-indigo-700 to-violet-800 p-10 text-white lg:flex">
+      <div className="relative hidden flex-col justify-between overflow-hidden bg-gradient-to-br from-slate-600 via-slate-700 to-amber-800 p-10 text-white lg:flex">
         <Logo to="/" className="[&_span]:text-white" />
         <div className="space-y-8">
           <figure className="rounded-2xl bg-white/10 p-6 backdrop-blur">

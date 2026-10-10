@@ -45,7 +45,7 @@ export function AiSummaryCard({ postId, companySlug, companyName }: { postId?: s
         <CardHeader className="pb-2">
           <CardTitle className="flex items-center gap-2 text-sm">
             {data.status === 'ok' ? (
-              <span className="inline-flex items-center gap-1 rounded-full bg-indigo-100 px-2 py-0.5 text-xs font-medium text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300">
+              <span className="inline-flex items-center gap-1 rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-700 dark:bg-slate-950 dark:text-slate-300">
                 <Sparkles className="size-3" /> AI summary
               </span>
             ) : (

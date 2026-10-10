@@ -10,9 +10,9 @@ export const ROUND_TYPE_LABEL: Record<string, string> = {
 
 export const ROUND_TYPE_PILL: Record<string, string> = {
   APTITUDE: 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300',
-  CODING: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300',
+  CODING: 'bg-slate-100 text-slate-700 dark:bg-slate-950 dark:text-slate-300',
   CS_FUNDAMENTALS: 'bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300',
-  TECHNICAL: 'bg-violet-100 text-violet-700 dark:bg-violet-950 dark:text-violet-300',
+  TECHNICAL: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300',
   HR: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300',
 };
 
@@ -46,8 +46,8 @@ export const enumLabel = (v: string) => titleCase(v.toLowerCase().replace(/_/g, 
 
 /** Opportunity type → card accent. Labels and icons come from OPPORTUNITY_TYPES in shared. */
 export const OPPORTUNITY_TONE: Record<string, string> = {
-  INTERNSHIP: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300',
-  HACKATHON: 'bg-violet-100 text-violet-700 dark:bg-violet-950 dark:text-violet-300',
+  INTERNSHIP: 'bg-slate-100 text-slate-700 dark:bg-slate-950 dark:text-slate-300',
+  HACKATHON: 'bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300',
   RESEARCH: 'bg-teal-100 text-teal-700 dark:bg-teal-950 dark:text-teal-300',
   EVENT: 'bg-sky-100 text-sky-700 dark:bg-sky-950 dark:text-sky-300',
   REFERRAL: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300',

@@ -106,7 +106,7 @@ export function ProfilePage() {
   return (
     <div className="space-y-6">
       <div className="overflow-hidden rounded-2xl border bg-card">
-        <div className="h-28 bg-gradient-to-r from-indigo-500 to-violet-600" />
+        <div className="h-28 bg-gradient-to-r from-slate-500 to-amber-600" />
         <div className="px-5 pb-5">
           <div className="-mt-10 flex flex-wrap items-end justify-between gap-4">
             <div className="rounded-full ring-4 ring-card">

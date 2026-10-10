@@ -2,8 +2,8 @@ import { Shield, MessageCircle, Star, Briefcase, Award, Map, Users, Heart, Zap }
 import { cn } from '@/lib/utils';
 
 const BADGE_DATA: Record<string, { name: string; icon: any; color: string; desc: string }> = {
-  'first-answer': { name: 'First Answer', icon: MessageCircle, color: 'text-indigo-500 bg-indigo-100 dark:bg-indigo-900/30', desc: 'Answered a question' },
-  'answer-machine': { name: 'Answer Machine', icon: Zap, color: 'text-indigo-500 bg-indigo-100 dark:bg-indigo-900/30', desc: 'Answered 10+ questions' },
+  'first-answer': { name: 'First Answer', icon: MessageCircle, color: 'text-slate-500 bg-slate-100 dark:bg-slate-900/30', desc: 'Answered a question' },
+  'answer-machine': { name: 'Answer Machine', icon: Zap, color: 'text-slate-500 bg-slate-100 dark:bg-slate-900/30', desc: 'Answered 10+ questions' },
   'trusted-voice': { name: 'Trusted Voice', icon: Shield, color: 'text-emerald-500 bg-emerald-100 dark:bg-emerald-900/30', desc: 'Earned 3+ best answers' },
   'experience-sharer': { name: 'Experience Sharer', icon: Briefcase, color: 'text-blue-500 bg-blue-100 dark:bg-blue-900/30', desc: 'Shared an interview experience' },
   'club-reviewer': { name: 'Club Reviewer', icon: Star, color: 'text-amber-500 bg-amber-100 dark:bg-amber-900/30', desc: 'Reviewed a club' },

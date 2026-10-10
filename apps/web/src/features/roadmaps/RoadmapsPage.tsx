@@ -25,7 +25,7 @@ export function RoadmapCard({ r }: { r: RoadmapSummary }) {
       {r.summary && <p className="line-clamp-2 text-sm text-muted-foreground">{r.summary}</p>}
       <div className="mt-auto flex items-center gap-2 text-xs text-muted-foreground">
         {r.isAi ? (
-          <span className="rounded-full bg-violet-100 px-2 py-0.5 font-medium text-violet-700 dark:bg-violet-950 dark:text-violet-300">
+          <span className="rounded-full bg-amber-100 px-2 py-0.5 font-medium text-amber-700 dark:bg-amber-950 dark:text-amber-300">
             AI · personal
           </span>
         ) : (

@@ -282,7 +282,7 @@ export function PrepDashboardPage() {
                   <XAxis dataKey="name" tick={{ fontSize: 10 }} />
                   <YAxis domain={[0, 100]} tick={{ fontSize: 10 }} />
                   <Tooltip formatter={(v) => [`${v}%`, 'Score']} />
-                  <Bar dataKey="score" fill="hsl(var(--primary))" radius={[3, 3, 0, 0]} />
+                  <Bar dataKey="score" fill="var(--primary)" radius={[3, 3, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </Card>
