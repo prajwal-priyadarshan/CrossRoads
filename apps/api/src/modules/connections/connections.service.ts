@@ -4,6 +4,7 @@ import type { Prisma } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
 import { badRequest, conflict, forbidden, notFound } from '../../lib/errors';
 import { notify } from '../../services/notify';
+import { POINTS, awardPoints, evaluateBadges } from '../../services/gamification';
 import { userLiteSelect } from '../users/users.serializers';
 
 const contactSelect = {
@@ -85,7 +86,10 @@ export async function respond(userId: string, id: string, status: 'ACCEPTED' | '
       title: `${me.fullName} ${status === 'ACCEPTED' ? 'accepted' : 'declined'} your request`,
       link: '/requests',
     });
-    // Phase 08 adds: if ACCEPTED -> evaluateBadges for both users
+    if (status === 'ACCEPTED') {
+      await evaluateBadges(tx, userId);
+      await evaluateBadges(tx, c.requesterId);
+    }
     return updated;
   });
 }
@@ -129,7 +133,8 @@ export async function complete(userId: string, id: string, sessionNote?: string)
       body: sessionNote ?? '',
       link: '/requests',
     });
-    // Phase 08 adds: points for the mentor and the Mentor badge
+    await awardPoints(tx, userId, 'MENTOR_SESSION', POINTS.MENTOR_SESSION, id);
+    await evaluateBadges(tx, userId);
     return updated;
   });
 }

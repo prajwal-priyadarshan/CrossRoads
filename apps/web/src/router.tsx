@@ -13,6 +13,13 @@ import { PeoplePage } from '@/features/people/PeoplePage';
 import { ProfilePage } from '@/features/profile/ProfilePage';
 import { ProfileEditPage } from '@/features/profile/ProfileEditPage';
 import { RequestsPage } from '@/features/requests/RequestsPage';
+import { AskListPage } from '@/features/ask/AskListPage';
+import { AskNewPage } from '@/features/ask/AskNewPage';
+import { QuestionPage } from '@/features/ask/QuestionPage';
+import { CommunityPage } from '@/features/community/CommunityPage';
+import { TopicPage } from '@/features/community/TopicPage';
+import { TagPage } from '@/features/community/TagPage';
+import { PostPage } from '@/features/community/PostPage';
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +48,13 @@ export const router = createBrowserRouter([
               { path: '/u/:handle', element: <ProfilePage /> },
               { path: '/settings/profile', element: <ProfileEditPage /> },
               { path: '/requests', element: <RequestsPage /> },
+              { path: '/ask', element: <AskListPage /> },
+              { path: '/ask/new', element: <AskNewPage /> },
+              { path: '/ask/:id', element: <QuestionPage /> },
+              { path: '/community', element: <CommunityPage /> },
+              { path: '/community/tag/:tag', element: <TagPage /> },
+              { path: '/community/:topic', element: <TopicPage /> },
+              { path: '/post/:id', element: <PostPage /> },
               { element: <RequireAdmin />, children: [{ path: '/admin/*', element: <Navigate to="/home" replace /> }] },
             ],
           },
