@@ -127,11 +127,12 @@ export function LandingPage() {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--primary-soft),transparent_60%)]" />
         <div className="relative mx-auto grid max-w-6xl items-center gap-12 px-4 py-16 md:px-8 md:py-24 lg:grid-cols-2">
           <div>
-            <span className="inline-flex items-center rounded-full bg-primary-soft px-3 py-1 text-xs font-medium text-primary">
-              Built for first years, powered by seniors
+            <span className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium text-muted-foreground">
+              <span className="size-1.5 rounded-full bg-warm" />
+              Guidance meets opportunity
             </span>
             <h1 className="mt-5 font-display text-4xl font-bold tracking-tight md:text-6xl">
-              Your seniors have walked your path. Now they can light it.
+              Your seniors have walked your path. Now they can <span className="text-warm">light it.</span>
             </h1>
             <p className="mt-5 max-w-xl text-lg text-muted-foreground">
               Ask questions, find mentors, see real interview experiences from your campus, and plan your four years,
@@ -153,8 +154,8 @@ export function LandingPage() {
       <section className="mx-auto max-w-6xl px-4 py-12 md:px-8">
         <div className="grid gap-4 md:grid-cols-3">
           {VALUE_CARDS.map(({ icon: Icon, title, description }) => (
-            <div key={title} className="rounded-2xl border bg-card p-6">
-              <div className="mb-4 grid size-10 place-items-center rounded-xl bg-primary-soft text-primary">
+            <div key={title} className="rounded-2xl border bg-card p-6 transition duration-200 hover:-translate-y-0.5 hover:shadow-md">
+              <div className="mb-4 grid size-10 place-items-center rounded-xl bg-accent text-accent-foreground">
                 <Icon className="size-5" />
               </div>
               <h3 className="font-display text-lg font-semibold">{title}</h3>
@@ -177,9 +178,9 @@ export function LandingPage() {
                   <li key={to}>
                     <Link
                       to={me ? to : '/login'}
-                      className="flex h-full gap-4 rounded-2xl border bg-card p-5 transition hover:border-primary/40"
+                      className="flex h-full gap-4 rounded-2xl border bg-card p-5 transition duration-200 hover:-translate-y-0.5 hover:border-warm/60 hover:shadow-md"
                     >
-                      <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary">
+                      <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-accent text-accent-foreground">
                         <Icon className="size-4" />
                       </span>
                       <span className="min-w-0">
@@ -196,18 +197,20 @@ export function LandingPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-12 md:px-8">
-        <h2 className="font-display text-2xl font-semibold tracking-tight md:text-3xl">How it works</h2>
-        <ol className="mt-6 grid gap-4 md:grid-cols-3">
-          {STEPS.map((s, i) => (
-            <li key={s.title} className="rounded-2xl border bg-card p-6">
-              <span className="grid size-8 place-items-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
-                {i + 1}
-              </span>
-              <h3 className="mt-4 font-semibold">{s.title}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{s.description}</p>
-            </li>
-          ))}
-        </ol>
+        <div className="rounded-3xl bg-primary p-8 text-primary-foreground md:p-12">
+          <h2 className="font-display text-2xl font-semibold tracking-tight md:text-3xl">How it works</h2>
+          <ol className="mt-8 grid gap-6 md:grid-cols-3">
+            {STEPS.map((s, i) => (
+              <li key={s.title}>
+                <span className="grid size-9 place-items-center rounded-full bg-warm text-sm font-semibold text-primary">
+                  {i + 1}
+                </span>
+                <h3 className="mt-4 font-semibold">{s.title}</h3>
+                <p className="mt-1 text-sm opacity-75">{s.description}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
       </section>
 
       <section className="mx-auto max-w-6xl px-4 py-12 md:px-8">
