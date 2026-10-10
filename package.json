@@ -13,7 +13,7 @@
     "test": "npm run test -w apps/api",
     "smoke": "npm run smoke -w apps/api",
     "lint": "oxlint apps/api/src apps/web/src packages/shared/src",
-    "db:seed:all": "npm run db:seed -w apps/api && npm run seed:users -w apps/api && npm run seed:content -w apps/api"
+    "db:seed:all": "npm run db:seed -w apps/api && npm run seed:users -w apps/api && npm run seed:content -w apps/api && npm run seed:activity -w apps/api"
   },
   "devDependencies": {
     "concurrently": "^10.0.6",

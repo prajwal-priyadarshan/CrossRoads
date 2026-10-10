@@ -125,10 +125,17 @@ async function main() {
     const r = await fetch(`${BASE}/auth/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{bad' });
     if (r.status !== 400) throw new Error(`got ${r.status}`);
   });
-  await check('auth: non-college email rejected', async () => {
-    const r = await anon.post('/auth/register', { fullName: 'Test', email: 'x@gmail.com', password: 'secret123' });
-    expectStatus(r, 400);
-    if (!r.body.error.fields?.email) throw new Error('no email field error');
+  await check('auth: non-college email follows ALUMNI_OPEN_SIGNUP', async () => {
+    const cfg = (await anon.get('/config')).body.data;
+    const r = await anon.post('/auth/register', { fullName: 'Test', email: 'smoke-alumni@gmail.com', password: 'secret123' });
+    if (cfg.alumniOpenSignup) {
+      // Personal emails register as ALUMNI; remove the throwaway account afterwards
+      expectStatus(r, 201);
+      await prisma.user.deleteMany({ where: { email: 'smoke-alumni@gmail.com' } });
+    } else {
+      expectStatus(r, 400);
+      if (!r.body.error.fields?.email) throw new Error('no email field error');
+    }
   });
   await check('routing: unknown route gets 404 JSON', async () => {
     expectStatus(await anon.get('/does-not-exist'), 404);
