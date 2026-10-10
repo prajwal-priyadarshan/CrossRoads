@@ -114,3 +114,52 @@ export async function toggleStep(userId: string, roadmapId: string, stepId: stri
     return { completedSteps: updated.completedSteps, saved: true };
   });
 }
+
+export async function generateRoadmap(userId: string, input: { goalTrack: string; targetRole?: string; targetCompanySlugs?: string[] }) {
+  const { gatherContext, deterministicRoadmap, aiRoadmap, computeGaps, aiEnabled } = await import('../../services/roadmapBuilder');
+  const ctx = await gatherContext(userId, input);
+  let out: Awaited<ReturnType<typeof deterministicRoadmap>>;
+  let usedAI = false;
+  if (aiEnabled) {
+    try {
+      out = await aiRoadmap(ctx, input.goalTrack);
+      usedAI = true;
+    } catch {
+      out = deterministicRoadmap(ctx, input.goalTrack);
+    }
+  } else {
+    out = deterministicRoadmap(ctx, input.goalTrack);
+  }
+
+  // Mark steps matching skills the user already has as completed
+  const userSkills = new Set(ctx.user.skills.map((s) => s.toLowerCase()));
+  const initialCompletedSteps = (out.steps as any[])
+    .filter((s) => userSkills.has(s.title.toLowerCase()) || userSkills.has(s.title.replace(/^Learn /i, '').toLowerCase()))
+    .map((s) => s.id);
+
+  const sources = {
+    roadmaps: ctx.roadmaps.map((r) => r.id),
+    experiences: ctx.companies.flatMap((c) => c.experiences.map((e) => e.id)),
+    journeys: ctx.twins.map((t: any) => t.id).filter(Boolean),
+  };
+
+  return prisma.$transaction(async (tx) => {
+    const r = await tx.roadmap.create({
+      data: {
+        authorId: userId,
+        goalTrack: input.goalTrack as any,
+        title: out.title,
+        summary: out.summary,
+        steps: out.steps,
+        isAi: usedAI,
+        isPublic: false,
+        gaps: out.gaps,
+        sources,
+      },
+    });
+    await tx.roadmapSave.create({
+      data: { roadmapId: r.id, userId, completedSteps: initialCompletedSteps },
+    });
+    return { id: r.id, ...out, isAi: usedAI };
+  });
+}

@@ -14,6 +14,7 @@ import { ConnectDialog } from '@/features/people/ConnectDialog';
 import { GOAL_LABEL } from '@/lib/labels';
 import { cn, isSafeUrl } from '@/lib/utils';
 import { useRoadmap, useToggleSave, useToggleStep } from './api';
+import { GapsCard } from './GapsCard';
 
 const KIND: Record<RoadmapStepView['kind'], { icon: ComponentType<{ className?: string }>; label: string }> = {
   SKILL: { icon: Brain, label: 'Skill' },
@@ -60,6 +61,13 @@ export function RoadmapPage() {
         </div>
         <h1 className="font-display text-2xl font-semibold">{r.title}</h1>
         {r.summary && <p className="text-sm text-muted-foreground">{r.summary}</p>}
+        {r.isAi && (
+          <div className="flex flex-wrap items-center gap-2 pt-1">
+            <span className="rounded-full bg-violet-100 px-2.5 py-0.5 text-xs font-medium text-violet-700 dark:bg-violet-950 dark:text-violet-300">
+              AI · built from alumni roadmaps and experiences
+            </span>
+          </div>
+        )}
         {r.author && (
           <div className="flex flex-wrap items-center gap-3">
             <UserAvatar user={r.author} size="md" />
@@ -109,6 +117,8 @@ export function RoadmapPage() {
           </div>
         )}
       </header>
+
+      {(r as any).gaps?.length > 0 && <GapsCard gaps={(r as any).gaps} />}
 
       {semesters.map((sem) => (
         <section key={sem} className="space-y-3">

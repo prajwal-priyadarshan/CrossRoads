@@ -65,6 +65,7 @@ const appRoutes: RouteObject[] = [
   // Prep (Phase 09)
   { path: '/prep', ...page(() => import('@/features/prep/PrepDashboardPage'), 'PrepDashboardPage') },
   { path: '/prep/simulator', ...page(() => import('@/features/prep/SimulatorSetupPage'), 'SimulatorSetupPage') },
+  { path: '/prep/simulator/:id', ...page(() => import('@/features/prep/SimulatorSessionPage'), 'SimulatorSessionPage') },
   { path: '/roadmaps/generate', ...page(() => import('@/features/roadmaps/RoadmapGeneratePage'), 'RoadmapGeneratePage') },
 ];
 

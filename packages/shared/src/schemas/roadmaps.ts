@@ -32,3 +32,9 @@ export const roadmapStepToggleSchema = z.object({ done: z.boolean() });
 export type RoadmapStep = z.infer<typeof roadmapStepSchema>;
 export type RoadmapCreateInput = z.infer<typeof roadmapCreateSchema>;
 export type RoadmapListQuery = z.output<typeof roadmapListQuerySchema>;
+
+export const roadmapGenerateSchema = z.object({
+  goalTrack: z.enum(GOAL_TRACK_VALUES),
+  targetRole: z.string().trim().optional(),
+  targetCompanySlugs: z.array(z.string()).max(4).optional(),
+});
