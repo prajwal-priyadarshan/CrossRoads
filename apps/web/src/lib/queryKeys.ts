@@ -1,5 +1,6 @@
 export const qk = {
   me: ['me'] as const,
+  config: ['config'] as const,
   feed: (tab: string, topic?: string) => ['feed', tab, topic ?? 'all'] as const,
   rail: ['home', 'rail'] as const,
   posts: (params: Record<string, unknown>) => ['posts', params] as const,

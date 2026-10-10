@@ -4,8 +4,9 @@ import { prisma } from '../../lib/prisma';
 import { rankFeed } from '../../services/feedRank';
 import { listPosts, viewerStateFor } from '../posts/posts.service';
 import { postInclude, toPostCard } from '../posts/posts.serializers';
+import { DAY_MS, LIMITS } from '../../config/constants';
 
-const PAGE = 20;
+const PAGE = LIMITS.PAGE_SIZE;
 
 export async function getFeed(viewerId: string, q: FeedQuery) {
   if (q.tab === 'latest' || q.tab === 'top') {
@@ -34,10 +35,10 @@ export async function getFeed(viewerId: string, q: FeedQuery) {
 
   // For you: rank recent posts in memory and page with an offset cursor.
   // On a fresh database fall back to a 180-day window so the feed is never empty.
-  const since = (days: number) => ({ ...base, createdAt: { gte: new Date(Date.now() - days * 864e5) } });
-  let posts = await prisma.post.findMany({ where: since(30), include: postInclude, orderBy: { createdAt: 'desc' }, take: 300 });
-  if (posts.length < 10) {
-    posts = await prisma.post.findMany({ where: since(180), include: postInclude, orderBy: { createdAt: 'desc' }, take: 300 });
+  const since = (days: number) => ({ ...base, createdAt: { gte: new Date(Date.now() - days * DAY_MS) } });
+  let posts = await prisma.post.findMany({ where: since(LIMITS.FEED_WINDOW_DAYS), include: postInclude, orderBy: { createdAt: 'desc' }, take: LIMITS.FEED_CANDIDATES });
+  if (posts.length < LIMITS.FEED_MIN_RECENT) {
+    posts = await prisma.post.findMany({ where: since(LIMITS.FEED_FALLBACK_WINDOW_DAYS), include: postInclude, orderBy: { createdAt: 'desc' }, take: LIMITS.FEED_CANDIDATES });
   }
 
   const ranked = rankFeed(

@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { SearchX, Search as SearchIcon } from 'lucide-react';
-import { DEPARTMENTS, TOPICS, type SearchHit } from '@bridgeup/shared';
+import { DEPARTMENTS, type SearchHit } from '@bridgeup/shared';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -12,6 +12,7 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { cn } from '@/lib/utils';
 import { GROUPS, useSearch } from './api';
 import { useCompanies } from '@/features/companies/api';
+import { useTopics } from '@/features/community/api';
 
 const ANY = '__any__';
 const thisYear = new Date().getFullYear();
@@ -89,12 +90,16 @@ export function SearchPage() {
   const type = sp.get('type') ?? 'all';
   const [input, setInput] = useState(q);
   const { data: companies } = useCompanies();
+  const { data: topics = [] } = useTopics();
   const debounced = useDebounce(input, 300);
 
   const set = (patch: Record<string, string>) =>
     setSp((prev) => {
       const next = new URLSearchParams(prev);
-      for (const [k, v] of Object.entries(patch)) (v ? next.set(k, v) : next.delete(k));
+      for (const [k, v] of Object.entries(patch)) {
+        if (v) next.set(k, v);
+        else next.delete(k);
+      }
       return next;
     });
 
@@ -160,7 +165,7 @@ export function SearchPage() {
             label="Topic"
             value={sp.get('topic') ?? ''}
             onChange={(v) => set({ topic: v })}
-            options={TOPICS.map((t) => ({ value: t.slug, label: t.name }))}
+            options={topics.map((t) => ({ value: t.slug, label: t.name }))}
           />
         )}
         {showCompany && (

@@ -1,10 +1,11 @@
-import { TOPICS } from '@bridgeup/shared';
+import { useTopics } from '@/features/community/api';
 import { AppIcon } from '@/components/shared/AppIcon';
 import { cn } from '@/lib/utils';
 
 /** Topic filter chips that keep state locally (no navigation). */
 export function TopicTabsState({ value, onChange }: { value: string; onChange: (slug: string) => void }) {
-  const items = [{ slug: '', name: 'All', icon: 'hash' }, ...TOPICS];
+  const { data: topics = [] } = useTopics();
+  const items = [{ slug: '', name: 'All', icon: 'hash' }, ...topics];
   return (
     <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
       {items.map((t) => (

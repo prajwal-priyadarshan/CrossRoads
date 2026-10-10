@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage, type StateStorage } from 'zustand/middleware';
 import type { z } from 'zod';
+import { STORAGE_KEYS } from '@/lib/storageKeys';
 import type { stepAboutSchema, stepSkillsSchema, stepGoalsSchema, stepConnectSchema } from '@bridgeup/shared';
 
 // sessionStorage can throw (private mode, blocked storage); never let that break the wizard.
@@ -52,6 +53,6 @@ export const useOnboardingStore = create<State>()(
       saveStep: (key, value) => set((s) => ({ draft: { ...s.draft, [key]: value } })),
       reset: () => set({ step: 0, draft: {} }),
     }),
-    { name: 'bu-onboarding', storage: createJSONStorage(() => safeSession) },
+    { name: STORAGE_KEYS.onboardingDraft, storage: createJSONStorage(() => safeSession) },
   ),
 );

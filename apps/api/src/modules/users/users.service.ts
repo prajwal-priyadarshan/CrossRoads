@@ -8,7 +8,7 @@ import { asMatchProfile, toPublicProfile } from './users.serializers';
 
 /** Serializer for the signed-in user. Never leaks the password hash. */
 export function toMe(u: User) {
-  const { passwordHash, emailVerified, consentAt, createdAt, updatedAt, ...rest } = u;
+  const { passwordHash: _hash, emailVerified: _verified, consentAt: _consent, createdAt: _c, updatedAt: _u, ...rest } = u;
   return rest;
 }
 

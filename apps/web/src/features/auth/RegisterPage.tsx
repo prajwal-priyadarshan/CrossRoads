@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { FormField } from '@/components/shared/FormField';
 import { ApiError } from '@/lib/api';
+import { exampleEmail, useAppConfig } from '@/hooks/useAppConfig';
 import { AuthLayout } from './AuthLayout';
 import { useRegister } from './api';
 
@@ -16,6 +17,7 @@ export function RegisterPage() {
   const navigate = useNavigate();
   const register = useRegister();
   const [show, setShow] = useState(false);
+  const { data: config } = useAppConfig();
   const {
     register: field,
     handleSubmit,
@@ -60,7 +62,7 @@ export function RegisterPage() {
           label="College email"
           htmlFor="email"
           error={errors.email?.message}
-          hint="Use your college email, e.g. name@am.students.amrita.edu"
+          hint={`Use your college email, e.g. ${exampleEmail(config)}`}
         >
           <Input id="email" type="email" autoComplete="email" aria-invalid={!!errors.email} {...field('email')} />
         </FormField>

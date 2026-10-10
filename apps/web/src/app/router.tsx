@@ -1,0 +1,78 @@
+import type { ComponentType } from 'react';
+import { createBrowserRouter, Navigate, type RouteObject } from 'react-router';
+import { AppShell } from '@/components/layout/AppShell';
+import { PublicOnly, RequireAdmin, RequireAuth, RequireOnboarded } from '@/components/guards/Guards';
+import { FullPageSpinner } from '@/components/shared/FullPageSpinner';
+import { NotFoundPage } from './pages/NotFoundPage';
+
+/**
+ * Route pages are code-split: each one is loaded the first time it is visited.
+ * `page(() => import(...), 'Name')` keeps named exports while still lazy-loading.
+ */
+const page = <M extends Record<string, unknown>>(loader: () => Promise<M>, name: keyof M & string): Pick<RouteObject, 'lazy'> => ({
+  lazy: async () => ({ Component: (await loader())[name] as ComponentType }),
+});
+
+const appRoutes: RouteObject[] = [
+  { path: '/home', ...page(() => import('@/features/home/HomePage'), 'HomePage') },
+  { path: '/me', ...page(() => import('./pages/MeRedirect'), 'MeRedirect') },
+
+  // People and profiles
+  { path: '/people', ...page(() => import('@/features/people/PeoplePage'), 'PeoplePage') },
+  { path: '/u/:handle', ...page(() => import('@/features/profile/ProfilePage'), 'ProfilePage') },
+  { path: '/settings/profile', ...page(() => import('@/features/profile/ProfileEditPage'), 'ProfileEditPage') },
+  { path: '/requests', ...page(() => import('@/features/requests/RequestsPage'), 'RequestsPage') },
+
+  // Ask a Senior and community
+  { path: '/ask', ...page(() => import('@/features/ask/AskListPage'), 'AskListPage') },
+  { path: '/ask/new', ...page(() => import('@/features/ask/AskNewPage'), 'AskNewPage') },
+  { path: '/ask/:id', ...page(() => import('@/features/ask/QuestionPage'), 'QuestionPage') },
+  { path: '/community', ...page(() => import('@/features/community/CommunityPage'), 'CommunityPage') },
+  { path: '/community/tag/:tag', ...page(() => import('@/features/community/TagPage'), 'TagPage') },
+  { path: '/community/:topic', ...page(() => import('@/features/community/TopicPage'), 'TopicPage') },
+  { path: '/post/:id', ...page(() => import('@/features/community/PostPage'), 'PostPage') },
+
+  // Home utilities
+  { path: '/bookmarks', ...page(() => import('@/features/bookmarks/BookmarksPage'), 'BookmarksPage') },
+  { path: '/search', ...page(() => import('@/features/search/SearchPage'), 'SearchPage') },
+
+  // Campus intelligence
+  { path: '/companies', ...page(() => import('@/features/companies/CompaniesPage'), 'CompaniesPage') },
+  { path: '/companies/:slug', ...page(() => import('@/features/companies/CompanyPage'), 'CompanyPage') },
+  { path: '/experiences/new', ...page(() => import('@/features/companies/ExperienceNewPage'), 'ExperienceNewPage') },
+  { path: '/clubs', ...page(() => import('@/features/clubs/ClubsPage'), 'ClubsPage') },
+  { path: '/clubs/:slug', ...page(() => import('@/features/clubs/ClubPage'), 'ClubPage') },
+  { path: '/path-twins', ...page(() => import('@/features/twins/PathTwinsPage'), 'PathTwinsPage') },
+  { path: '/roadmaps', ...page(() => import('@/features/roadmaps/RoadmapsPage'), 'RoadmapsPage') },
+  { path: '/roadmaps/new', ...page(() => import('@/features/roadmaps/RoadmapNewPage'), 'RoadmapNewPage') },
+  { path: '/roadmaps/:id', ...page(() => import('@/features/roadmaps/RoadmapPage'), 'RoadmapPage') },
+
+  // Admin (Phase 08)
+  { element: <RequireAdmin />, children: [{ path: '/admin/*', element: <Navigate to="/home" replace /> }] },
+];
+
+export const router = createBrowserRouter([
+  {
+    hydrateFallbackElement: <FullPageSpinner />,
+    children: [
+      {
+        element: <PublicOnly />,
+        children: [
+          { path: '/', ...page(() => import('@/features/landing/LandingPage'), 'LandingPage') },
+          { path: '/login', ...page(() => import('@/features/auth/LoginPage'), 'LoginPage') },
+          { path: '/register', ...page(() => import('@/features/auth/RegisterPage'), 'RegisterPage') },
+          { path: '/verify', ...page(() => import('@/features/auth/VerifyPage'), 'VerifyPage') },
+        ],
+      },
+      // Phase 08 / 10: /stories, /stories/:slug, /support (public)
+      {
+        element: <RequireAuth />,
+        children: [
+          { path: '/onboarding', ...page(() => import('@/features/onboarding/OnboardingPage'), 'OnboardingPage') },
+          { element: <RequireOnboarded />, children: [{ element: <AppShell />, children: appRoutes }] },
+        ],
+      },
+      { path: '*', element: <NotFoundPage /> },
+    ],
+  },
+]);

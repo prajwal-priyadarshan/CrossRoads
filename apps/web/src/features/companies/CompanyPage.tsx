@@ -21,12 +21,12 @@ import { ExperienceCard } from './ExperienceCard';
 type Tab = 'overview' | 'experiences' | 'alumni' | 'prep';
 const TABS: Tab[] = ['overview', 'experiences', 'alumni', 'prep'];
 const ANY = '__any__';
+const THIS_YEAR = new Date().getFullYear();
 
 function ExperiencesTab({ slug }: { slug: string }) {
   const [f, setF] = useState<Record<string, string>>({});
   const { data, isLoading } = useCompanyExperiences(slug, f);
   const { hash } = useLocation();
-  const thisYear = new Date().getFullYear();
 
   // Deep links from search (#exp-<id>) scroll the card into view once loaded
   useEffect(() => {
@@ -52,7 +52,7 @@ function ExperiencesTab({ slug }: { slug: string }) {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap gap-2">
-        {sel('year', 'Year', Array.from({ length: 5 }, (_, i) => ({ value: String(thisYear - i), label: String(thisYear - i) })))}
+        {sel('year', 'Year', Array.from({ length: 5 }, (_, i) => ({ value: String(THIS_YEAR - i), label: String(THIS_YEAR - i) })))}
         {sel('minDifficulty', 'Difficulty', [1, 2, 3, 4, 5].map((d) => ({ value: String(d), label: `${d}+ of 5` })))}
         {sel('roundType', 'Round type', Object.entries(ROUND_TYPE_LABEL).map(([value, label]) => ({ value, label })))}
       </div>
@@ -89,12 +89,10 @@ export function CompanyPage() {
   const { data: c, isLoading, error } = useCompany(slug);
   const { data: me } = useMe();
   const update = useUpdateProfile();
+  // The active tab lives in the URL hash so it is shareable and survives reloads
   const hashTab = hash.startsWith('#exp-') ? 'experiences' : (hash.slice(1) as Tab);
-  const [tab, setTab] = useState<Tab>(TABS.includes(hashTab) ? hashTab : 'overview');
-
-  useEffect(() => {
-    if (TABS.includes(hashTab)) setTab(hashTab);
-  }, [hashTab]);
+  const tab: Tab = TABS.includes(hashTab) ? hashTab : 'overview';
+  const setTab = (t: Tab) => navigate({ hash: t }, { replace: true });
 
   if (isLoading || !me) return <ProfileSkeleton />;
   if (error || !c) {
@@ -169,10 +167,7 @@ export function CompanyPage() {
 
       <Tabs
         value={tab}
-        onValueChange={(v) => {
-          setTab(v as Tab);
-          navigate({ hash: v }, { replace: true });
-        }}
+        onValueChange={(v) => setTab(v as Tab)}
       >
         <TabsList className="h-auto w-full flex-wrap justify-start">
           <TabsTrigger value="overview">Overview</TabsTrigger>

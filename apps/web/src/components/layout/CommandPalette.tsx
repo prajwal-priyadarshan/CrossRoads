@@ -23,7 +23,7 @@ const ACTIONS = [
   { label: 'My prep', to: '/prep', icon: Target },
   { label: 'Share an experience', to: '/experiences/new', icon: NotebookPen },
 ];
-const SUGGESTIONS = ['dsa roadmap', 'northwind interview', 'robotics club'];
+const SUGGESTIONS = ['dsa roadmap', 'interview experience', 'coding club'];
 
 export function CommandPalette() {
   const open = useUiStore((s) => s.paletteOpen);

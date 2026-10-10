@@ -1,0 +1,236 @@
+/**
+ * End-to-end smoke test against a running API (default http://localhost:4000/api).
+ * Exercises every endpoint group with demo accounts, checks guards and validation,
+ * and removes anything it creates. Needs DEMO_MODE=true and seeded demo users.
+ *
+ *   npm run dev -w apps/api      (in another terminal)
+ *   npm run smoke
+ */
+import 'dotenv/config';
+import { prisma } from '../src/lib/prisma';
+
+const BASE = process.env.SMOKE_BASE_URL || `http://localhost:${process.env.PORT || 4000}/api`;
+
+type Res = { status: number; body: any };
+const results: { name: string; ok: boolean; detail: string }[] = [];
+const createdPostIds: string[] = [];
+
+/** Removes everything the smoke run created, including points and notifications it caused. */
+async function cleanup() {
+  if (!createdPostIds.length) return;
+  const comments = await prisma.comment.findMany({ where: { postId: { in: createdPostIds } }, select: { id: true } });
+  const refIds = [...createdPostIds, ...comments.map((c) => c.id)];
+  const ledger = await prisma.pointsLedger.findMany({ where: { refId: { in: refIds } } });
+  await prisma.$transaction(async (tx) => {
+    for (const l of ledger) await tx.user.update({ where: { id: l.userId }, data: { points: { decrement: l.points } } });
+    await tx.pointsLedger.deleteMany({ where: { id: { in: ledger.map((l) => l.id) } } });
+    await tx.vote.deleteMany({ where: { targetId: { in: refIds } } });
+    await tx.bookmark.deleteMany({ where: { targetId: { in: createdPostIds } } });
+    await tx.notification.deleteMany({ where: { OR: createdPostIds.map((id) => ({ link: { contains: id } })) } });
+    await tx.post.updateMany({ where: { id: { in: createdPostIds } }, data: { bestAnswerId: null } });
+    await tx.post.deleteMany({ where: { id: { in: createdPostIds } } });
+  });
+}
+
+class Client {
+  cookie = '';
+  async req(method: string, path: string, json?: unknown, headers: Record<string, string> = {}): Promise<Res> {
+    const res = await fetch(`${BASE}${path}`, {
+      method,
+      headers: { ...(json !== undefined ? { 'Content-Type': 'application/json' } : {}), ...(this.cookie ? { Cookie: this.cookie } : {}), ...headers },
+      body: json !== undefined ? JSON.stringify(json) : undefined,
+    });
+    const set = res.headers.get('set-cookie');
+    if (set?.startsWith('bu_session=')) this.cookie = set.split(';')[0]!;
+    const text = await res.text();
+    let body: any = text;
+    try {
+      body = JSON.parse(text);
+    } catch {
+      /* not JSON (e.g. Swagger HTML) */
+    }
+    return { status: res.status, body };
+  }
+  get = (p: string) => this.req('GET', p);
+  post = (p: string, j: unknown = {}) => this.req('POST', p, j);
+  put = (p: string, j: unknown = {}) => this.req('PUT', p, j);
+  patch = (p: string, j: unknown = {}) => this.req('PATCH', p, j);
+  del = (p: string) => this.req('DELETE', p);
+}
+
+async function check(name: string, fn: () => Promise<string | void>) {
+  try {
+    const detail = (await fn()) ?? '';
+    results.push({ name, ok: true, detail });
+  } catch (e) {
+    results.push({ name, ok: false, detail: e instanceof Error ? e.message : String(e) });
+  }
+}
+
+function expectStatus(r: Res, status: number, what = '') {
+  if (r.status !== status) {
+    throw new Error(`${what} expected ${status}, got ${r.status}: ${JSON.stringify(r.body).slice(0, 200)}`);
+  }
+  return r.body?.data;
+}
+
+async function login(handle: string) {
+  const c = new Client();
+  expectStatus(await c.post('/auth/demo-login', { handle }), 200, `demo-login ${handle}`);
+  return c;
+}
+
+async function main() {
+  const anon = new Client();
+
+  await check('system: health with database', async () => {
+    const d = expectStatus(await anon.get('/health'), 200);
+    if (d.db !== 'up') throw new Error('db not up');
+    return `db ${d.dbLatencyMs}ms`;
+  });
+  await check('system: public config', async () => {
+    const d = expectStatus(await anon.get('/config'), 200);
+    if (!d.allowedEmailDomains.length) throw new Error('no email domains');
+    return `domains=${d.allowedEmailDomains.join(',')} demo=${d.demoMode} accounts=${d.demoAccounts.length}`;
+  });
+  await check('system: swagger UI and OpenAPI document', async () => {
+    const ui = await anon.get('/docs/');
+    if (ui.status !== 200 || !String(ui.body).includes('swagger')) throw new Error(`docs ${ui.status}`);
+    const spec = await anon.get('/openapi.json');
+    const ops = Object.values(spec.body.paths as Record<string, object>).reduce((n, p) => n + Object.keys(p).length, 0);
+    return `${ops} operations`;
+  });
+
+  await check('guards: signed-out user gets 401', async () => {
+    expectStatus(await anon.get('/people'), 401);
+    expectStatus(await anon.patch('/me/profile', { bio: 'x' }), 401);
+  });
+  await check('guards: non-JSON write gets 415', async () => {
+    const r = await fetch(`${BASE}/auth/login`, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: 'x' });
+    if (r.status !== 415) throw new Error(`got ${r.status}`);
+  });
+  await check('validation: malformed JSON gets 400', async () => {
+    const r = await fetch(`${BASE}/auth/login`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{bad' });
+    if (r.status !== 400) throw new Error(`got ${r.status}`);
+  });
+  await check('auth: non-college email rejected', async () => {
+    const r = await anon.post('/auth/register', { fullName: 'Test', email: 'x@gmail.com', password: 'secret123' });
+    expectStatus(r, 400);
+    if (!r.body.error.fields?.email) throw new Error('no email field error');
+  });
+  await check('routing: unknown route gets 404 JSON', async () => {
+    expectStatus(await anon.get('/does-not-exist'), 404);
+  });
+
+  const ananya = await login('ananya');
+  const rahul = await login('rahul');
+
+  await check('auth: me', async () => (expectStatus(await ananya.get('/auth/me'), 200) as any).handle);
+
+  const reads: Array<[string, string, (d: any) => string]> = [
+    ['people: discover', '/people', (d) => `${d.length} people, top ${d[0]?.match.score}`],
+    ['people: mentor mode', '/people?mode=mentor&limit=5', (d) => `${d.length} mentors`],
+    ['people: suggested', '/people/suggested', (d) => `${d.length}`],
+    ['users: public profile', '/users/rahul', (d) => `match ${d.match?.score}`],
+    ['requests: incoming', '/connections?box=incoming', (d) => `${d.length}`],
+    ['community: topics', '/topics', (d) => `${d.length} topics`],
+    ['community: posts', '/posts', (d) => `${d.items.length} posts`],
+    ['community: unanswered', '/posts?sort=unanswered', (d) => `${d.items.length}`],
+    ['community: similar questions', '/questions/similar?q=which%20coding%20club%20to%20join', (d) => `${d.length}`],
+    ['home: feed for you', '/feed', (d) => `${d.items.length}`],
+    ['home: feed latest', '/feed?tab=latest', (d) => `${d.items.length}`],
+    ['home: rail', '/home/rail?visitedClubs=1', (d) => `week=${d.thisWeek.length} quests=${d.quests?.done}/${d.quests?.total}`],
+    ['home: this week', '/events/week', (d) => `${d.length}`],
+    ['home: bookmarks', '/bookmarks', (d) => `${d.posts.length}`],
+    ['search: all types', '/search?q=python', (d) => Object.entries(d).filter(([, v]: any) => v.length).map(([k]) => k).join(',')],
+    ['campus: companies', '/companies', (d) => `${d.length} companies`],
+    ['campus: company detail', '/companies/northwind-labs', (d) => `${d.stats.experiences} experiences`],
+    ['campus: company experiences filtered', '/companies/quantis-capital/experiences?minDifficulty=4', (d) => `${d.length}`],
+    ['campus: company alumni', '/companies/northwind-labs/alumni', (d) => `${d.length}`],
+    ['campus: clubs', '/clubs?sort=useful', (d) => `${d.length} clubs`],
+    ['campus: club detail', '/clubs/code-circle', (d) => `${d.reviewCount} reviews`],
+    ['campus: path twins', '/path-twins', (d) => `${d.twins.length} twins`],
+    ['campus: roadmaps', '/roadmaps', (d) => `${d.length} roadmaps`],
+    ['campus: my roadmaps', '/roadmaps?mine=true', (d) => `${d.length}`],
+  ];
+  for (const [name, path, describe] of reads) {
+    await check(name, async () => describe(expectStatus(await ananya.get(path), 200, path)));
+  }
+
+  await check('rules: first year cannot review a club', async () => {
+    expectStatus(await ananya.put('/clubs/code-circle/review', { usefulness: 4, timeCost: 2, review: 'Trying as a first year to review this club.' }), 403);
+  });
+  await check('rules: profile update ignores role and points', async () => {
+    const before = expectStatus(await ananya.get('/auth/me'), 200);
+    const after = expectStatus(await ananya.patch('/me/profile', { role: 'ADMIN', points: 999, bio: before.bio }), 200);
+    if (after.role !== before.role || after.points !== before.points) throw new Error('role or points changed');
+  });
+
+  // Write flow with cleanup: question -> answer -> vote -> bookmark -> delete
+  await check('flow: ask, answer, vote, bookmark, delete', async () => {
+    const topics = expectStatus(await ananya.get('/topics'), 200) as Array<{ id: number; slug: string }>;
+    const topicId = topics.find((t) => t.slug === 'ai-ml')?.id ?? topics[0]!.id;
+    const { id } = expectStatus(
+      await ananya.post('/posts', { kind: 'QUESTION', title: 'Smoke test: how do I start with ML projects?', topicId, tags: ['python'] }),
+      201,
+      'create post',
+    );
+    createdPostIds.push(id);
+    try {
+      const ans = expectStatus(await rahul.post(`/posts/${id}/comments`, { body: 'Smoke test answer from a senior.' }), 201, 'answer');
+      expectStatus(await rahul.post(`/posts/${id}/best-answer`, { commentId: ans.comment.id }), 403, 'non-asker best');
+      expectStatus(await ananya.post(`/posts/${id}/best-answer`, { commentId: ans.comment.id }), 200, 'asker best');
+      const v = expectStatus(await rahul.put('/votes', { targetType: 'POST', targetId: id, value: 1 }), 200, 'vote');
+      if (v.score !== 1) throw new Error(`score ${v.score}`);
+      expectStatus(await rahul.put('/votes', { targetType: 'POST', targetId: id, value: 0 }), 200, 'unvote');
+      const b1 = expectStatus(await ananya.put('/bookmarks', { targetType: 'POST', targetId: id }), 200);
+      const b2 = expectStatus(await ananya.put('/bookmarks', { targetType: 'POST', targetId: id }), 200);
+      if (!b1.bookmarked || b2.bookmarked) throw new Error('bookmark toggle wrong');
+      const detail = expectStatus(await ananya.get(`/posts/${id}`), 200);
+      if (!detail.comments[0]?.isBest) throw new Error('best answer not first');
+    } finally {
+      expectStatus(await rahul.del(`/posts/${id}`), 404, 'non-author delete');
+      expectStatus(await ananya.del(`/posts/${id}`), 200, 'author delete');
+    }
+    expectStatus(await ananya.get(`/posts/${id}`), 404, 'deleted post');
+  });
+
+  await check('flow: roadmap step tick and save toggle', async () => {
+    const list = expectStatus(await ananya.get('/roadmaps?goalTrack=MBA'), 200) as Array<{ id: string; saved: boolean }>;
+    const r = list[0];
+    if (!r) return 'no MBA roadmap seeded, skipped';
+    const detail = expectStatus(await ananya.get(`/roadmaps/${r.id}`), 200);
+    const step = detail.steps[0].id;
+    expectStatus(await ananya.patch(`/roadmaps/${r.id}/steps/${step}`, { done: true }), 200);
+    const after = expectStatus(await ananya.get(`/roadmaps/${r.id}`), 200);
+    if (!after.saved || !after.completedSteps.includes(step)) throw new Error('step not saved');
+    // restore previous state
+    expectStatus(await ananya.patch(`/roadmaps/${r.id}/steps/${step}`, { done: false }), 200);
+    if (!r.saved) expectStatus(await ananya.put(`/roadmaps/${r.id}/save`), 200);
+  });
+
+  await check('auth: logout clears the session', async () => {
+    const c = await login('meera');
+    expectStatus(await c.post('/auth/logout'), 200);
+    c.cookie = '';
+    const me = expectStatus(await c.get('/auth/me'), 200);
+    if (me !== null) throw new Error('still signed in');
+  });
+
+  // Report
+  const width = Math.max(...results.map((r) => r.name.length));
+  for (const r of results) console.log(`${r.ok ? 'PASS' : 'FAIL'}  ${r.name.padEnd(width)}  ${r.detail}`);
+  const failed = results.filter((r) => !r.ok).length;
+  console.log(`\n${results.length - failed}/${results.length} checks passed against ${BASE}`);
+  if (failed) process.exitCode = 1;
+}
+
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exitCode = 1;
+  })
+  .finally(async () => {
+    await cleanup().catch((e) => console.error('cleanup failed', e));
+    await prisma.$disconnect();
+  });

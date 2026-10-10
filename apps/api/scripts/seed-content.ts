@@ -1,11 +1,12 @@
 import { clubReviewSchema, experienceCreateSchema, roadmapCreateSchema } from '@bridgeup/shared';
 import { prisma } from '../src/lib/prisma';
+import { env } from '../src/config/env';
 import { createExperience } from '../src/modules/experiences/experiences.service';
 import { reviewClub } from '../src/modules/clubs/clubs.service';
 import { createRoadmap } from '../src/modules/roadmaps/roadmaps.service';
 import { clubReviews, experiences, roadmaps } from './data/content';
 
-const DEMO = { endsWith: '@demo.bridgeup' };
+const DEMO = { endsWith: env.DEMO_EMAIL_SUFFIX };
 
 /** Removes previous seed content by demo authors and takes back the points it earned, so re-runs are idempotent. */
 async function clearPrevious() {

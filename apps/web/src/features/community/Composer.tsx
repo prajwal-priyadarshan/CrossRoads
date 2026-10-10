@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { TOPICS, postCreateSchema } from '@bridgeup/shared';
+import { postCreateSchema } from '@bridgeup/shared';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -12,7 +12,7 @@ import { TagInput } from '@/components/shared/TagInput';
 import { UserAvatar } from '@/components/shared/UserAvatar';
 import { ApiError } from '@/lib/api';
 import { useMe } from '@/hooks/useMe';
-import { useCreatePost } from './api';
+import { useCreatePost, useTopics } from './api';
 
 /** Collapsed it looks like an input; expanded it is the discussion form. Topic ids follow the seeded order. */
 export function Composer({
@@ -31,8 +31,11 @@ export function Composer({
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [tags, setTags] = useState<string[]>([]);
-  const defaultId = TOPICS.findIndex((t) => t.slug === defaultTopicSlug) + 1;
-  const [topicId, setTopicId] = useState<string>(defaultId > 0 ? String(defaultId) : '');
+  const { data: topics = [] } = useTopics();
+  const [picked, setPicked] = useState<string>('');
+  const defaultId = topics.find((t) => t.slug === defaultTopicSlug)?.id;
+  const topicId = picked || (defaultId ? String(defaultId) : '');
+  const setTopicId = setPicked;
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   if (!me) return null;
@@ -95,8 +98,8 @@ export function Composer({
               <SelectValue placeholder="Choose a topic" />
             </SelectTrigger>
             <SelectContent>
-              {TOPICS.map((t, i) => (
-                <SelectItem key={t.slug} value={String(i + 1)}>
+              {topics.map((t) => (
+                <SelectItem key={t.slug} value={String(t.id)}>
                   {t.name}
                 </SelectItem>
               ))}

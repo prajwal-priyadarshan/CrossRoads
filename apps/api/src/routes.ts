@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { systemRouter } from './modules/system/system.routes';
 import { authRouter } from './modules/auth/auth.routes';
 import { usersRouter } from './modules/users/users.routes';
 import { peopleRouter } from './modules/people/people.routes';
@@ -18,6 +19,7 @@ import { twinsRouter } from './modules/twins/twins.routes';
 import { roadmapsRouter } from './modules/roadmaps/roadmaps.routes';
 
 export const routes = Router();
+routes.use('/', systemRouter);
 routes.use('/auth', authRouter);
 routes.use('/', usersRouter);
 routes.use('/', peopleRouter);
@@ -35,4 +37,4 @@ routes.use('/', experiencesRouter);
 routes.use('/', clubsRouter);
 routes.use('/', twinsRouter);
 routes.use('/', roadmapsRouter);
-// later phases: routes.use('/', opportunitiesRouter); …
+// Add new module routers here and document them in docs/openapi.ts

@@ -15,6 +15,7 @@ import { useMe } from '@/hooks/useMe';
 import { CLUB_CATEGORY_LABEL } from '@/lib/labels';
 import { qk } from '@/lib/queryKeys';
 import { storage } from '@/lib/storage';
+import { STORAGE_KEYS } from '@/lib/storageKeys';
 import { cn, isSafeUrl, titleCase } from '@/lib/utils';
 import { useClub, useReviewClub } from './api';
 import { RatingMeter } from './RatingMeter';
@@ -100,10 +101,10 @@ export function ClubPage() {
   useEffect(() => {
     if (!slug) return;
     try {
-      const prev: unknown = JSON.parse(storage.get('bu-visited-clubs') ?? '[]');
+      const prev: unknown = JSON.parse(storage.get(STORAGE_KEYS.visitedClubs) ?? '[]');
       const list = Array.isArray(prev) ? (prev as string[]) : [];
       if (!list.includes(slug)) {
-        storage.set('bu-visited-clubs', JSON.stringify([...list, slug]));
+        storage.set(STORAGE_KEYS.visitedClubs, JSON.stringify([...list, slug]));
         qc.invalidateQueries({ queryKey: qk.rail });
       }
     } catch {

@@ -27,7 +27,7 @@ import {
   ThisWeek,
   TrendingTopics,
   WaysToHelp,
-} from './RailWidgets';
+} from './rail';
 
 function greetingWord() {
   const h = new Date().getHours();

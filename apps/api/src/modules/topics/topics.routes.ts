@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import { requireOnboarded } from '../../middleware/auth';
+import { requireAuth, requireOnboarded } from '../../middleware/auth';
 import * as svc from './topics.service';
 
 export const topicsRouter = Router();
 
-topicsRouter.get('/topics', requireOnboarded, async (req, res) => {
+topicsRouter.get('/topics', requireAuth, async (req, res) => {
   res.json({ data: await svc.listTopics(req.user!.id) });
 });
 

@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import { prisma } from '../src/lib/prisma';
+import { env } from '../src/config/env';
 import { TOPICS, BADGES } from '@bridgeup/shared';
 import { companies } from './data/companies';
 import { clubs } from './data/clubs';
@@ -35,8 +36,8 @@ async function main() {
   });
 
   // Admin account (password from env so it's never committed)
-  const adminEmail = process.env.SEED_ADMIN_EMAIL ?? 'admin@demo.bridgeup';
-  const adminPassword = process.env.SEED_ADMIN_PASSWORD ?? 'ChangeMe123';
+  const adminEmail = process.env.SEED_ADMIN_EMAIL || `admin${env.DEMO_EMAIL_SUFFIX}`;
+  const adminPassword = process.env.SEED_ADMIN_PASSWORD || 'ChangeMe123';
   await prisma.user.upsert({
     where: { email: adminEmail },
     update: {},
@@ -54,9 +55,9 @@ async function main() {
 
   // Alumni invite allowlist (alumni may register with a non-college email if listed here)
   await prisma.allowedEmail.upsert({
-    where: { email: 'alumni@demo.bridgeup' },
+    where: { email: `alumni${env.DEMO_EMAIL_SUFFIX}` },
     update: {},
-    create: { email: 'alumni@demo.bridgeup', role: 'ALUMNI' },
+    create: { email: `alumni${env.DEMO_EMAIL_SUFFIX}`, role: 'ALUMNI' },
   });
 
   console.log('Seed complete');

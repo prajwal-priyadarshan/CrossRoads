@@ -38,7 +38,8 @@ export function rankFeed<T extends FeedPost>(viewer: FeedViewer, followedTopicId
       terms.push([1, p.author.role === 'ALUMNI' ? 'From an alumnus' : `From a senior in ${p.author.department ?? 'your college'}`]);
     }
     const helpTag = p.tags.find((t) => viewer.skills.includes(t));
-    if (p.kind === 'QUESTION' && p.commentCount === 0 && helper && helpTag) terms.push([1, `You can help: ${titleCase(helpTag)}`]);
+    // Put first so it wins ties (sort is stable): for a senior, "you can help" is the more useful reason
+    if (p.kind === 'QUESTION' && p.commentCount === 0 && helper && helpTag) terms.unshift([1, `You can help: ${titleCase(helpTag)}`]);
 
     const relevance = 0.5 + terms.reduce((s, [w]) => s + w, 0);
     const quality =

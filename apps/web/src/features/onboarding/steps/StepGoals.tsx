@@ -3,10 +3,11 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { z } from 'zod';
 import { Check } from 'lucide-react';
-import { GOAL_TRACKS, TARGET_ROLES, TOPICS, stepGoalsSchema } from '@bridgeup/shared';
+import { DEFAULT_TOPIC_SLUG, GOAL_TRACKS, TARGET_ROLES, TOPICS, stepGoalsSchema } from '@bridgeup/shared';
 import { FormField } from '@/components/shared/FormField';
 import { ChipPicker } from '@/components/shared/ChipPicker';
 import { CompanyMultiSelect } from '@/features/companies/CompanyMultiSelect';
+import { useTopics } from '@/features/community/api';
 import { cn } from '@/lib/utils';
 import { AppIcon as Icon } from '@/components/shared/AppIcon';
 import type { StepProps } from './types';
@@ -14,8 +15,8 @@ import type { StepProps } from './types';
 type In = z.input<typeof stepGoalsSchema>;
 type Out = z.output<typeof stepGoalsSchema>;
 
-// Topic ids are the seeded order (1..6), see prisma/seed.ts; replaced by GET /topics in Phase 04.
-const TOPIC_CARDS = TOPICS.map((t, i) => ({ ...t, id: i + 1 }));
+/** Interests that suggest following a topic, from the shared topic definitions. */
+const RELATED = new Map<string, readonly string[]>(TOPICS.map((t) => [t.slug, t.relatedInterests]));
 
 export function StepGoals({ draft, onSubmit, formId, interests }: StepProps<'goals'> & { interests: string[] }) {
   const {
@@ -29,18 +30,15 @@ export function StepGoals({ draft, onSubmit, formId, interests }: StepProps<'goa
     defaultValues: draft ?? { goalTrack: undefined, targetRoles: [], targetCompanies: [], followTopicIds: [] },
   });
 
-  // Preselect topics from interests the first time this step is shown
+  const { data: topics = [] } = useTopics();
+
+  // Preselect topics related to the chosen interests the first time this step is shown
   useEffect(() => {
-    if (draft || getValues('followTopicIds').length) return;
-    const text = interests.join(' ');
-    const picks = TOPIC_CARDS.filter((t) =>
-      (t.slug === 'ai-ml' && /ai|ml|data/.test(text)) ||
-      (t.slug === 'dsa-leetcode' && /competitive|programming/.test(text)) ||
-      (t.slug === 'hackathons-projects' && /open source|web|app/.test(text)) ||
-      (t.slug === 'internships' && /startup|product/.test(text)),
-    ).map((t) => t.id);
-    setValue('followTopicIds', picks.length ? picks : [TOPIC_CARDS[2]!.id]);
-  }, [draft, interests, getValues, setValue]);
+    if (draft || !topics.length || getValues('followTopicIds').length) return;
+    const picks = topics.filter((t) => (RELATED.get(t.slug) ?? []).some((i) => interests.includes(i))).map((t) => t.id);
+    const fallback = topics.find((t) => t.slug === DEFAULT_TOPIC_SLUG) ?? topics[0]!;
+    setValue('followTopicIds', picks.length ? picks : [fallback.id]);
+  }, [draft, interests, topics, getValues, setValue]);
 
   return (
     <form id={formId} onSubmit={handleSubmit((v) => onSubmit(v as In))} className="space-y-6" noValidate>
@@ -108,7 +106,7 @@ export function StepGoals({ draft, onSubmit, formId, interests }: StepProps<'goa
           name="followTopicIds"
           render={({ field }) => (
             <div className="grid gap-3 sm:grid-cols-2">
-              {TOPIC_CARDS.map((t) => {
+              {topics.map((t) => {
                 const on = field.value.includes(t.id);
                 return (
                   <button

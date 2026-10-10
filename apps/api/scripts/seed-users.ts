@@ -1,8 +1,9 @@
 import bcrypt from 'bcryptjs';
 import { prisma } from '../src/lib/prisma';
+import { env } from '../src/config/env';
 import { users } from './data/users';
 
-const PASSWORD = process.env.SEED_USER_PASSWORD ?? 'demo12345';
+const PASSWORD = process.env.SEED_USER_PASSWORD || 'demo12345';
 
 async function main() {
   const passwordHash = await bcrypt.hash(PASSWORD, 10);
@@ -65,7 +66,7 @@ async function main() {
   }
 
   // Admin should be demo-loginable
-  await prisma.user.updateMany({ where: { handle: 'admin' }, data: { email: 'admin@demo.bridgeup' } });
+  await prisma.user.updateMany({ where: { handle: 'admin' }, data: { email: `admin${env.DEMO_EMAIL_SUFFIX}` } });
   console.log(`Seeded ${users.length} users`);
 }
 

@@ -10,5 +10,5 @@
     "types": ["node"],
     "outDir": "dist"
   },
-  "include": ["src", "scripts", "prisma"]
+  "include": ["src", "scripts", "prisma", "test"]
 }

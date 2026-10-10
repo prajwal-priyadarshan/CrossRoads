@@ -3,6 +3,7 @@ import type { Prisma } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
 import { rankPeople } from '../../services/matching';
 import { userLiteSelect, asMatchProfile } from '../users/users.serializers';
+import { LIMITS } from '../../config/constants';
 
 const matchSelect = {
   ...userLiteSelect,
@@ -58,7 +59,7 @@ export async function discoverPeople(viewerId: string, q: PeopleQuery) {
     });
   }
 
-  const candidates = await prisma.user.findMany({ where, select: matchSelect, take: 300 });
+  const candidates = await prisma.user.findMany({ where, select: matchSelect, take: LIMITS.MATCH_CANDIDATES });
   const byId = new Map(candidates.map((c) => [c.id, c]));
   let ranked = rankPeople(asMatchProfile(viewer), candidates.map(asMatchProfile), q.mode === 'mentor').map(
     ({ candidate, match }) => ({ ...byId.get(candidate.id)!, match }),

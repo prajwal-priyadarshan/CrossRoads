@@ -3,6 +3,7 @@ import type { FeedPage, RailData } from '@bridgeup/shared';
 import { api } from '@/lib/api';
 import { qk } from '@/lib/queryKeys';
 import { storage } from '@/lib/storage';
+import { STORAGE_KEYS } from '@/lib/storageKeys';
 
 export type FeedTab = 'foryou' | 'latest' | 'top';
 
@@ -22,7 +23,7 @@ export const useFeed = (tab: FeedTab, topic?: string) =>
 /** Number of clubs opened on this device (written by the club page in Phase 06). */
 function visitedClubs() {
   try {
-    const v = JSON.parse(storage.get('bu-visited-clubs') ?? '[]');
+    const v = JSON.parse(storage.get(STORAGE_KEYS.visitedClubs) ?? '[]');
     return Array.isArray(v) ? v.length : 0;
   } catch {
     return 0;

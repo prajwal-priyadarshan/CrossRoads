@@ -2,6 +2,7 @@ import { prisma } from '../lib/prisma';
 import { groupBy } from '../lib/collections';
 import { jaccard, titleCase } from '../lib/text';
 import { userLiteSelect } from '../modules/users/users.serializers';
+import { LIMITS } from '../config/constants';
 
 type Candidate = {
   company: string | null;
@@ -48,7 +49,7 @@ export async function findTwins(viewerId: string) {
         select: { id: true, yearOfStudy: true, category: true, title: true, description: true },
       },
     },
-    take: 200,
+    take: LIMITS.TWIN_CANDIDATES,
   });
 
   const scored = candidates

@@ -6,6 +6,7 @@ import { normalizeTag } from '../../lib/text';
 import { decodeCursor, encodeCursor } from '../../lib/pagination';
 import { notify, notifyMany } from '../../services/notify';
 import { POINTS, awardPoints, evaluateBadges } from '../../services/gamification';
+import { DAY_MS, LIMITS } from '../../config/constants';
 import {
   buildTree,
   commentInclude,
@@ -52,7 +53,7 @@ export async function listPosts(viewerId: string, q: PostListQuery) {
     where.kind = 'QUESTION';
     where.commentCount = 0;
   }
-  if (q.sort === 'top') where.createdAt = { gte: new Date(Date.now() - 7 * 864e5) };
+  if (q.sort === 'top') where.createdAt = { gte: new Date(Date.now() - 7 * DAY_MS) };
 
   const byScore = q.sort === 'top' || q.sort === 'top_all';
   const orderBy: Prisma.PostOrderByWithRelationInput[] = byScore
@@ -114,7 +115,7 @@ export async function createPost(userId: string, input: PostCreateInput) {
           ],
         },
         orderBy: { points: 'desc' },
-        take: 20,
+        take: LIMITS.QUESTION_NOTIFY_MAX,
         select: { id: true },
       });
       await notifyMany(tx, helpers.map((h) => h.id), {
@@ -234,11 +235,11 @@ export async function markBestAnswer(userId: string, postId: string, commentId: 
 
 export async function similarQuestions(q: string) {
   const term = q.trim();
-  if (term.length < 8) return [];
+  if (term.length < LIMITS.SIMILAR_MIN_CHARS) return [];
   return prisma.$queryRaw<Array<{ id: string; title: string; commentCount: number; hasBest: boolean; sim: number }>>`
     SELECT id, title, "commentCount", ("bestAnswerId" IS NOT NULL) AS "hasBest", similarity(title, ${term}) AS sim
     FROM "Post"
-    WHERE kind = 'QUESTION' AND "isRemoved" = false AND similarity(title, ${term}) > 0.15
+    WHERE kind = 'QUESTION' AND "isRemoved" = false AND similarity(title, ${term}) > ${LIMITS.SIMILAR_THRESHOLD}
     ORDER BY sim DESC
-    LIMIT 5`;
+    LIMIT ${LIMITS.SIMILAR_MAX}`;
 }

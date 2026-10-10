@@ -1,11 +1,14 @@
 export const TOPICS = [
-  { slug: 'dsa-leetcode', name: 'DSA and LeetCode', icon: 'binary', description: 'Problem solving, patterns, contests and practice plans.' },
-  { slug: 'ai-ml', name: 'AI/ML and Generative AI', icon: 'brain-circuit', description: 'Machine learning, deep learning, LLMs and projects.' },
-  { slug: 'placements', name: 'Placements and Interview Experiences', icon: 'briefcase', description: 'Company processes, rounds and preparation.' },
-  { slug: 'internships', name: 'Internships and Referrals', icon: 'send', description: 'Finding internships, applying and referrals.' },
-  { slug: 'hackathons-projects', name: 'Hackathons and Projects', icon: 'rocket', description: 'Teams, ideas, builds and showcases.' },
-  { slug: 'campus-life', name: 'Campus Life and Academics', icon: 'graduation-cap', description: 'Clubs, courses, exams, hostel and life.' },
+  { slug: 'dsa-leetcode', name: 'DSA and LeetCode', icon: 'binary', description: 'Problem solving, patterns, contests and practice plans.', relatedInterests: ['competitive programming'] },
+  { slug: 'ai-ml', name: 'AI/ML and Generative AI', icon: 'brain-circuit', description: 'Machine learning, deep learning, LLMs and projects.', relatedInterests: ['ai/ml', 'data science', 'research'] },
+  { slug: 'placements', name: 'Placements and Interview Experiences', icon: 'briefcase', description: 'Company processes, rounds and preparation.', relatedInterests: ['product management', 'quant/finance', 'higher studies'] },
+  { slug: 'internships', name: 'Internships and Referrals', icon: 'send', description: 'Finding internships, applying and referrals.', relatedInterests: ['startups', 'cloud and devops', 'cybersecurity'] },
+  { slug: 'hackathons-projects', name: 'Hackathons and Projects', icon: 'rocket', description: 'Teams, ideas, builds and showcases.', relatedInterests: ['web development', 'app development', 'open source', 'robotics', 'design'] },
+  { slug: 'campus-life', name: 'Campus Life and Academics', icon: 'graduation-cap', description: 'Clubs, courses, exams, hostel and life.', relatedInterests: ['content creation'] },
 ] as const;
+
+/** Topic preselected in onboarding when no interest maps to a topic */
+export const DEFAULT_TOPIC_SLUG = 'campus-life';
 
 export const SKILLS = [
   'python', 'java', 'c++', 'c', 'javascript', 'typescript', 'dsa', 'competitive programming', 'sql', 'react', 'node.js',

@@ -52,7 +52,8 @@ const social = (h: string) => ({
   githubUrl: `https://github.com/demo-${h}`,
 });
 
-const base = (handle: string, fullName: string) => ({ handle, fullName, email: `${handle}@demo.bridgeup` });
+const DEMO_SUFFIX = process.env.DEMO_EMAIL_SUFFIX || '@demo.bridgeup';
+const base = (handle: string, fullName: string) => ({ handle, fullName, email: `${handle}${DEMO_SUFFIX}` });
 
 export const users: SeedUser[] = [
   // ───────────── First years (7) ─────────────

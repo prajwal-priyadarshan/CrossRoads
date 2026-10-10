@@ -9,15 +9,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { FormField } from '@/components/shared/FormField';
 import { ApiError } from '@/lib/api';
+import { roleLabel } from '@/components/shared/RoleBadge';
+import { useAppConfig } from '@/hooks/useAppConfig';
 import { AuthLayout } from './AuthLayout';
 import { useDemoLogin, useLogin, useResend } from './api';
 
-const DEMO_ACCOUNTS = [
-  { handle: 'ananya', label: 'Ananya (first year)' },
-  { handle: 'rahul', label: 'Rahul (senior)' },
-  { handle: 'meera', label: 'Meera (alumni)' },
-  { handle: 'admin', label: 'Admin' },
-];
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -28,6 +24,8 @@ export function LoginPage() {
   const demo = useDemoLogin();
   const resend = useResend();
   const [show, setShow] = useState(false);
+  const { data: config } = useAppConfig();
+  const demoAccounts = config?.demoMode ? config.demoAccounts : [];
   const {
     register,
     handleSubmit,
@@ -89,14 +87,14 @@ export function LoginPage() {
         </Button>
       </form>
 
-      {import.meta.env.VITE_DEMO_MODE === 'true' && (
+      {demoAccounts.length > 0 && (
         <div className="mt-8">
           <div className="relative mb-4 text-center text-xs text-muted-foreground">
             <span className="relative z-10 bg-background px-2">Demo accounts</span>
             <div className="absolute inset-x-0 top-1/2 border-t" />
           </div>
           <div className="grid grid-cols-2 gap-2">
-            {DEMO_ACCOUNTS.map((a) => (
+            {demoAccounts.map((a) => (
               <Button
                 key={a.handle}
                 variant="outline"
@@ -109,7 +107,7 @@ export function LoginPage() {
                   })
                 }
               >
-                {a.label}
+                {a.fullName.split(' ')[0]} ({roleLabel(a.role, a.currentYear).toLowerCase()})
               </Button>
             ))}
           </div>

@@ -4,6 +4,7 @@ import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { CodeInput } from '@/components/shared/CodeInput';
+import { useAppConfig } from '@/hooks/useAppConfig';
 import { AuthLayout } from './AuthLayout';
 import { useResend, useVerify } from './api';
 
@@ -18,6 +19,7 @@ export function VerifyPage() {
   const [code, setCode] = useState('');
   const [error, setError] = useState('');
   const [cooldown, setCooldown] = useState(COOLDOWN);
+  const { data: config } = useAppConfig();
 
   useEffect(() => {
     if (cooldown <= 0) return;
@@ -83,7 +85,7 @@ export function VerifyPage() {
         >
           {cooldown > 0 ? `Resend in ${cooldown}s` : 'Resend code'}
         </Button>
-        {import.meta.env.VITE_DEMO_MODE === 'true' && (
+        {config?.demoMode && (
           <p className="text-center text-xs text-muted-foreground">Demo mode: the code is printed in the API log.</p>
         )}
       </div>

@@ -1,11 +1,12 @@
 import { Link } from 'react-router';
-import { TOPICS } from '@bridgeup/shared';
+import { useTopics } from './api';
 import { AppIcon } from '@/components/shared/AppIcon';
 import { cn } from '@/lib/utils';
 
 /** Horizontally scrollable topic chips: All + the six topics. */
 export function TopicTabs({ active, base = '/community' }: { active?: string; base?: string }) {
-  const items = [{ slug: '', name: 'All', icon: 'hash' }, ...TOPICS];
+  const { data: topics = [] } = useTopics();
+  const items = [{ slug: '', name: 'All', icon: 'hash' }, ...topics];
   return (
     <div className="relative -mx-4 md:mx-0">
       <div className="flex gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] md:px-0 [&::-webkit-scrollbar]:hidden">

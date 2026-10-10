@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { useMe } from '@/hooks/useMe';
 import { storage } from '@/lib/storage';
+import { STORAGE_KEYS } from '@/lib/storageKeys';
 import { PostFeed } from '@/features/community/PostFeed';
 import { SortToggle } from '@/features/community/SortToggle';
 import { TopicTabsState } from './TopicChips';
@@ -16,7 +17,7 @@ export function AskListPage() {
   const isHelper = me?.role === 'SENIOR' || me?.role === 'ALUMNI';
   const [sort, setSort] = useState<AskSort>(isHelper ? 'unanswered' : 'latest');
   const [topic, setTopic] = useState('');
-  const [tipHidden, setTipHidden] = useState(storage.get('bu-ask-tip') === '1');
+  const [tipHidden, setTipHidden] = useState(storage.get(STORAGE_KEYS.askTipDismissed) === '1');
   const firstYear = me?.currentYear === 1;
 
   return (
@@ -43,7 +44,7 @@ export function AskListPage() {
             type="button"
             aria-label="Dismiss tip"
             onClick={() => {
-              storage.set('bu-ask-tip', '1');
+              storage.set(STORAGE_KEYS.askTipDismissed, '1');
               setTipHidden(true);
             }}
           >

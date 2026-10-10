@@ -83,6 +83,6 @@ export async function login(email: string, password: string) {
 export async function demoLogin(handle: string) {
   if (!env.DEMO_MODE) throw forbidden('Demo login is disabled');
   const user = await prisma.user.findUnique({ where: { handle } });
-  if (!user || !user.email.endsWith('@demo.bridgeup')) throw forbidden('Not a demo account');
+  if (!user || !user.email.endsWith(env.DEMO_EMAIL_SUFFIX)) throw forbidden('Not a demo account');
   return user;
 }

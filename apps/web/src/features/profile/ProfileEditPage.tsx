@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Check, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -33,6 +33,7 @@ import { CompanyMultiSelect } from '@/features/companies/CompanyMultiSelect';
 import { useProfile, useUpdateProfile } from './api';
 
 type Tab = 'basics' | 'skills' | 'connect' | 'projects' | 'journey' | 'mentoring';
+const TABS: Tab[] = ['basics', 'skills', 'connect', 'projects', 'journey', 'mentoring'];
 const HASH_TO_TAB: Record<string, Tab> = { goals: 'skills', skills: 'skills', privacy: 'connect', mentoring: 'mentoring' };
 
 /** One tab = one form that saves only its own fields. */
@@ -294,13 +295,9 @@ export function ProfileEditPage() {
   const { data: profile } = useProfile(me?.handle ?? '');
   const { hash } = useLocation();
   const navigate = useNavigate();
-  const initial = HASH_TO_TAB[hash.slice(1)] ?? ((hash.slice(1) as Tab) || 'basics');
-  const [tab, setTab] = useState<Tab>(initial);
-
-  useEffect(() => {
-    const t = HASH_TO_TAB[hash.slice(1)] ?? (hash.slice(1) as Tab);
-    if (t) setTab(t);
-  }, [hash]);
+  // The active tab lives in the URL hash (#goals, #mentoring…) so deep links work
+  const fromHash = HASH_TO_TAB[hash.slice(1)] ?? (hash.slice(1) as Tab);
+  const tab: Tab = TABS.includes(fromHash) ? fromHash : 'basics';
 
   if (!me) return <ProfileSkeleton />;
 
@@ -322,10 +319,7 @@ export function ProfileEditPage() {
       />
       <Tabs
         value={tab}
-        onValueChange={(v) => {
-          setTab(v as Tab);
-          navigate({ hash: v }, { replace: true });
-        }}
+        onValueChange={(v) => navigate({ hash: v }, { replace: true })}
       >
         <TabsList className="h-auto w-full flex-wrap justify-start">
           {tabs.map((t) => (

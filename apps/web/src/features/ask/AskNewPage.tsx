@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import { Check, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { TOPICS, postCreateSchema } from '@bridgeup/shared';
+import { postCreateSchema } from '@bridgeup/shared';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -13,7 +13,7 @@ import { TagInput } from '@/components/shared/TagInput';
 import { ApiError } from '@/lib/api';
 import { useDebounce } from '@/hooks/useDebounce';
 import { cn } from '@/lib/utils';
-import { useCreatePost } from '@/features/community/api';
+import { useCreatePost, useTopics } from '@/features/community/api';
 import { SimilarQuestions } from './SimilarQuestions';
 
 export function AskNewPage() {
@@ -26,6 +26,7 @@ export function AskNewPage() {
   const [tags, setTags] = useState<string[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const debounced = useDebounce(title, 300);
+  const { data: topics = [] } = useTopics();
 
   const submit = () => {
     const parsed = postCreateSchema.safeParse({ kind: 'QUESTION', title, body, topicId: topicId ?? undefined, tags });
@@ -82,14 +83,14 @@ export function AskNewPage() {
 
           <FormField label="Topic" error={errors.topicId}>
             <div className="grid gap-3 sm:grid-cols-2">
-              {TOPICS.map((t, i) => {
-                const on = topicId === i + 1;
+              {topics.map((t) => {
+                const on = topicId === t.id;
                 return (
                   <button
                     key={t.slug}
                     type="button"
                     aria-pressed={on}
-                    onClick={() => setTopicId(i + 1)}
+                    onClick={() => setTopicId(t.id)}
                     className={cn(
                       'flex items-center gap-3 rounded-2xl border p-3 text-left transition hover:border-primary/50',
                       on && 'border-primary bg-primary-soft',
