@@ -3,8 +3,8 @@ import type { ChatConversation, ChatMessage, ChatMessagePage, ChatSendInput } fr
 import { api } from '@/lib/api';
 import { qk } from '@/lib/queryKeys';
 
-/** The inbox refreshes on an interval: the API has no push channel yet, so this keeps threads current. */
-const POLL_MS = 5000;
+/** Fallback refresh. Live updates arrive over the chat stream (useChatStream); polling only covers a dropped stream. */
+const POLL_MS = 30_000;
 
 export const useConversations = () =>
   useQuery({

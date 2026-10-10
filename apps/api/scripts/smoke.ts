@@ -393,6 +393,30 @@ async function main() {
     if (!thread || thread.unread !== 0) throw new Error(`unread after read: ${thread?.unread}`);
     return 'open, send, receive, read';
   });
+  await check('chat: live stream delivers a new message to the recipient', async () => {
+    const rahulId = (expectStatus(await rahul.get('/auth/me'), 200) as any).id;
+    const id = (expectStatus(await ananya.post('/chat/conversations', { userId: rahulId }), 201) as any).id;
+    const ac = new AbortController();
+    const res = await fetch(`${BASE}/chat/stream`, { headers: { cookie: rahul.cookie }, signal: ac.signal });
+    if (res.status !== 200) throw new Error(`stream got ${res.status}`);
+    const reader = res.body!.getReader();
+    const decoder = new TextDecoder();
+    const sent = expectStatus(await ananya.post(`/chat/conversations/${id}/messages`, { body: 'smoke: live' }), 201) as any;
+    createdMessageIds.push(sent.id);
+    let buf = '';
+    const deadline = Date.now() + 4000;
+    try {
+      while (Date.now() < deadline && !buf.includes(sent.id)) {
+        const chunk = await Promise.race([reader.read(), new Promise<never>((_, rej) => setTimeout(() => rej(new Error('timeout')), 4000))]);
+        if (chunk.done) break;
+        buf += decoder.decode(chunk.value);
+      }
+    } finally {
+      ac.abort();
+    }
+    if (!buf.includes('event: chat.message') || !buf.includes(sent.id)) throw new Error('no chat.message event received');
+    return 'event received in under 4s';
+  });
   await check('chat: strangers cannot start or read a thread', async () => {
     const suresh = await login('suresh');
     const ananyaId = (expectStatus(await ananya.get('/auth/me'), 200) as any).id;

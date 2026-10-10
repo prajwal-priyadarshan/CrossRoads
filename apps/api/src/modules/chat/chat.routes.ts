@@ -9,6 +9,7 @@ import { requireOnboarded } from '../../middleware/auth';
 import { validate } from '../../middleware/validate';
 import { writeLimiter } from '../../middleware/rateLimits';
 import * as chat from './chat.service';
+import { openStream } from '../../services/chatHub';
 
 export const chatRouter = Router();
 
@@ -41,4 +42,10 @@ chatRouter.post(
 
 chatRouter.post('/chat/conversations/:id/read', requireOnboarded, validate({ params: chatIdParamsSchema }), async (req, res) => {
   res.json({ data: await chat.markRead(req.user!, req.valid.params.id) });
+});
+
+/** Live updates for the signed-in user. The client also polls, so this is an upgrade, not a requirement. */
+chatRouter.get('/chat/stream', requireOnboarded, (req, res) => {
+  const close = openStream(req.user!.id, res);
+  req.on('close', close);
 });

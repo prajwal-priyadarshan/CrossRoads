@@ -4,6 +4,7 @@ import { decodeCursor, encodeCursor } from '../../lib/pagination';
 import { badRequest, forbidden, notFound } from '../../lib/errors';
 import type { SessionUser } from '../../middleware/auth';
 import { notify } from '../../services/notify';
+import { publish } from '../../services/chatHub';
 import { LIMITS } from '../../config/constants';
 import { userLiteSelect } from '../users/users.serializers';
 
@@ -142,6 +143,9 @@ export async function sendMessage(me: SessionUser, conversationId: string, input
     }
     return m;
   });
+  // Live update: the recipient gets it as incoming, and the sender's other open tabs get it as sent
+  publish([otherId], 'chat.message', { conversationId, message: toMessage(message, otherId) });
+  publish([me.id], 'chat.message', { conversationId, message: toMessage(message, me.id) });
   return toMessage(message, me.id);
 }
 

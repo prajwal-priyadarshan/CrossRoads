@@ -4,8 +4,12 @@ import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
 import { MobileNav } from './MobileNav';
 import { CommandPalette } from './CommandPalette';
+import { useChatStream } from '@/features/chat/useChatStream';
+import { useMe } from '@/hooks/useMe';
 
 export function AppShell() {
+  const { data: me } = useMe();
+  useChatStream(Boolean(me));
   return (
     <div className="min-h-dvh bg-background">
       <Sidebar />

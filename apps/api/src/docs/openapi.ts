@@ -74,6 +74,7 @@ const ROUTES: Row[] = [
   { method: 'post', path: '/chat/conversations', tag: 'Chat', summary: 'Open a conversation with a connected person', auth: 'onboarded', body: S.chatStartSchema, status: 201 },
   { method: 'get', path: '/chat/conversations/:id/messages', tag: 'Chat', summary: 'Messages in a conversation, newest first, cursor paged', auth: 'onboarded', query: S.chatMessagesQuerySchema },
   { method: 'post', path: '/chat/conversations/:id/messages', tag: 'Chat', summary: 'Send a message (connected people only)', auth: 'onboarded', body: S.chatSendSchema, status: 201 },
+  { method: 'get', path: '/chat/stream', tag: 'Chat', summary: 'Server-sent events: chat.message when a message arrives or is sent from another tab', auth: 'onboarded' },
   { method: 'post', path: '/chat/conversations/:id/read', tag: 'Chat', summary: 'Mark a conversation as read', auth: 'onboarded' },
   { method: 'get', path: '/alumni/dashboard', tag: 'Home', summary: 'Alumni dashboard: mentees, requests, open questions, own answers (ALUMNI only)', auth: 'onboarded' },
   { method: 'get', path: '/events/week', tag: 'Home', summary: 'Events in the next 7 days for your year', auth: 'onboarded' },
