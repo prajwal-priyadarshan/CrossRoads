@@ -42,7 +42,7 @@ API docs: Swagger UI at `/api/docs`, OpenAPI JSON at `/api/openapi.json` (on by 
 - **Responses:** `{ data }`; paginated lists `{ data: { items, nextCursor } }`; errors `{ error: { code, message, fields? } }` (VALIDATION, UNAUTHENTICATED, FORBIDDEN, NOT_FOUND, CONFLICT, RATE_LIMITED, INTERNAL).
 - **Express 5:** `req.query` is a getter; parsed input lives on `req.valid`.
 - **Prisma migrations:** always `--create-only`, review the SQL, delete any `DROP INDEX` lines for the search indexes, then apply; re-run `db:search` if they vanish.
-- **Before committing:** `npm run typecheck && npm test && npm run build`, and `npm run smoke` with the API running.
+- **Before committing:** `npm run typecheck && npm test` at minimum (every commit). Add `npm run build`, and `npm run smoke` with the API running, before pushing, before tagging a phase, and after any change to API routes, schemas or the build setup.
 - Prettier: single quotes, semicolons, printWidth 120, trailing commas `all`.
 
 ## Tool-version specifics (verified)
@@ -63,4 +63,6 @@ API docs: Swagger UI at `/api/docs`, OpenAPI JSON at `/api/openapi.json` (on by 
 ## Git rules
 
 - **Never add Claude as a co-author or contributor.** No `Co-Authored-By: Claude ...` trailer and no "Generated with Claude Code" lines in commit messages or PR descriptions.
-- Commit after each phase (and at sensible steps within it), tag `phase-NN`, and push to the connected GitHub remote.
+- **Commit every completed change, not just whole phases.** As soon as a change works and the checks pass, commit it — a new endpoint, a bug fix, a refactor, a doc edit, added tests, a dependency bump. Don't batch unrelated work into one commit and don't leave finished work uncommitted waiting for the phase to end.
+- One logical change per commit, with a message in the imperative mood (`fix: …`, `feat: …`, `test: …`, `docs: …`, `chore: …`). If a change touches API + web + shared for one feature, that is still one commit.
+- At the end of a phase, commit anything outstanding, tag `phase-NN`, and push to the connected GitHub remote. Push after ordinary commits too, so the remote is never far behind.
