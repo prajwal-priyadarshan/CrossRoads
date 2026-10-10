@@ -6,6 +6,11 @@ import { connectionsRouter } from './modules/connections/connections.routes';
 import { topicsRouter } from './modules/topics/topics.routes';
 import { postsRouter } from './modules/posts/posts.routes';
 import { votesRouter } from './modules/votes/votes.routes';
+import { feedRouter } from './modules/feed/feed.routes';
+import { homeRouter } from './modules/home/home.routes';
+import { eventsRouter } from './modules/events/events.routes';
+import { bookmarksRouter } from './modules/bookmarks/bookmarks.routes';
+import { searchRouter } from './modules/search/search.routes';
 
 export const routes = Router();
 routes.use('/auth', authRouter);
@@ -15,4 +20,9 @@ routes.use('/', connectionsRouter);
 routes.use('/', topicsRouter);
 routes.use('/', postsRouter);
 routes.use('/', votesRouter);
-// later phases: routes.use('/', postsRouter); …
+routes.use('/', feedRouter);
+routes.use('/', homeRouter);
+routes.use('/', eventsRouter);
+routes.use('/', bookmarksRouter);
+routes.use('/', searchRouter);
+// later phases: routes.use('/', companiesRouter); …

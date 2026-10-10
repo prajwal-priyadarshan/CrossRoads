@@ -8,6 +8,7 @@ import { PlainText } from '@/components/shared/PlainText';
 import { RelativeTime } from '@/components/shared/RelativeTime';
 import { ProfileSkeleton } from '@/components/shared/Skeletons';
 import { VoteButtons } from '@/components/shared/VoteButtons';
+import { BookmarkButton } from '@/components/shared/BookmarkButton';
 import { useMe } from '@/hooks/useMe';
 import { qk } from '@/lib/queryKeys';
 import { useDeletePost, useMarkBest, usePost } from '@/features/community/api';
@@ -95,6 +96,8 @@ export function QuestionPage() {
                 ))}
               </div>
             )}
+            <div className="flex items-center gap-1">
+              <BookmarkButton targetType="POST" targetId={post.id} bookmarked={post.bookmarked} />
             {canDelete && (
               <Button
                 variant="ghost"
@@ -107,6 +110,7 @@ export function QuestionPage() {
                 <Trash2 /> Delete
               </Button>
             )}
+            </div>
           </div>
         </article>
 

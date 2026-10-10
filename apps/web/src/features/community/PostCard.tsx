@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { AppIcon } from '@/components/shared/AppIcon';
+import { BookmarkButton } from '@/components/shared/BookmarkButton';
 import { RelativeTime } from '@/components/shared/RelativeTime';
 import { UserAvatar } from '@/components/shared/UserAvatar';
 import { VoteButtons } from '@/components/shared/VoteButtons';
@@ -146,8 +147,9 @@ export function PostCard({ post, reason }: { post: Post; reason?: ReactNode }) {
           {isQuestion && post.hasSeniorAnswer && (
             <span className="text-xs font-medium text-primary">Answered by a senior</span>
           )}
+          <BookmarkButton targetType="POST" targetId={post.id} bookmarked={post.bookmarked} className="ml-auto" />
           {canDelete && (
-            <div className="ml-auto">
+            <div>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="size-7" aria-label="More actions">

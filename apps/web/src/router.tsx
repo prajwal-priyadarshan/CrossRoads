@@ -20,6 +20,8 @@ import { CommunityPage } from '@/features/community/CommunityPage';
 import { TopicPage } from '@/features/community/TopicPage';
 import { TagPage } from '@/features/community/TagPage';
 import { PostPage } from '@/features/community/PostPage';
+import { BookmarksPage } from '@/features/bookmarks/BookmarksPage';
+import { SearchPage } from '@/features/search/SearchPage';
 
 export const router = createBrowserRouter([
   {
@@ -55,6 +57,8 @@ export const router = createBrowserRouter([
               { path: '/community/tag/:tag', element: <TagPage /> },
               { path: '/community/:topic', element: <TopicPage /> },
               { path: '/post/:id', element: <PostPage /> },
+              { path: '/bookmarks', element: <BookmarksPage /> },
+              { path: '/search', element: <SearchPage /> },
               { element: <RequireAdmin />, children: [{ path: '/admin/*', element: <Navigate to="/home" replace /> }] },
             ],
           },

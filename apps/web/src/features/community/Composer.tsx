@@ -15,11 +15,19 @@ import { useMe } from '@/hooks/useMe';
 import { useCreatePost } from './api';
 
 /** Collapsed it looks like an input; expanded it is the discussion form. Topic ids follow the seeded order. */
-export function Composer({ defaultTopicSlug }: { defaultTopicSlug?: string }) {
+export function Composer({
+  defaultTopicSlug,
+  defaultOpen = false,
+  onClose,
+}: {
+  defaultTopicSlug?: string;
+  defaultOpen?: boolean;
+  onClose?: () => void;
+}) {
   const { data: me } = useMe();
   const navigate = useNavigate();
   const create = useCreatePost();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(defaultOpen);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [tags, setTags] = useState<string[]>([]);
@@ -30,7 +38,8 @@ export function Composer({ defaultTopicSlug }: { defaultTopicSlug?: string }) {
   if (!me) return null;
 
   const reset = () => {
-    setOpen(false);
+    setOpen(defaultOpen);
+    onClose?.();
     setTitle('');
     setBody('');
     setTags([]);

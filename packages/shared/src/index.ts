@@ -6,5 +6,6 @@ export * from './schemas/people';
 export * from './schemas/connections';
 export * from './schemas/posts';
 export * from './schemas/votes';
+export * from './schemas/search';
 // schemas are added phase by phase:
 // export * from './schemas/posts'; …

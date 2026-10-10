@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { Check, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { TOPICS, postCreateSchema } from '@bridgeup/shared';
@@ -19,7 +19,8 @@ import { SimilarQuestions } from './SimilarQuestions';
 export function AskNewPage() {
   const navigate = useNavigate();
   const create = useCreatePost();
-  const [title, setTitle] = useState('');
+  const [params] = useSearchParams();
+  const [title, setTitle] = useState(params.get('title') ?? '');
   const [body, setBody] = useState('');
   const [topicId, setTopicId] = useState<number | null>(null);
   const [tags, setTags] = useState<string[]>([]);

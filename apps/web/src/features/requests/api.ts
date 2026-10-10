@@ -16,6 +16,7 @@ export function useCreateConnection() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ['connections'] });
       qc.invalidateQueries({ queryKey: ['user'] });
+      qc.invalidateQueries({ queryKey: ['home'] });
     },
   });
 }
@@ -37,7 +38,10 @@ export function useRespond() {
       if (ctx?.prev) qc.setQueryData(qk.connections('incoming'), ctx.prev);
       toast.error(e.message);
     },
-    onSettled: () => qc.invalidateQueries({ queryKey: ['connections'] }),
+    onSettled: () => {
+      qc.invalidateQueries({ queryKey: ['connections'] });
+      qc.invalidateQueries({ queryKey: ['home'] });
+    },
   });
 }
 

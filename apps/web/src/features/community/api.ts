@@ -38,6 +38,7 @@ export function useFollowTopic() {
     onSettled: () => {
       qc.invalidateQueries({ queryKey: qk.topics });
       qc.invalidateQueries({ queryKey: ['feed'] });
+      qc.invalidateQueries({ queryKey: ['home'] });
     },
   });
 }
@@ -61,6 +62,7 @@ export function useCreatePost() {
       qc.invalidateQueries({ queryKey: ['posts'] });
       qc.invalidateQueries({ queryKey: ['feed'] });
       qc.invalidateQueries({ queryKey: qk.topics });
+      qc.invalidateQueries({ queryKey: ['home'] });
     },
   });
 }
@@ -73,6 +75,8 @@ export function useCreateComment(postId: string) {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: qk.post(postId) });
       qc.invalidateQueries({ queryKey: ['posts'] });
+      qc.invalidateQueries({ queryKey: ['feed'] });
+      qc.invalidateQueries({ queryKey: ['home'] });
     },
   });
 }
