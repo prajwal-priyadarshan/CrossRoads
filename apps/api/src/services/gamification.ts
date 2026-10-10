@@ -1,4 +1,4 @@
-import { LEVELS } from '@bridgeup/shared';
+import { levelFor } from '@bridgeup/shared';
 import type { Tx } from './notify';
 
 export const POINTS = {
@@ -60,11 +60,3 @@ export async function evaluateBadges(tx: Tx, userId: string) {
   for (const slug of grants) await grantBadge(tx, userId, slug);
 }
 
-export function levelFor(points: number) {
-  let idx = 0;
-  for (let i = 0; i < LEVELS.length; i++) if (points >= LEVELS[i]!.min) idx = i;
-  const current = LEVELS[idx]!;
-  const next = LEVELS[idx + 1] ?? null;
-  const progress = next ? (points - current.min) / (next.min - current.min) : 1;
-  return { name: current.name, min: current.min, next: next?.min ?? null, progress };
-}

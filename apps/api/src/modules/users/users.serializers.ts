@@ -1,5 +1,6 @@
 import type { User, Milestone } from '../../generated/prisma/client';
 import type { P } from '../../services/matching';
+import { levelFor } from '@bridgeup/shared';
 
 export const userLiteSelect = {
   id: true,
@@ -56,6 +57,8 @@ export function toPublicProfile(u: User & { milestones?: Milestone[] }, viewerId
     githubUrl: isOwner || u.showGithub ? u.githubUrl : null,
     // points are public only for seniors/alumni (wellbeing rule); owner always sees their own
     points: isOwner || u.role === 'SENIOR' || u.role === 'ALUMNI' ? u.points : null,
+    level: (isOwner || u.role === 'SENIOR' || u.role === 'ALUMNI') && typeof u.points === 'number' ? levelFor(u.points) : null,
+    badges: (isOwner || u.role === 'SENIOR' || u.role === 'ALUMNI') && (u as any).badges ? (u as any).badges.map((b: any) => ({ ...b.badge, awardedAt: b.awardedAt })) : null,
     isOwner,
   };
 }

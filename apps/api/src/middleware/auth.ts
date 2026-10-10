@@ -17,9 +17,9 @@ export const authOptional: RequestHandler = async (req, _res, next) => {
   if (!payload) return next();
   const user = await prisma.user.findUnique({
     where: { id: payload.sub },
-    select: { id: true, role: true, onboarded: true, currentYear: true, emailVerified: true },
+    select: { id: true, role: true, onboarded: true, currentYear: true, emailVerified: true, isSuspended: true },
   });
-  if (user?.emailVerified) {
+  if (user?.emailVerified && !user.isSuspended) {
     req.user = { id: user.id, role: user.role, onboarded: user.onboarded, currentYear: user.currentYear };
   }
   next();

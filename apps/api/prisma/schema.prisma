@@ -198,6 +198,7 @@ model User {
   email            String     @unique
   passwordHash     String
   emailVerified    Boolean    @default(false)
+  isSuspended      Boolean    @default(false)
   handle           String     @unique
   fullName         String
   avatarUrl        String?

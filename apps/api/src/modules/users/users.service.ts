@@ -121,3 +121,52 @@ export async function getPublicProfile(handle: string, viewer: { id: string }) {
   });
   return { ...profile, match, connection };
 }
+
+export async function getContributions(handle: string) {
+  const user = await prisma.user.findUnique({ where: { handle }, select: { id: true, role: true, points: true } });
+  if (!user) throw notFound();
+  const id = user.id;
+  const [answers, bestAnswers, experiences, reviews, roadmaps, sessions, helpedRows, badges, recent] = await Promise.all([
+    prisma.comment.count({ where: { authorId: id, parentId: null, isRemoved: false, post: { kind: 'QUESTION' } } }),
+    prisma.post.count({ where: { bestAnswer: { authorId: id } } }),
+    prisma.experience.count({ where: { authorId: id, isRemoved: false } }),
+    prisma.clubReview.count({ where: { authorId: id } }),
+    prisma.roadmap.count({ where: { authorId: id, isAi: false } }),
+    prisma.connection.count({ where: { recipientId: id, kind: 'MENTORSHIP', status: 'COMPLETED' } }),
+    // distinct people helped = askers of questions they answered + people they mentored
+    prisma.$queryRaw<Array<{ n: bigint }>>`
+      SELECT count(DISTINCT x.uid) AS n FROM (
+        SELECT p."authorId" AS uid FROM "Comment" c JOIN "Post" p ON p.id = c."postId"
+        WHERE c."authorId" = ${id} AND c."parentId" IS NULL AND p.kind = 'QUESTION' AND p."authorId" <> ${id}
+        UNION
+        SELECT "requesterId" FROM "Connection" WHERE "recipientId" = ${id} AND status IN ('ACCEPTED','COMPLETED')
+      ) x`,
+    prisma.userBadge.findMany({ where: { userId: id }, include: { badge: true }, orderBy: { awardedAt: 'asc' } }),
+    prisma.pointsLedger.findMany({ where: { userId: id }, orderBy: { createdAt: 'desc' }, take: 5 }),
+  ]);
+  return {
+    counts: { answers, bestAnswers, experiences, reviews, roadmaps, sessions },
+    helped: Number(helpedRows[0]?.n ?? 0),
+    badges: badges.map((b) => ({ ...b.badge, awardedAt: b.awardedAt })),
+    recent, // used to render "Recent contributions" (action, points, date)
+  };
+}
+
+export async function mentorWall() {
+  const start = new Date(); start.setDate(1); start.setHours(0, 0, 0, 0);
+  const rows = await prisma.pointsLedger.groupBy({
+    by: ['userId'],
+    // only seniors/alumni who opted in, so students can't crowd out the wall
+    where: { createdAt: { gte: start }, user: { role: { in: ['SENIOR', 'ALUMNI'] }, showOnMentorWall: true } },
+    _sum: { points: true },
+    orderBy: { _sum: { points: 'desc' } }, take: 10,
+  });
+  const users = await prisma.user.findMany({
+    where: { id: { in: rows.map((r) => r.userId) }, role: { in: ['SENIOR', 'ALUMNI'] }, showOnMentorWall: true },
+    select: { ...userLiteSelect, badges: { include: { badge: true }, take: 1, orderBy: { awardedAt: 'desc' } } },
+  });
+  return rows
+    .map((r) => ({ user: users.find((u) => u.id === r.userId), pointsThisMonth: r._sum.points ?? 0 }))
+    .filter((x) => x.user)
+    .slice(0, 10);
+}
