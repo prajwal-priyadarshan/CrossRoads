@@ -11,13 +11,7 @@ export function StoryCard({ story }: { story: StorySummary }) {
       to={`/stories/${story.slug}`}
       className="flex h-full flex-col overflow-hidden rounded-2xl border bg-card transition hover:-translate-y-0.5 hover:shadow-md"
     >
-      {story.coverUrl ? (
-        <img src={story.coverUrl} alt="" className="aspect-[16/9] w-full object-cover" />
-      ) : (
-        <div className="grid aspect-[16/9] w-full place-items-center bg-muted text-muted-foreground">
-          <Star className="size-8" />
-        </div>
-      )}
+      {story.coverUrl && <img src={story.coverUrl} alt="" className="aspect-[16/9] w-full object-cover" />}
       <div className="flex flex-1 flex-col gap-2 p-4">
         {story.isSpotlight && (
           <span className="inline-flex w-fit items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-950 dark:text-amber-300">

@@ -245,6 +245,19 @@ async function main() {
     });
   }
 
+  // Mock cover images for the demo stories (files live in apps/web/public/mock/stories)
+  const covers: Record<string, string> = {
+    'demo-from-campus-to-ml-engineer': 'story-1',
+    'demo-placement-season-lessons': 'story-2',
+    'demo-from-service-to-product-sde': 'story-3',
+    'demo-building-a-campus-startup': 'story-4',
+    'demo-research-year-to-ms-offer': 'story-5',
+    'demo-first-internship-in-finance': 'story-6',
+  };
+  for (const [slug, file] of Object.entries(covers)) {
+    await prisma.story.updateMany({ where: { slug }, data: { coverUrl: `/mock/stories/${file}.svg` } });
+  }
+
   // ── Mentorship and connection requests (feeds the alumni dashboard) ──
   const connections = [
     { from: ananya, to: meera, kind: 'MENTORSHIP' as const, topic: 'Breaking into ML internships', message: 'Would love 20 minutes to ask about projects that get interviews.', status: 'ACCEPTED' as const, respondedAt: daysAgo(6) },
