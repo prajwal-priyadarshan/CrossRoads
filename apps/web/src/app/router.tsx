@@ -83,6 +83,7 @@ export const router = createBrowserRouter([
         ],
       },
       // Phase 10: /support (public)
+      { path: '/support', ...page(() => import('@/features/support/SupportPage'), 'SupportPage') },
       {
         element: <RequireAuth />,
         children: [
