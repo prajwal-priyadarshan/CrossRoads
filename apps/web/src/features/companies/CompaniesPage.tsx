@@ -7,7 +7,7 @@ import { PageHeader } from '@/components/layout/PageHeader';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { CardSkeleton } from '@/components/shared/Skeletons';
 import { useMe } from '@/hooks/useMe';
-import { gradientFor, titleCase } from '@/lib/utils';
+import { brandTone, titleCase } from '@/lib/utils';
 import { useCompanies } from './api';
 
 export function CompanyLogo({ slug, name, size = 'md' }: { slug: string; name: string; size?: 'md' | 'lg' }) {
@@ -18,7 +18,7 @@ export function CompanyLogo({ slug, name, size = 'md' }: { slug: string; name: s
           ? 'grid size-16 shrink-0 place-items-center rounded-2xl text-2xl font-bold text-white'
           : 'grid size-11 shrink-0 place-items-center rounded-xl text-lg font-bold text-white'
       }
-      style={{ background: gradientFor(slug) }}
+      style={{ background: brandTone(slug).bg, color: brandTone(slug).fg }}
       aria-hidden
     >
       {name[0]}

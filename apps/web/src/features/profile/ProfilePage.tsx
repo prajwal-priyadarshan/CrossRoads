@@ -67,12 +67,12 @@ function ConnectionAction({ p }: { p: PublicProfile }) {
   if (c && c.status === 'ACCEPTED')
     return (
       <div className="flex flex-wrap items-center gap-2">
-        <span className="rounded-full bg-emerald-100 px-3 py-1.5 text-sm font-medium text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Connected</span>
+        <span className="rounded-full bg-success/15 px-3 py-1.5 text-sm font-medium text-success">Connected</span>
         <MessageButton userId={p.id} variant="default" />
       </div>
     );
   if (c && c.status === 'PENDING')
-    return <span className="rounded-full bg-amber-100 px-3 py-1.5 text-sm font-medium text-amber-800 dark:bg-amber-950 dark:text-amber-300">Request pending</span>;
+    return <span className="rounded-full bg-warm/20 px-3 py-1.5 text-sm font-medium text-accent-foreground">Request pending</span>;
   return <ConnectDialog recipient={p} trigger={<Button>Connect</Button>} />;
 }
 
@@ -106,7 +106,7 @@ export function ProfilePage() {
   return (
     <div className="space-y-6">
       <div className="overflow-hidden rounded-2xl border bg-card">
-        <div className="h-28 bg-primary" />
+        <div className="h-28 bg-accent" />
         <div className="px-5 pb-5">
           <div className="-mt-10 flex flex-wrap items-end justify-between gap-4">
             <div className="rounded-full ring-4 ring-card">
