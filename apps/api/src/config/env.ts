@@ -58,6 +58,10 @@ export const env = schema.parse(raw);
 if (env.AUTO_VERIFY_EMAIL && env.NODE_ENV === 'production') {
   throw new Error('AUTO_VERIFY_EMAIL must be false in production');
 }
+if (env.ALUMNI_OPEN_SIGNUP && env.NODE_ENV === 'production') {
+  // Production alumni come in through the admin invite list (AllowedEmail), not open sign-up
+  throw new Error('ALUMNI_OPEN_SIGNUP must be false in production; invite alumni from the admin panel');
+}
 export const isProd = env.NODE_ENV === 'production';
 export const aiEnabled = Boolean(env.AI_API_KEY);
 export const docsEnabled = env.API_DOCS_ENABLED ? env.API_DOCS_ENABLED === 'true' : !isProd;
