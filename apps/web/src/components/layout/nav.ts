@@ -1,4 +1,4 @@
-import { Home, MessageCircleQuestion, MessagesSquare, Users, Building2, Sparkles, Route, Map, Briefcase, UsersRound, Handshake, Target, BookOpen, LifeBuoy, Shield } from 'lucide-react';
+import { Home, MessageCircle, MessageCircleQuestion, MessagesSquare, Users, Building2, Sparkles, Route, Map, Briefcase, UsersRound, Handshake, Target, BookOpen, LifeBuoy, Shield } from 'lucide-react';
 
 export const PRIMARY_NAV = [
   { to: '/home', label: 'Home', icon: Home },
@@ -6,6 +6,7 @@ export const PRIMARY_NAV = [
   { to: '/community', label: 'Community', icon: MessagesSquare },
   { to: '/people', label: 'People', icon: Users },
   { to: '/requests', label: 'Requests', icon: Handshake },
+  { to: '/messages', label: 'Messages', icon: MessageCircle },
 ];
 export const CAREER_NAV = [
   { to: '/prep', label: 'My Prep', icon: Target },

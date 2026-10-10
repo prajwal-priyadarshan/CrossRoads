@@ -12,6 +12,7 @@ import { RoleBadge } from '@/components/shared/RoleBadge';
 import { UserAvatar } from '@/components/shared/UserAvatar';
 import { VerifiedBadge } from '@/components/shared/VerifiedBadge';
 import { ConnectDialog } from '@/features/people/ConnectDialog';
+import { MessageButton } from '@/features/chat/MessageButton';
 import { personSubline, yearLabel } from '@/lib/people';
 import { isSafeUrl, titleCase } from '@/lib/utils';
 import { UserX } from 'lucide-react';
@@ -63,7 +64,13 @@ function ConnectionAction({ p }: { p: PublicProfile }) {
   }
   const c = p.connection;
   if (c && c.status === 'COMPLETED') return <span className="rounded-full bg-primary-soft px-3 py-1.5 text-sm font-medium text-primary">Mentorship completed</span>;
-  if (c && c.status === 'ACCEPTED') return <span className="rounded-full bg-emerald-100 px-3 py-1.5 text-sm font-medium text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Connected</span>;
+  if (c && c.status === 'ACCEPTED')
+    return (
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="rounded-full bg-emerald-100 px-3 py-1.5 text-sm font-medium text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300">Connected</span>
+        <MessageButton userId={p.id} variant="default" />
+      </div>
+    );
   if (c && c.status === 'PENDING')
     return <span className="rounded-full bg-amber-100 px-3 py-1.5 text-sm font-medium text-amber-800 dark:bg-amber-950 dark:text-amber-300">Request pending</span>;
   return <ConnectDialog recipient={p} trigger={<Button>Connect</Button>} />;

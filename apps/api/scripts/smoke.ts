@@ -18,7 +18,21 @@ const createdTeamIds: string[] = [];
 const createdReportIds: string[] = [];
 
 /** Removes everything the smoke run created, including points and notifications it caused. */
+const createdMessageIds: string[] = [];
+
 async function cleanup() {
+  if (createdMessageIds.length) {
+    // Remove the smoke messages, then point each thread's preview back at its newest real message
+    const touched = await prisma.message.findMany({ where: { id: { in: createdMessageIds } }, select: { conversationId: true } });
+    await prisma.message.deleteMany({ where: { id: { in: createdMessageIds } } });
+    for (const { conversationId } of touched) {
+      const last = await prisma.message.findFirst({ where: { conversationId }, orderBy: { createdAt: 'desc' } });
+      await prisma.conversation.update({
+        where: { id: conversationId },
+        data: { lastMessagePreview: last?.body.slice(0, 140) ?? '', lastMessageSenderId: last?.senderId ?? null },
+      });
+    }
+  }
   if (createdTeamIds.length) {
     // Applications cascade with the team; the notifications they caused link to /teams/<id>
     await prisma.notification.deleteMany({ where: { OR: createdTeamIds.map((id) => ({ link: { contains: id } })) } });
@@ -357,6 +371,35 @@ async function main() {
     return `report ${first.id}`;
   });
 
+  await check('chat: inbox lists conversations with unread counts', async () => {
+    const rows = expectStatus(await ananya.get('/chat/conversations'), 200) as any[];
+    if (!rows.every((r) => typeof r.unread === 'number' && r.other?.handle)) throw new Error('bad shape');
+    return `${rows.length} threads`;
+  });
+  await check('chat: connected people can open and use a thread', async () => {
+    const rahulId = (expectStatus(await rahul.get('/auth/me'), 200) as any).id;
+    const start = expectStatus(await ananya.post('/chat/conversations', { userId: rahulId }), 201) as any;
+    const id = start.id as string;
+    const sent = expectStatus(await ananya.post(`/chat/conversations/${id}/messages`, { body: 'smoke: hello from a test' }), 201) as any;
+    createdMessageIds.push(sent.id);
+    if (!sent.mine) throw new Error('sender should see mine=true');
+    const theirs = expectStatus(await rahul.get(`/chat/conversations/${id}/messages`), 200) as any;
+    if (!theirs.items.some((m: any) => m.id === sent.id && m.mine === false)) throw new Error('recipient did not get the message');
+    expectStatus(await rahul.post(`/chat/conversations/${id}/read`), 200);
+    const rahulInbox = expectStatus(await rahul.get('/chat/conversations'), 200) as any[];
+    const thread = rahulInbox.find((r) => r.id === id);
+    if (!thread || thread.unread !== 0) throw new Error(`unread after read: ${thread?.unread}`);
+    return 'open, send, receive, read';
+  });
+  await check('chat: strangers cannot start or read a thread', async () => {
+    const suresh = await login('suresh');
+    const ananyaId = (expectStatus(await ananya.get('/auth/me'), 200) as any).id;
+    expectStatus(await suresh.post('/chat/conversations', { userId: ananyaId }), 403);
+    const rahulId = (expectStatus(await rahul.get('/auth/me'), 200) as any).id;
+    const id = (expectStatus(await ananya.post('/chat/conversations', { userId: rahulId }), 201) as any).id;
+    expectStatus(await suresh.get(`/chat/conversations/${id}/messages`), 404);
+    return '403 to start, 404 to read';
+  });
   await check('auth: logout clears the session', async () => {
     const c = await login('meera');
     expectStatus(await c.post('/auth/logout'), 200);

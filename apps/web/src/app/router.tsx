@@ -22,6 +22,8 @@ const appRoutes: RouteObject[] = [
   { path: '/u/:handle', ...page(() => import('@/features/profile/ProfilePage'), 'ProfilePage') },
   { path: '/settings/profile', ...page(() => import('@/features/profile/ProfileEditPage'), 'ProfileEditPage') },
   { path: '/requests', ...page(() => import('@/features/requests/RequestsPage'), 'RequestsPage') },
+  { path: '/messages', ...page(() => import('@/features/chat/MessagesPage'), 'MessagesPage') },
+  { path: '/messages/:id', ...page(() => import('@/features/chat/MessagesPage'), 'MessagesPage') },
 
   // Ask a Senior and community
   { path: '/ask', ...page(() => import('@/features/ask/AskListPage'), 'AskListPage') },
