@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router';
+import { BadgeCelebration } from '@/components/gamification/BadgeCelebration';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
 import { MobileNav } from './MobileNav';
@@ -16,6 +17,7 @@ export function AppShell() {
       </div>
       <MobileNav />
       <CommandPalette />
+      <BadgeCelebration />
     </div>
   );
 }
