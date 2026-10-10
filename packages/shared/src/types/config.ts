@@ -4,6 +4,7 @@ import type { Role } from './enums';
 export type AppConfig = {
   appName: string;
   allowedEmailDomains: string[];
+  alumniOpenSignup: boolean;
   demoMode: boolean;
   demoAccounts: Array<{ handle: string; fullName: string; role: Role; currentYear: number | null }>;
   aiEnabled: boolean;

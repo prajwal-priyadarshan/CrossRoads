@@ -22,6 +22,10 @@ const schema = z.object({
   DEMO_MODE: bool('false'),
   DEMO_LOGIN_HANDLES: csv.default('ananya,rahul,meera,admin'),
   DEMO_EMAIL_SUFFIX: z.string().default('@demo.crossroads'),
+  // Alumni may register with any personal email as ALUMNI (open for now; restrict to AllowedEmail invites later)
+  ALUMNI_OPEN_SIGNUP: bool('false'),
+  // Dev/demo only: skip the emailed 6-digit code and mark new accounts verified. Refused in production (see below)
+  AUTO_VERIFY_EMAIL: bool('false'),
 
   // Email
   EMAIL_MODE: z.enum(['console', 'resend']).default('console'),
@@ -51,6 +55,9 @@ const schema = z.object({
 // Empty strings in .env (placeholders such as AI_API_KEY=) mean "not set"
 const raw = Object.fromEntries(Object.entries(process.env).filter(([, v]) => v !== ''));
 export const env = schema.parse(raw);
+if (env.AUTO_VERIFY_EMAIL && env.NODE_ENV === 'production') {
+  throw new Error('AUTO_VERIFY_EMAIL must be false in production');
+}
 export const isProd = env.NODE_ENV === 'production';
 export const aiEnabled = Boolean(env.AI_API_KEY);
 export const docsEnabled = env.API_DOCS_ENABLED ? env.API_DOCS_ENABLED === 'true' : !isProd;

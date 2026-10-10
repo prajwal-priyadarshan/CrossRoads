@@ -29,6 +29,7 @@ systemRouter.get('/config', async (_req, res) => {
   const data: AppConfig = {
     appName: env.APP_NAME,
     allowedEmailDomains: env.ALLOWED_EMAIL_DOMAINS,
+    alumniOpenSignup: env.ALUMNI_OPEN_SIGNUP,
     demoMode: env.DEMO_MODE,
     demoAccounts,
     aiEnabled,

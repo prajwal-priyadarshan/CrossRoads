@@ -25,13 +25,14 @@ async function allowedRoleFor(email: string) {
   if (invite) return invite.role;
   const domain = email.split('@')[1] ?? '';
   if (isAllowedDomain(domain)) return 'STUDENT' as const;
+  if (env.ALUMNI_OPEN_SIGNUP) return 'ALUMNI' as const;
   return null;
 }
 
 export async function register(input: { fullName: string; email: string; password: string }) {
   const role = await allowedRoleFor(input.email);
   if (!role) {
-    throw badRequest('Use your college email address. Alumni can ask an admin for an invite.', {
+    throw badRequest('Use your college email address. Alumni can sign up with a personal email.', {
       email: 'Not a college email address',
     });
   }
@@ -40,16 +41,28 @@ export async function register(input: { fullName: string; email: string; passwor
   if (existing?.emailVerified) throw conflict('An account with this email already exists. Please log in.');
 
   const passwordHash = await hashPassword(input.password);
+  const emailVerified = env.AUTO_VERIFY_EMAIL;
   if (existing) {
-    await prisma.user.update({ where: { id: existing.id }, data: { fullName: input.fullName, passwordHash } });
+    await prisma.user.update({
+      where: { id: existing.id },
+      data: { fullName: input.fullName, passwordHash, emailVerified },
+    });
   } else {
     await prisma.user.create({
-      data: { email: input.email, passwordHash, fullName: input.fullName, handle: await uniqueHandle(input.fullName), role },
+      data: {
+        email: input.email,
+        passwordHash,
+        fullName: input.fullName,
+        handle: await uniqueHandle(input.fullName),
+        role,
+        emailVerified,
+      },
     });
   }
+  if (emailVerified) return { email: input.email, verified: true };
   const code = await createVerificationCode(input.email);
   await sendVerificationEmail(input.email, code);
-  return { email: input.email };
+  return { email: input.email, verified: false };
 }
 
 export async function verify(email: string, code: string) {

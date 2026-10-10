@@ -4,7 +4,7 @@ import { api } from '@/lib/api';
 import { qk } from '@/lib/queryKeys';
 
 export const useRegister = () =>
-  useMutation({ mutationFn: (b: RegisterInput) => api<{ email: string }>('/auth/register', { method: 'POST', json: b }) });
+  useMutation({ mutationFn: (b: RegisterInput) => api<{ email: string; verified: boolean }>('/auth/register', { method: 'POST', json: b }) });
 
 export const useResend = () =>
   useMutation({ mutationFn: (email: string) => api('/auth/resend-code', { method: 'POST', json: { email } }) });

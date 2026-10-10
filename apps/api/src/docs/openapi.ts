@@ -30,7 +30,7 @@ const ROUTES: Row[] = [
   { method: 'get', path: '/config', tag: 'System', summary: 'Public app settings (email domains, demo accounts, flags)', auth: 'public' },
 
   // Auth
-  { method: 'post', path: '/auth/register', tag: 'Auth', summary: 'Register with a college email; sends a 6-digit code', auth: 'public', body: S.registerSchema, status: 201 },
+  { method: 'post', path: '/auth/register', tag: 'Auth', summary: 'Register with a college email (or a personal email for alumni); sends a 6-digit code unless AUTO_VERIFY_EMAIL is on', auth: 'public', body: S.registerSchema, status: 201 },
   { method: 'post', path: '/auth/verify', tag: 'Auth', summary: 'Verify the email code and start a session', auth: 'public', body: S.verifySchema },
   { method: 'post', path: '/auth/resend-code', tag: 'Auth', summary: 'Resend the verification code', auth: 'public', body: S.emailOnlySchema },
   { method: 'post', path: '/auth/login', tag: 'Auth', summary: 'Log in and set the session cookie', auth: 'public', body: S.loginSchema },

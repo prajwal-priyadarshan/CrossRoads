@@ -27,7 +27,12 @@ export function RegisterPage() {
 
   const onSubmit = handleSubmit((values) =>
     register.mutate(values, {
-      onSuccess: ({ email }) => {
+      onSuccess: ({ email, verified }) => {
+        if (verified) {
+          toast.success('Account created. Log in to continue.');
+          navigate('/login');
+          return;
+        }
         toast.success('We sent a 6-digit code to your email');
         navigate(`/verify?email=${encodeURIComponent(email)}`);
       },
@@ -44,7 +49,7 @@ export function RegisterPage() {
   return (
     <AuthLayout
       title="Join Crossroads"
-      subtitle="Use your college email so we know you're one of us."
+      subtitle="Students: use your college email. Alumni: use your personal email."
       footer={
         <>
           Already have an account?{' '}
