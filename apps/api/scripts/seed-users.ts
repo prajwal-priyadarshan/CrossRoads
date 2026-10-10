@@ -35,6 +35,13 @@ async function main() {
       create: { ...profile, passwordHash },
     });
 
+    // Keep points consistent with anything already earned (seed:content, demo activity)
+    const earned = await prisma.pointsLedger.aggregate({ where: { userId: user.id }, _sum: { points: true } });
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { points: (u.points ?? 0) + (earned._sum.points ?? 0) },
+    });
+
     await prisma.milestone.deleteMany({ where: { userId: user.id } });
     if (milestones.length) {
       await prisma.milestone.createMany({

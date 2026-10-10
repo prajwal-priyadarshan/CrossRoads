@@ -11,6 +11,11 @@ import { homeRouter } from './modules/home/home.routes';
 import { eventsRouter } from './modules/events/events.routes';
 import { bookmarksRouter } from './modules/bookmarks/bookmarks.routes';
 import { searchRouter } from './modules/search/search.routes';
+import { companiesRouter } from './modules/companies/companies.routes';
+import { experiencesRouter } from './modules/experiences/experiences.routes';
+import { clubsRouter } from './modules/clubs/clubs.routes';
+import { twinsRouter } from './modules/twins/twins.routes';
+import { roadmapsRouter } from './modules/roadmaps/roadmaps.routes';
 
 export const routes = Router();
 routes.use('/auth', authRouter);
@@ -25,4 +30,9 @@ routes.use('/', homeRouter);
 routes.use('/', eventsRouter);
 routes.use('/', bookmarksRouter);
 routes.use('/', searchRouter);
-// later phases: routes.use('/', companiesRouter); …
+routes.use('/', companiesRouter);
+routes.use('/', experiencesRouter);
+routes.use('/', clubsRouter);
+routes.use('/', twinsRouter);
+routes.use('/', roadmapsRouter);
+// later phases: routes.use('/', opportunitiesRouter); …
