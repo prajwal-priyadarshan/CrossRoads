@@ -1,4 +1,4 @@
-// Fictional demo people. All emails end with @demo.bridgeup (the demo-login marker).
+// Fictional demo people. All emails end with @demo.crossroads (the demo-login marker).
 // Companies referenced by alumni/seniors match the seeded company names.
 
 type Category = 'CLUB' | 'PROJECT' | 'INTERNSHIP' | 'COURSE' | 'ACHIEVEMENT' | 'JOB' | 'STARTUP';
@@ -52,7 +52,7 @@ const social = (h: string) => ({
   githubUrl: `https://github.com/demo-${h}`,
 });
 
-const DEMO_SUFFIX = process.env.DEMO_EMAIL_SUFFIX || '@demo.bridgeup';
+const DEMO_SUFFIX = process.env.DEMO_EMAIL_SUFFIX || '@demo.crossroads';
 const base = (handle: string, fullName: string) => ({ handle, fullName, email: `${handle}${DEMO_SUFFIX}` });
 
 export const users: SeedUser[] = [

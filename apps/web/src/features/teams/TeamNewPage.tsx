@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import { Check, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { TEAM_KINDS, TEAM_ROLES, teamCreateSchema, type TeamKind } from '@bridgeup/shared';
+import { TEAM_KINDS, TEAM_ROLES, teamCreateSchema, type TeamKind } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';

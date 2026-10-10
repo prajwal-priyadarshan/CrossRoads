@@ -1,7 +1,7 @@
 import { Fragment, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { Loader2, MessageCircleQuestion, MessagesSquare, Rss } from 'lucide-react';
-import type { Me } from '@bridgeup/shared';
+import type { Me } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { AppIcon } from '@/components/shared/AppIcon';

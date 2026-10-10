@@ -68,7 +68,7 @@ Building the **whole** schema now is deliberate: later phases only add API route
 
 ### Step 1 — Create the database (5 min)
 
-1. In Neon, create a project named `bridgeup` (choose the region closest to India that is offered).
+1. In Neon, create a project named `crossroads` (choose the region closest to India that is offered).
 2. Open **Connection details**. Copy:
    - the **pooled** connection string → `DATABASE_URL`
    - the **direct** (non-pooled) connection string → `DIRECT_URL`
@@ -244,7 +244,7 @@ export const events = [
 ```ts
 import bcrypt from 'bcryptjs';
 import { prisma } from '../src/lib/prisma';
-import { TOPICS, BADGES } from '@bridgeup/shared';
+import { TOPICS, BADGES } from '@crossroads/shared';
 import { companies } from './data/companies';
 import { clubs } from './data/clubs';
 import { events } from './data/events';
@@ -267,7 +267,7 @@ async function main() {
   await prisma.event.createMany({ data: events as any });
 
   // Admin account (password from env so it's never committed)
-  const adminEmail = process.env.SEED_ADMIN_EMAIL ?? 'admin@demo.bridgeup';
+  const adminEmail = process.env.SEED_ADMIN_EMAIL ?? 'admin@demo.crossroads';
   const adminPassword = process.env.SEED_ADMIN_PASSWORD ?? 'ChangeMe123';
   await prisma.user.upsert({
     where: { email: adminEmail },
@@ -297,7 +297,7 @@ npm run db:seed -w apps/api
 npx prisma studio   # from apps/api; opens a browser tab
 ```
 
-> The `@demo.bridgeup` domain is a marker for demo accounts. It is allowed by the demo-login endpoint in Phase 02 only when `DEMO_MODE=true`.
+> The `@demo.crossroads` domain is a marker for demo accounts. It is allowed by the demo-login endpoint in Phase 02 only when `DEMO_MODE=true`.
 
 ### Step 7 — Shared types (2 min)
 

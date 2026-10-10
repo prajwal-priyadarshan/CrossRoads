@@ -1,4 +1,4 @@
-import type { ExperienceCard, ExperienceRoundView } from '@bridgeup/shared';
+import type { ExperienceCard, ExperienceRoundView } from '@crossroads/shared';
 import type { Prisma } from '../../generated/prisma/client';
 import { userLiteSelect } from '../users/users.serializers';
 

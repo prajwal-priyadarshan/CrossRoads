@@ -1,4 +1,4 @@
-import type { PeopleQuery } from '@bridgeup/shared';
+import type { PeopleQuery } from '@crossroads/shared';
 import type { Prisma } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
 import { rankPeople } from '../../services/matching';
@@ -93,7 +93,7 @@ function toPersonCard(u: Row & { match: { score: number; reasons: string[] } }) 
     canHelpWith: u.canHelpWith.slice(0, 3),
     mentorAvailable: u.mentorAvailable,
     mentorSlots: u.mentorSlots,
-    match: u.match.reasons.length ? u.match : { ...u.match, reasons: ['New to BridgeUp'] },
+    match: u.match.reasons.length ? u.match : { ...u.match, reasons: ['New to Crossroads'] },
   };
 }
 

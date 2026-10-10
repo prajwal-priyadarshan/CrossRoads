@@ -24,7 +24,7 @@ export function docsRouter() {
     }),
     swaggerUi.serve,
     swaggerUi.setup(document, {
-      customSiteTitle: 'BridgeUp API docs',
+      customSiteTitle: 'Crossroads API docs',
       swaggerOptions: { withCredentials: true, persistAuthorization: true },
     }),
   );

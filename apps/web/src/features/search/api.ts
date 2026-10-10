@@ -1,5 +1,5 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import type { SearchGroup, SearchResults } from '@bridgeup/shared';
+import type { SearchGroup, SearchResults } from '@crossroads/shared';
 import {
   Building2,
   BookOpen,

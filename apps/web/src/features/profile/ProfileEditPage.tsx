@@ -11,7 +11,7 @@ import {
   TARGET_ROLES,
   type Me,
   type ProfileUpdateInput,
-} from '@bridgeup/shared';
+} from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';

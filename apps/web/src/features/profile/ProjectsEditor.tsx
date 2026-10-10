@@ -1,5 +1,5 @@
 import { Plus, Trash2 } from 'lucide-react';
-import type { Project } from '@bridgeup/shared';
+import type { Project } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';

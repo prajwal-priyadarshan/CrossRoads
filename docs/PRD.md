@@ -1,6 +1,6 @@
-# BridgeUp — Product Requirements Document (PRD)
+# Crossroads — Product Requirements Document (PRD)
 
-> **Working name:** BridgeUp (final name to be decided)
+> **Working name:** Crossroads (final name to be decided)
 > **Version:** 2.0 · **Date:** 2026-10-10 · **Build window:** 10–12 hours for the core product
 > **Companion files:** `TRD.md` (technical design) · `phases/phase-00.md` … `phases/phase-11.md` (step-by-step build guide) · `phases/phase-12.md` (institutional layer, after every other phase: see F49–F57 below)
 > **Stack in one line:** React (Vite + TypeScript) frontend · Node.js (Express + TypeScript) backend · PostgreSQL with Prisma · deployed on Vercel + Render + Neon
@@ -30,7 +30,7 @@
 
 ## 1. Summary
 
-BridgeUp is a campus network where students — especially first years — get guidance from the seniors and alumni of **their own college**. It brings together:
+Crossroads is a campus network where students — especially first years — get guidance from the seniors and alumni of **their own college**. It brings together:
 
 - an **alumni and senior Q&A** ("Ask a Senior") where answers are stored and reused for every future batch,
 - a **Reddit-style community feed** organised by topics,
@@ -56,7 +56,7 @@ First years arrive with no map of college life. The guidance they need exists on
 | First summer | No plan for the break; realising time was lost | Regret, comparing themselves to peers |
 | Years 2–4 | Interview prep without campus-specific information; no idea what each company's rounds look like | Unfocused preparation, anxiety before placements |
 
-Underneath all of this is an emotional layer: homesickness, isolation and feeling behind. BridgeUp cannot replace counselling, but it reduces the uncertainty that feeds stress and points students to official support.
+Underneath all of this is an emotional layer: homesickness, isolation and feeling behind. Crossroads cannot replace counselling, but it reduces the uncertainty that feeds stress and points students to official support.
 
 ### Why current options fall short
 
@@ -69,7 +69,7 @@ Underneath all of this is an emotional layer: homesickness, isolation and feelin
 | YouTube, Reddit, generic career sites | Lots of material | Generic, not about this college, its clubs or the companies that visit |
 | Institutional alumni platforms | Built for alumni relations | Usually focused on alumni engagement and fundraising, not on first-year guidance *(verify current offerings before any pitch claim)* |
 
-**The real competitor is WhatsApp.** BridgeUp must be clearly better at specific jobs: **search, verified answers, finding the right people, and campus-specific knowledge**.
+**The real competitor is WhatsApp.** Crossroads must be clearly better at specific jobs: **search, verified answers, finding the right people, and campus-specific knowledge**.
 
 ---
 
@@ -557,7 +557,7 @@ Gamification exists to **reward helping**, never to make students compare themse
 - Scale: page title 28/36 semibold · section title 18/28 semibold · card title 16/24 semibold · body 15/24 · meta 13/20 · micro 12/16.
 - `tracking-tight` on headings; tabular numbers for counts and scores.
 
-**Logo:** wordmark "BridgeUp" in Plus Jakarta Sans 700 with a small arch icon (an arc over two dots) in indigo with an amber dot. Delivered as an SVG in `client/public/logo.svg`.
+**Logo:** wordmark "Crossroads" in Plus Jakarta Sans 700 with a small arch icon (an arc over two dots) in indigo with an amber dot. Delivered as an SVG in `client/public/logo.svg`.
 
 **Iconography:** lucide-react only; 18px in navigation, 16px in chips and buttons, 1.75 stroke.
 

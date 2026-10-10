@@ -1,7 +1,7 @@
 import { Link } from 'react-router';
 import { differenceInCalendarDays, format, formatDistanceToNowStrict } from 'date-fns';
 import { ExternalLink } from 'lucide-react';
-import type { WeekEvent } from '@bridgeup/shared';
+import type { WeekEvent } from '@crossroads/shared';
 import { cn } from '@/lib/utils';
 import { RailCard } from './RailCard';
 

@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { requireOnboarded } from '../../middleware/auth';
 import { validate } from '../../middleware/validate';
 import { aiLimiter } from '../../middleware/rateLimits';
-import { simStartSchema, simAnswerSchema } from '@bridgeup/shared';
+import { simStartSchema, simAnswerSchema } from '@crossroads/shared';
 import { start, answerQuestion, finishSession, getSession, listSessions } from './sim.service';
 
 export const simRouter = Router();

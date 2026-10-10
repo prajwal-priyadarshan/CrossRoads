@@ -13,7 +13,7 @@
 > - Import Prisma types from the generated client: `import type { Prisma } from '../../generated/prisma/client'` (not `@prisma/client`).
 > - Paginated lists return `{ data: { items, nextCursor } }`; use `LIMITS.PAGE_SIZE` from `src/config/constants.ts`, never a literal.
 > - No hardcoded settings: deployment values go in `src/config/env.ts` (+ `.env.example`); tuning numbers in `src/config/constants.ts`; topic ids come from `GET /topics` (never `index + 1`).
-> - Routes declare `requireAuth` / `requireOnboarded` / `requireRole('ADMIN')` and `validate({ body, query })` with schemas from `@bridgeup/shared`; read input from `req.valid`.
+> - Routes declare `requireAuth` / `requireOnboarded` / `requireRole('ADMIN')` and `validate({ body, query })` with schemas from `@crossroads/shared`; read input from `req.valid`.
 > - Every new endpoint gets a row in `apps/api/src/docs/openapi.ts` (Swagger at `/api/docs`) and, where useful, a check in `apps/api/scripts/smoke.ts`.
 > - Transactions that award points, evaluate badges and notify run inside `prisma.$transaction` (timeout configured in `src/lib/prisma.ts`).
 > - Before committing: `npm run typecheck && npm test && npm run build`, then `npm run smoke` against a running API.
@@ -76,7 +76,7 @@ npm run seed:content -w apps/api   # questions, answers, posts, experiences, rev
 
 1. Warm intro: "College is a lot. You don't have to figure it out alone."
 2. **Talk to someone** card: the college's official counselling/wellbeing contacts — **only details you have verified with the college** (name of the service, how to reach it, hours). If you can't verify them before the demo, show "Contact your college's student wellbeing office" and a placeholder you fill in later. Add a line: "If you're in immediate danger, contact local emergency services." Don't list national helpline numbers unless you've verified they're current.
-3. **What BridgeUp is (and isn't):** peer guidance from seniors and alumni — not counselling, medical or legal advice.
+3. **What Crossroads is (and isn't):** peer guidance from seniors and alumni — not counselling, medical or legal advice.
 4. **Our promises:** no rankings of students, no pressure mechanics, your contact details stay private unless you choose to share them.
 5. **Community guidelines:** be kind; no ragging or harassment; don't share confidential interview content; label opinions as opinions; report anything harmful.
 6. **How to report:** "Use the ⋯ menu → Report on any post, answer, profile or listing. Admins review every report."
@@ -117,7 +117,7 @@ Go through **every screen** with this checklist. Fix the demo path screens first
 - [ ] List stagger (30 ms) on feed, people grid and stories.
 - [ ] Hover lift on clickable cards; smooth tab underline transitions.
 - [ ] Landing page shows a real screenshot of the home page inside a browser frame, plus the spotlight story.
-- [ ] Favicon, page titles per route (`document.title = 'Ask a Senior · BridgeUp'`), and an OG image for link previews.
+- [ ] Favicon, page titles per route (`document.title = 'Ask a Senior · Crossroads'`), and an OG image for link previews.
 
 **Cut features**
 - [ ] Any P2 or cut feature appears as a `ComingNext` card in its natural place (e.g. "Code execution for coding rounds" on the simulator, "Events & reunions" and "Give back" in the sidebar footer pointing to Phase 11 features) — never a dead link or an empty page.

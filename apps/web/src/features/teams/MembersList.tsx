@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import type { UserLite } from '@bridgeup/shared';
+import type { UserLite } from '@crossroads/shared';
 import { UserAvatar } from '@/components/shared/UserAvatar';
 
 /** Compact avatar stack with a member count — used on team cards. */

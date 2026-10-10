@@ -1,7 +1,7 @@
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { z } from 'zod';
-import { INTERESTS, SKILLS, stepSkillsSchema } from '@bridgeup/shared';
+import { INTERESTS, SKILLS, stepSkillsSchema } from '@crossroads/shared';
 import { FormField } from '@/components/shared/FormField';
 import { ChipPicker, ChipToggleGroup } from '@/components/shared/ChipPicker';
 import type { StepProps } from './types';

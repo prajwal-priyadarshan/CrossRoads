@@ -5,7 +5,7 @@ import {
   teamCreateSchema,
   teamListQuerySchema,
   teamUpdateSchema,
-} from '@bridgeup/shared';
+} from '@crossroads/shared';
 import { requireOnboarded } from '../../middleware/auth';
 import { validate } from '../../middleware/validate';
 import { writeLimiter } from '../../middleware/rateLimits';

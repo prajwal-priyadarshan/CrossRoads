@@ -1,4 +1,4 @@
-import type { VoteInput } from '@bridgeup/shared';
+import type { VoteInput } from '@crossroads/shared';
 import { prisma } from '../../lib/prisma';
 import { notFound } from '../../lib/errors';
 import { POINTS, awardPoints } from '../../services/gamification';

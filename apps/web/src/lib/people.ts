@@ -1,4 +1,4 @@
-import type { Role } from '@bridgeup/shared';
+import type { Role } from '@crossroads/shared';
 
 const ORDINAL = ['', '1st', '2nd', '3rd', '4th', '5th'];
 

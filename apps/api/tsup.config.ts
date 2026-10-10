@@ -8,5 +8,5 @@ export default defineConfig({
   outDir: 'dist',
   clean: true,
   sourcemap: true,
-  noExternal: ['@bridgeup/shared'], // bundle the TS shared package into the API build
+  noExternal: ['@crossroads/shared'], // bundle the TS shared package into the API build
 });

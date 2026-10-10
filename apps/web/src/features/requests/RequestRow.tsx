@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router';
 import { Mail } from 'lucide-react';
 import { Github, Linkedin } from '@/components/shared/BrandIcons';
-import type { ConnectionRow, ContactUser } from '@bridgeup/shared';
+import type { ConnectionRow, ContactUser } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';

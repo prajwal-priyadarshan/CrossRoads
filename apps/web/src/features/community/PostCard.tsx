@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { CheckCircle2, MessageSquare, MoreHorizontal, Trash2 } from 'lucide-react';
-import type { PostCard as Post } from '@bridgeup/shared';
+import type { PostCard as Post } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,

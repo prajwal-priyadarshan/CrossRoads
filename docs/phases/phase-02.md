@@ -107,7 +107,7 @@ JWT_SECRET=<openssl rand -hex 32>
 SESSION_DAYS=7
 ALLOWED_EMAIL_DOMAINS=amrita.edu   # subdomains such as am.students.amrita.edu are accepted too
 EMAIL_MODE=console
-EMAIL_FROM=BridgeUp <no-reply@example.com>
+EMAIL_FROM=Crossroads <no-reply@example.com>
 DEMO_MODE=true
 ```
 
@@ -196,8 +196,8 @@ export async function sendVerificationEmail(to: string, code: string) {
   await resend.emails.send({
     from: env.EMAIL_FROM,
     to,
-    subject: `${code} is your BridgeUp code`,
-    text: `Your BridgeUp verification code is ${code}. It expires in 10 minutes.`,
+    subject: `${code} is your Crossroads code`,
+    text: `Your Crossroads verification code is ${code}. It expires in 10 minutes.`,
   });
 }
 ```
@@ -428,7 +428,7 @@ export async function login(email: string, password: string) {
 export async function demoLogin(handle: string) {
   if (!env.DEMO_MODE) throw forbidden('Demo login is disabled');
   const user = await prisma.user.findUnique({ where: { handle } });
-  if (!user || !user.email.endsWith('@demo.bridgeup')) throw forbidden('Not a demo account');
+  if (!user || !user.email.endsWith('@demo.crossroads')) throw forbidden('Not a demo account');
   return user;
 }
 ```
@@ -437,7 +437,7 @@ export async function demoLogin(handle: string) {
 
 ```ts
 import { Router } from 'express';
-import { registerSchema, verifySchema, loginSchema, emailOnlySchema, demoLoginSchema } from '@bridgeup/shared';
+import { registerSchema, verifySchema, loginSchema, emailOnlySchema, demoLoginSchema } from '@crossroads/shared';
 import { validate } from '../../middleware/validate';
 import { authLimiter } from '../../middleware/rateLimits';
 import { requireAuth } from '../../middleware/auth';
@@ -498,7 +498,7 @@ Add to `users.service.ts`:
 import { prisma } from '../../lib/prisma';
 import { normalizeTag } from '../../lib/text';
 import { badRequest } from '../../lib/errors';
-import type { OnboardingInput } from '@bridgeup/shared';
+import type { OnboardingInput } from '@crossroads/shared';
 
 const YEAR = { FIRST_YEAR: 1, SECOND_YEAR: 2, THIRD_YEAR: 3, FINAL_YEAR: 4, ALUMNI: null } as const;
 
@@ -563,7 +563,7 @@ export async function completeOnboarding(userId: string, input: OnboardingInput)
 
 ```ts
 import { Router } from 'express';
-import { onboardingSchema } from '@bridgeup/shared';
+import { onboardingSchema } from '@crossroads/shared';
 import { requireAuth } from '../../middleware/auth';
 import { validate } from '../../middleware/validate';
 import { completeOnboarding, toMe } from './users.service';
@@ -616,7 +616,7 @@ The `verify` response must include `Set-Cookie: bu_session=…; HttpOnly`.
 ```ts
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
-import type { Me } from '@bridgeup/shared';
+import type { Me } from '@crossroads/shared';
 import { api } from '@/lib/api';
 import { qk } from '@/lib/queryKeys';
 
@@ -723,13 +723,13 @@ export const router = createBrowserRouter([
 - Email, password, "Log in" button; link to register.
 - On 403 `EMAIL_NOT_VERIFIED`: call resend and navigate to `/verify?email=…` with a toast.
 - On success: set `me` cache and navigate to `next` (from the query string, only if it starts with `/`) or `/home`.
-- When `GET /api/config` returns `demoMode: true`: a "Demo accounts" section (buttons built from `config.demoAccounts`) below a divider with buttons **Ananya (first year)**, **Rahul (senior)**, **Meera (alumni)**, **Admin** calling `useDemoLogin({ handle })`. These accounts are created in Phase 03 (`seed-users.ts`); the admin exists already (handle `admin`, but its email must end with `@demo.bridgeup` for demo login — it does if you kept the default seed email).
+- When `GET /api/config` returns `demoMode: true`: a "Demo accounts" section (buttons built from `config.demoAccounts`) below a divider with buttons **Ananya (first year)**, **Rahul (senior)**, **Meera (alumni)**, **Admin** calling `useDemoLogin({ handle })`. These accounts are created in Phase 03 (`seed-users.ts`); the admin exists already (handle `admin`, but its email must end with `@demo.crossroads` for demo login — it does if you kept the default seed email).
 
 `src/features/auth/api.ts` (pattern used by every feature):
 
 ```ts
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { Me, RegisterInput, LoginInput } from '@bridgeup/shared';
+import type { Me, RegisterInput, LoginInput } from '@crossroads/shared';
 import { api } from '@/lib/api';
 import { qk } from '@/lib/queryKeys';
 
@@ -790,7 +790,7 @@ Each step uses its own `useForm` with the step schema; Continue validates the st
 | 3 Goals | "Where are you heading?" / "No pressure — 'Still exploring' is a great answer" | **Goal track** as 8 cards from `GOAL_TRACKS` (icon, label, description); **Target roles** `ChipPicker` (`TARGET_ROLES`, max 5); **Target companies** multi-select from `GET /companies` (built in Phase 06; until then hide this field or seed a static list); **Topics to follow** — topic cards from `GET /topics` (real ids), preselected from each topic's `relatedInterests` in shared constants, falling back to `DEFAULT_TOPIC_SLUG` |
 | 4 Connect | "How can people help you — and how can you help?" | "I'm looking for" `ChipToggleGroup` (`HELP_VOCAB`, warm tone); "I can help with" (`HELP_VOCAB`, primary tone) — for first years show a hint "Even first years can help with campus life!"; LinkedIn URL, GitHub URL; visibility switches (Show email / LinkedIn / GitHub); consent checkbox: "I agree to share my profile with students and alumni of my college. I can edit or delete it anytime." |
 
-On Finish → `useCompleteOnboarding` → `PATCH /me/onboarding` with the full draft → on success: set `me` cache, clear the store, toast "Welcome to BridgeUp, {firstName}! 🎉" (one emoji is fine here), navigate to `/home`.
+On Finish → `useCompleteOnboarding` → `PATCH /me/onboarding` with the full draft → on success: set `me` cache, clear the store, toast "Welcome to Crossroads, {firstName}! 🎉" (one emoji is fine here), navigate to `/home`.
 
 Server field errors come back as paths like `skills.skills`; map the first segment to the step and jump back to it.
 
@@ -862,7 +862,7 @@ git add -A && git commit -m "phase-02: auth and onboarding" && git tag phase-02
 | Cookie not set in the browser | Make sure the web app calls `/api/...` through the Vite proxy (same origin), `credentials: 'include'` is set, and `secure` is false locally |
 | `req.user` always undefined | `authOptional` must run after `cookieParser()` and before the routes |
 | zod `literal(true)` error message option fails | zod v4 changed error customisation (`{ error: '…' }`); check your zod version |
-| Demo login says "Not a demo account" | Demo users must have emails ending in `@demo.bridgeup` and `DEMO_MODE=true` |
+| Demo login says "Not a demo account" | Demo users must have emails ending in `@demo.crossroads` and `DEMO_MODE=true` |
 | Onboarding 400 with `about.company` | Alumni must fill company and role (refinement in `stepAboutSchema`) |
 
 ---

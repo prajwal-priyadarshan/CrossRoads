@@ -1,4 +1,4 @@
-import { levelFor } from '@bridgeup/shared';
+import { levelFor } from '@crossroads/shared';
 import type { Tx } from './notify';
 
 export const POINTS = {

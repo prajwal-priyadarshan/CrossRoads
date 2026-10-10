@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { Building2, Search } from 'lucide-react';
-import type { CompanyTile as Company } from '@bridgeup/shared';
+import type { CompanyTile as Company } from '@crossroads/shared';
 import { Input } from '@/components/ui/input';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { EmptyState } from '@/components/shared/EmptyState';

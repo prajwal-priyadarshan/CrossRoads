@@ -1,4 +1,4 @@
-import type { RailData } from '@bridgeup/shared';
+import type { RailData } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { RoleBadge } from '@/components/shared/RoleBadge';
 import { UserAvatar } from '@/components/shared/UserAvatar';

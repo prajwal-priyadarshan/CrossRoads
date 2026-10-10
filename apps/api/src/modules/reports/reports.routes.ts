@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { requireAuth } from '../../middleware/auth';
 import { validate } from '../../middleware/validate';
 import { writeLimiter } from '../../middleware/rateLimits';
-import { reportCreateSchema } from '@bridgeup/shared';
+import { reportCreateSchema } from '@crossroads/shared';
 import { createReport } from './reports.service';
 
 export const reportsRouter = Router();

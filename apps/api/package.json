@@ -1,5 +1,5 @@
 {
-  "name": "@bridgeup/api",
+  "name": "@crossroads/api",
   "private": true,
   "type": "module",
   "scripts": {
@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.3.4",
-    "@bridgeup/shared": "*",
+    "@crossroads/shared": "*",
     "@prisma/adapter-pg": "^7.10.0",
     "@prisma/client": "^7.10.0",
     "bcryptjs": "^3.0.3",

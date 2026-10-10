@@ -87,7 +87,7 @@
 
 ### Step 1 — Seed 30 demo users (12 min)
 
-`scripts/data/users.ts` — define users in plain objects. **All demo emails end with `@demo.bridgeup`** and are inserted into `AllowedEmail` first (so they pass the domain rule and alumni get the right role).
+`scripts/data/users.ts` — define users in plain objects. **All demo emails end with `@demo.crossroads`** and are inserted into `AllowedEmail` first (so they pass the domain rule and alumni get the right role).
 
 Mix (aim for realistic variety):
 
@@ -105,7 +105,7 @@ Sample entry:
 
 ```ts
 {
-  handle: 'rahul', fullName: 'Rahul Menon', email: 'rahul@demo.bridgeup', role: 'SENIOR', currentYear: 4, batchYear: 2027,
+  handle: 'rahul', fullName: 'Rahul Menon', email: 'rahul@demo.crossroads', role: 'SENIOR', currentYear: 4, batchYear: 2027,
   department: 'CSE-AI', bio: 'Final year. Love computer vision and helping juniors start ML the right way.',
   skills: ['python', 'computer vision', 'deep learning', 'dsa', 'sql'], interests: ['ai/ml', 'research', 'competitive programming'],
   targetRoles: ['ml engineer'], goalTrack: 'PRODUCT', canHelpWith: ['interview prep', 'dsa', 'internships', 'projects', 'club guidance'],
@@ -148,7 +148,7 @@ async function main() {
     if (milestones.length) await prisma.milestone.createMany({ data: milestones.map((m) => ({ ...m, userId: user.id })) });
   }
   // Admin should be demo-loginable
-  await prisma.user.updateMany({ where: { handle: 'admin' }, data: { email: 'admin@demo.bridgeup' } });
+  await prisma.user.updateMany({ where: { handle: 'admin' }, data: { email: 'admin@demo.crossroads' } });
   console.log(`Seeded ${users.length} users`);
 }
 main().finally(() => prisma.$disconnect());
@@ -578,7 +578,7 @@ git add -A && git commit -m "phase-03: profiles, people, matching, requests" && 
 ## 7. Completion criteria
 
 - [ ] 30 demo users exist with milestones; demo login works for `ananya`, `rahul`, `meera`, `karthik`, `admin`.
-- [ ] Every person card shows a score and at least one reason (or "New to BridgeUp" when there is nothing to match).
+- [ ] Every person card shows a score and at least one reason (or "New to Crossroads" when there is nothing to match).
 - [ ] Filters combine with AND; free-text search finds names, companies, roles and skills.
 - [ ] Mentor mode shows only seniors/alumni with mentoring on, and target-company matches rank highly with the reason "Works at {company}, your target company".
 - [ ] Contact links obey visibility on the **API** response (check the Network tab).

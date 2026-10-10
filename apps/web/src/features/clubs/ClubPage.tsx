@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router';
 import { useQueryClient } from '@tanstack/react-query';
 import { ExternalLink, Info, Loader2, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
-import { clubReviewSchema, type ClubDetail } from '@bridgeup/shared';
+import { clubReviewSchema, type ClubDetail } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { EmptyState } from '@/components/shared/EmptyState';

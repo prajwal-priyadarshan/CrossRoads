@@ -1,6 +1,6 @@
 import { OpenAPIRegistry, OpenApiGeneratorV3, extendZodWithOpenApi, type RouteConfig } from '@asteasolutions/zod-to-openapi';
 import { z, type ZodTypeAny } from 'zod';
-import * as S from '@bridgeup/shared';
+import * as S from '@crossroads/shared';
 import { env } from '../config/env';
 
 // Adds .openapi() to the zod prototype (also for the shared schemas, which use the same zod instance)

@@ -1,4 +1,4 @@
-import type { OpportunityListQuery, OpportunityPage } from '@bridgeup/shared';
+import type { OpportunityListQuery, OpportunityPage } from '@crossroads/shared';
 import type { Prisma } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
 import { titleCase } from '../../lib/text';

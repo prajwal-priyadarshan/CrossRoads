@@ -10,7 +10,7 @@ export function SupportPage() {
       <header className="border-b bg-card/50 px-6 py-4 backdrop-blur">
         <div className="mx-auto flex max-w-4xl items-center justify-between">
           <Link to="/" className="text-xl font-bold tracking-tight text-primary">
-            BridgeUp
+            Crossroads
           </Link>
           <Button variant="ghost" asChild>
             <Link to="/home">Go to App</Link>
@@ -48,13 +48,13 @@ export function SupportPage() {
             </p>
           </Card>
           
-          {/* What BridgeUp is */}
+          {/* What Crossroads is */}
           <Card className="p-6">
             <h3 className="flex items-center gap-2 text-lg font-semibold">
-              <Info className="h-5 w-5 text-primary" /> What BridgeUp is (and isn't)
+              <Info className="h-5 w-5 text-primary" /> What Crossroads is (and isn't)
             </h3>
             <p className="mt-3 text-sm text-muted-foreground">
-              BridgeUp provides peer guidance from seniors and alumni. It is <strong>not</strong> a substitute for professional counselling, medical, or legal advice.
+              Crossroads provides peer guidance from seniors and alumni. It is <strong>not</strong> a substitute for professional counselling, medical, or legal advice.
             </p>
             <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
               <li className="flex items-center gap-2">
@@ -74,7 +74,7 @@ export function SupportPage() {
             <div className="mt-4 grid gap-4 text-sm text-muted-foreground sm:grid-cols-2">
               <div>
                 <strong className="text-foreground">Be kind and constructive.</strong>
-                <p>No ragging, bullying, or harassment will be tolerated. BridgeUp is a safe space.</p>
+                <p>No ragging, bullying, or harassment will be tolerated. Crossroads is a safe space.</p>
               </div>
               <div>
                 <strong className="text-foreground">Respect confidentiality.</strong>

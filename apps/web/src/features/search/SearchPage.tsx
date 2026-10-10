@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { SearchX, Search as SearchIcon } from 'lucide-react';
-import { DEPARTMENTS, type SearchHit } from '@bridgeup/shared';
+import { DEPARTMENTS, type SearchHit } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';

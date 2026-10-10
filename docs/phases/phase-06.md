@@ -399,7 +399,7 @@ Create `scripts/seed-content.ts` (Phase 10 adds questions, posts, teams and stor
 - **20 club reviews** from seniors/juniors (varied usefulness and time cost, honest one-paragraph reviews).
 - **7 human roadmaps**, one per goal track (Product, Service, Quant/finance, Research, Startup, MS, MBA), each with 8–12 steps across semesters, `kind` set (SKILL / PROJECT / RESOURCE / PRACTICE), and 2–3 "mistakes I made".
 
-Insert these **through the service functions** (or replicate their point awards) so authors get points and badges consistently. Make the script idempotent: delete previous seed content by a marker (e.g. authors with `@demo.bridgeup` emails) before inserting.
+Insert these **through the service functions** (or replicate their point awards) so authors get points and badges consistently. Make the script idempotent: delete previous seed content by a marker (e.g. authors with `@demo.crossroads` emails) before inserting.
 
 ---
 

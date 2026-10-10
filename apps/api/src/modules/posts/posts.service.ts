@@ -1,4 +1,4 @@
-import type { CommentCreateInput, PostCreateInput, PostListQuery } from '@bridgeup/shared';
+import type { CommentCreateInput, PostCreateInput, PostListQuery } from '@crossroads/shared';
 import type { Prisma } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
 import { badRequest, forbidden, notFound } from '../../lib/errors';

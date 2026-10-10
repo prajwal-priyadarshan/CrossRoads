@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { Link, useParams } from 'react-router';
 import { ExternalLink, Mail, Pencil, Trophy } from 'lucide-react';
 import { Github, Linkedin } from '@/components/shared/BrandIcons';
-import type { PublicProfile } from '@bridgeup/shared';
+import type { PublicProfile } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { MatchRing } from '@/components/shared/MatchRing';
@@ -79,7 +79,7 @@ export function ProfilePage() {
       <EmptyState
         icon={UserX}
         title="Profile not found"
-        description="This person may not have finished joining BridgeUp yet."
+        description="This person may not have finished joining Crossroads yet."
         action={
           <Button asChild>
             <Link to="/people">Discover people</Link>

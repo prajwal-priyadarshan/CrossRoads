@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import { ExternalLink, MessageSquare, UserPlus } from 'lucide-react';
-import { OPPORTUNITY_TYPES, type OpportunityItem } from '@bridgeup/shared';
+import { OPPORTUNITY_TYPES, type OpportunityItem } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { AppIcon } from '@/components/shared/AppIcon';
 import { BookmarkButton } from '@/components/shared/BookmarkButton';

@@ -1,5 +1,5 @@
 import { Progress } from '@/components/ui/progress';
-import { levelFor } from '@bridgeup/shared';
+import { levelFor } from '@crossroads/shared';
 
 export function LevelProgress({ points }: { points: number }) {
   const level = levelFor(points);

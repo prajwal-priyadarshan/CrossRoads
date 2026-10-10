@@ -1,4 +1,4 @@
-import type { Advisor } from '@bridgeup/shared';
+import type { Advisor } from '@crossroads/shared';
 import { RoleBadge } from '@/components/shared/RoleBadge';
 import { UserAvatar } from '@/components/shared/UserAvatar';
 import { ConnectDialog } from '@/features/people/ConnectDialog';

@@ -1,4 +1,4 @@
-import type { CompanyRound, ExperienceFilter, PrepRoadmapItem } from '@bridgeup/shared';
+import type { CompanyRound, ExperienceFilter, PrepRoadmapItem } from '@crossroads/shared';
 import { prisma } from '../../lib/prisma';
 import { notFound } from '../../lib/errors';
 import { round1 } from '../../lib/collections';

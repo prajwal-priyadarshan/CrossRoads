@@ -1,4 +1,4 @@
-# 🌉 BridgeUp
+# 🌉 Crossroads
 
 > **A college community and mentorship platform that connects juniors with seniors and alumni.**
 > Ask a Senior · Discover People · Path Twins · Career Roadmaps · Placement Prep · Simulator
@@ -104,7 +104,7 @@ graph TB
 
 ## 🤖 AI Layer Deep-Dive
 
-BridgeUp's AI features run **server-side only**, through any OpenAI-compatible provider (Groq free tier by default). Every feature has a graceful non-AI fallback so the app works even without an `AI_API_KEY`.
+Crossroads's AI features run **server-side only**, through any OpenAI-compatible provider (Groq free tier by default). Every feature has a graceful non-AI fallback so the app works even without an `AI_API_KEY`.
 
 ```mermaid
 sequenceDiagram
@@ -256,7 +256,7 @@ Open [http://localhost:5173](http://localhost:5173) and use a demo account (pass
 
 ```mermaid
 mindmap
-  root((BridgeUp))
+  root((Crossroads))
     Auth
       College-domain email gate
       httpOnly JWT cookie

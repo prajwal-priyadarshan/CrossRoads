@@ -1,4 +1,4 @@
-import type { OnboardingInput, ProfileUpdateInput } from '@bridgeup/shared';
+import type { OnboardingInput, ProfileUpdateInput } from '@crossroads/shared';
 import type { User } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
 import { normalizeTag } from '../../lib/text';

@@ -1,8 +1,8 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import type { ConnectionKind, UserLite } from '@bridgeup/shared';
-import { connectionCreateSchema } from '@bridgeup/shared';
+import type { ConnectionKind, UserLite } from '@crossroads/shared';
+import { connectionCreateSchema } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { Bell, Briefcase, Plus } from 'lucide-react';
-import { OPPORTUNITY_TYPES } from '@bridgeup/shared';
+import { OPPORTUNITY_TYPES } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';

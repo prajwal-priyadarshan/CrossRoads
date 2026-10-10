@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { z } from 'zod';
-import { bestAnswerSchema, commentCreateSchema, postCreateSchema, postListQuerySchema } from '@bridgeup/shared';
+import { bestAnswerSchema, commentCreateSchema, postCreateSchema, postListQuerySchema } from '@crossroads/shared';
 import { requireOnboarded } from '../../middleware/auth';
 import { validate } from '../../middleware/validate';
 import { writeLimiter } from '../../middleware/rateLimits';

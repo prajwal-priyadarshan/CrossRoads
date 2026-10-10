@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { requireOnboarded } from '../../middleware/auth';
 import { validate } from '../../middleware/validate';
-import { targetsSchema, prepItemSchema, prepItemUpdateSchema } from '@bridgeup/shared';
+import { targetsSchema, prepItemSchema, prepItemUpdateSchema } from '@crossroads/shared';
 import { prisma } from '../../lib/prisma';
 import { getDashboard, createPrepItem, updatePrepItem, deletePrepItem, importPrepItems } from './prep.service';
 

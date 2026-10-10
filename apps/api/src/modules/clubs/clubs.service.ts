@@ -1,4 +1,4 @@
-import type { ClubListQuery, ClubReviewInput } from '@bridgeup/shared';
+import type { ClubListQuery, ClubReviewInput } from '@crossroads/shared';
 import { prisma } from '../../lib/prisma';
 import { forbidden, notFound } from '../../lib/errors';
 import { avg, round1 } from '../../lib/collections';

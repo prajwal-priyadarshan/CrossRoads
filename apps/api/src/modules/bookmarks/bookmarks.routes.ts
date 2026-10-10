@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { bookmarkSchema, bookmarksQuerySchema } from '@bridgeup/shared';
+import { bookmarkSchema, bookmarksQuerySchema } from '@crossroads/shared';
 import { requireOnboarded } from '../../middleware/auth';
 import { validate } from '../../middleware/validate';
 import { writeLimiter } from '../../middleware/rateLimits';

@@ -1,5 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import type { ConnectionCreateInput } from '@bridgeup/shared';
+import type { ConnectionCreateInput } from '@crossroads/shared';
 import type { Prisma } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
 import { badRequest, conflict, forbidden, notFound } from '../../lib/errors';

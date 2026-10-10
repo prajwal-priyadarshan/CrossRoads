@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { milestoneSchema, type Milestone, type MilestoneCategory } from '@bridgeup/shared';
+import { milestoneSchema, type Milestone, type MilestoneCategory } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';

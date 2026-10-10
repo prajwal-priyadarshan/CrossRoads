@@ -151,7 +151,7 @@ export function LandingPage() {
               No rankings. No pressure. Just people who want you to do well.
             </h2>
             <p className="mt-1 text-sm text-muted-foreground">
-              Placement season is stressful. BridgeUp is built to make it kinder, and help is always one tap away.
+              Placement season is stressful. Crossroads is built to make it kinder, and help is always one tap away.
             </p>
           </div>
           <Button variant="outline" asChild>
@@ -161,7 +161,7 @@ export function LandingPage() {
       </section>
 
       <footer className="mx-auto flex max-w-6xl flex-wrap items-center gap-4 border-t px-4 py-8 text-sm text-muted-foreground md:px-8">
-        <span>© {new Date().getFullYear()} BridgeUp</span>
+        <span>© {new Date().getFullYear()} Crossroads</span>
         <Link to="/support" className="hover:text-foreground">Support</Link>
         <Link to="/stories" className="hover:text-foreground">Stories</Link>
       </footer>

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { markReadSchema, notificationListQuerySchema } from '@bridgeup/shared';
+import { markReadSchema, notificationListQuerySchema } from '@crossroads/shared';
 import { requireAuth } from '../../middleware/auth';
 import { validate } from '../../middleware/validate';
 import * as svc from './notifications.service';

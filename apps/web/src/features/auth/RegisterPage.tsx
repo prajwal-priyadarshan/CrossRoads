@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { registerSchema, type RegisterInput } from '@bridgeup/shared';
+import { registerSchema, type RegisterInput } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { FormField } from '@/components/shared/FormField';
@@ -43,7 +43,7 @@ export function RegisterPage() {
 
   return (
     <AuthLayout
-      title="Join BridgeUp"
+      title="Join Crossroads"
       subtitle="Use your college email so we know you're one of us."
       footer={
         <>

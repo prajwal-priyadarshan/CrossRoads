@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import type { CommentNode } from '@bridgeup/shared';
+import type { CommentNode } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { PlainText } from '@/components/shared/PlainText';

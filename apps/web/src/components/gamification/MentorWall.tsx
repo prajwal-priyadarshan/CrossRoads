@@ -1,7 +1,7 @@
 import { Link } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
 import { HandHeart } from 'lucide-react';
-import type { UserLite } from '@bridgeup/shared';
+import type { UserLite } from '@crossroads/shared';
 import { api } from '@/lib/api';
 import { UserAvatar } from '@/components/shared/UserAvatar';
 

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { ClubDetail, ClubReviewInput, ClubSummary } from '@bridgeup/shared';
+import type { ClubDetail, ClubReviewInput, ClubSummary } from '@crossroads/shared';
 import { api } from '@/lib/api';
 import { qk } from '@/lib/queryKeys';
 

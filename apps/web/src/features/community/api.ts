@@ -1,6 +1,6 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import type { PostCreateInput, PostDetail, PostPage, SimilarQuestion, TopicWithFollow } from '@bridgeup/shared';
+import type { PostCreateInput, PostDetail, PostPage, SimilarQuestion, TopicWithFollow } from '@crossroads/shared';
 import { api } from '@/lib/api';
 import { qk } from '@/lib/queryKeys';
 

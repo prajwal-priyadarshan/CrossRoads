@@ -1,4 +1,4 @@
-import type { FeedQuery } from '@bridgeup/shared';
+import type { FeedQuery } from '@crossroads/shared';
 import type { Prisma } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
 import { rankFeed } from '../../services/feedRank';

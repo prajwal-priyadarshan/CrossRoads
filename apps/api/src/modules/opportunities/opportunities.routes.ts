@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { opportunityListQuerySchema } from '@bridgeup/shared';
+import { opportunityListQuerySchema } from '@crossroads/shared';
 import { requireOnboarded } from '../../middleware/auth';
 import { validate } from '../../middleware/validate';
 import * as svc from './opportunities.service';

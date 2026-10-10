@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## State of this repository
 
-BridgeUp is a college community/mentorship platform (juniors ↔ seniors/alumni: Ask a Senior, Discover People, Path Twins, placement readiness, etc.), built phase by phase from the guides in `docs/`. The repo root is the npm-workspaces root (`apps/api`, `apps/web`, `packages/shared`). Completed phases are tagged `phase-NN` (check `git tag`); phases 00–06 are built, 07–11 are next.
+Crossroads is a college community/mentorship platform (juniors ↔ seniors/alumni: Ask a Senior, Discover People, Path Twins, placement readiness, etc.), built phase by phase from the guides in `docs/`. The repo root is the npm-workspaces root (`apps/api`, `apps/web`, `packages/shared`). Completed phases are tagged `phase-NN` (check `git tag`); phases 00–06 are built, 07–11 are next.
 
 The **code is the source of truth**. Each phase guide starts with "Implementation notes" (built phases) or "Codebase conventions" (upcoming phases) that override older snippets in the guide body.
 

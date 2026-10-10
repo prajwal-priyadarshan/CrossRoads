@@ -1,4 +1,4 @@
-import { GOAL_TRACKS } from '@bridgeup/shared';
+import { GOAL_TRACKS } from '@crossroads/shared';
 import { AppIcon } from '@/components/shared/AppIcon';
 import { cn } from '@/lib/utils';
 

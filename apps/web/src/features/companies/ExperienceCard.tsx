@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import { Lightbulb } from 'lucide-react';
-import type { ExperienceCard as Experience } from '@bridgeup/shared';
+import type { ExperienceCard as Experience } from '@crossroads/shared';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { BookmarkButton } from '@/components/shared/BookmarkButton';

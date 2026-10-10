@@ -1,6 +1,6 @@
 import type { User, Milestone } from '../../generated/prisma/client';
 import type { P } from '../../services/matching';
-import { levelFor } from '@bridgeup/shared';
+import { levelFor } from '@crossroads/shared';
 
 export const userLiteSelect = {
   id: true,

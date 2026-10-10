@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import { Check, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { postCreateSchema } from '@bridgeup/shared';
+import { postCreateSchema } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';

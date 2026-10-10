@@ -5,7 +5,7 @@ export function Logo({ className, to = '/home' }: { className?: string; to?: str
   return (
     <Link to={to} className={cn('flex items-center gap-2.5', className)}>
       <img src="/logo.svg" alt="" className="size-8" />
-      <span className="font-display text-lg font-bold tracking-tight">BridgeUp</span>
+      <span className="font-display text-lg font-bold tracking-tight">Crossroads</span>
     </Link>
   );
 }

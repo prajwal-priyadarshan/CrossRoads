@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { companyListQuerySchema, experienceFilterSchema } from '@bridgeup/shared';
+import { companyListQuerySchema, experienceFilterSchema } from '@crossroads/shared';
 import { requireOnboarded } from '../../middleware/auth';
 import { validate } from '../../middleware/validate';
 import * as svc from './companies.service';

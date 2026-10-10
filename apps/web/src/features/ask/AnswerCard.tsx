@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { CheckCircle2 } from 'lucide-react';
-import type { CommentNode, UserLite } from '@bridgeup/shared';
+import type { CommentNode, UserLite } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { PlainText } from '@/components/shared/PlainText';
 import { RelativeTime } from '@/components/shared/RelativeTime';

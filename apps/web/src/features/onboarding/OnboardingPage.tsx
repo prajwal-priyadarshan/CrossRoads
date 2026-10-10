@@ -3,7 +3,7 @@ import { Navigate, useNavigate } from 'react-router';
 import { AnimatePresence, motion } from 'motion/react';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import type { OnboardingDraft } from '@bridgeup/shared';
+import type { OnboardingDraft } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/layout/Logo';
 import { ApiError } from '@/lib/api';
@@ -39,7 +39,7 @@ export function OnboardingPage() {
     complete.mutate(full, {
       onSuccess: (updated) => {
         reset();
-        toast.success(`Welcome to BridgeUp, ${updated.fullName.split(' ')[0]}! 🎉`);
+        toast.success(`Welcome to Crossroads, ${updated.fullName.split(' ')[0]}! 🎉`);
         navigate('/home', { replace: true });
       },
       onError: (e) => {

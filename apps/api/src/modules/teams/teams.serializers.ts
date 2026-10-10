@@ -1,4 +1,4 @@
-import type { TeamCard } from '@bridgeup/shared';
+import type { TeamCard } from '@crossroads/shared';
 import type { Prisma } from '../../generated/prisma/client';
 import { userLiteSelect } from '../users/users.serializers';
 

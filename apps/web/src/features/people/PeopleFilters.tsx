@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Search } from 'lucide-react';
-import { DEPARTMENTS, INTERESTS, SKILLS, TARGET_ROLES } from '@bridgeup/shared';
+import { DEPARTMENTS, INTERESTS, SKILLS, TARGET_ROLES } from '@crossroads/shared';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';

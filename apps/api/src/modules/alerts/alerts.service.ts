@@ -1,4 +1,4 @@
-import type { AlertPrefs, AlertPrefsInput } from '@bridgeup/shared';
+import type { AlertPrefs, AlertPrefsInput } from '@crossroads/shared';
 import { prisma } from '../../lib/prisma';
 import { badRequest } from '../../lib/errors';
 

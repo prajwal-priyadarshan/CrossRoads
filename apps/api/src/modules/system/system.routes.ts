@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import type { AppConfig } from '@bridgeup/shared';
+import type { AppConfig } from '@crossroads/shared';
 import { aiEnabled, env } from '../../config/env';
 import { prisma } from '../../lib/prisma';
 

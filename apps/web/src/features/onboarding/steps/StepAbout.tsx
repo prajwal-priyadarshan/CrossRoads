@@ -2,7 +2,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { z } from 'zod';
 import { Check, GraduationCap, Sprout, Sparkles, Trophy, Briefcase } from 'lucide-react';
-import { DEPARTMENTS, stepAboutSchema } from '@bridgeup/shared';
+import { DEPARTMENTS, stepAboutSchema } from '@crossroads/shared';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';

@@ -1,4 +1,4 @@
-import type { CommentNode, PostCard } from '@bridgeup/shared';
+import type { CommentNode, PostCard } from '@crossroads/shared';
 import type { Prisma } from '../../generated/prisma/client';
 import { userLiteSelect } from '../users/users.serializers';
 

@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import type { RailData } from '@bridgeup/shared';
+import type { RailData } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { RailCard } from './RailCard';
 

@@ -5,11 +5,11 @@ export function VerifiedBadge() {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <span className="inline-flex text-success" aria-label="Verified by BridgeUp admins">
+        <span className="inline-flex text-success" aria-label="Verified by Crossroads admins">
           <BadgeCheck className="size-3.5" />
         </span>
       </TooltipTrigger>
-      <TooltipContent>Verified by BridgeUp admins</TooltipContent>
+      <TooltipContent>Verified by Crossroads admins</TooltipContent>
     </Tooltip>
   );
 }

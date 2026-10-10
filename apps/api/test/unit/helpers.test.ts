@@ -2,10 +2,10 @@ import { describe, expect, it } from 'vitest';
 import { jaccard, normalizeTag, slugify } from '../../src/lib/text';
 import { decodeCursor, encodeCursor } from '../../src/lib/pagination';
 import { avg, groupBy, round1 } from '../../src/lib/collections';
-import { LEVELS } from '@bridgeup/shared';
+import { LEVELS } from '@crossroads/shared';
 
 // levelFor lives with the gamification service; import lazily so the DB client is not needed
-const { levelFor } = await import('@bridgeup/shared');
+const { levelFor } = await import('@crossroads/shared');
 
 describe('text helpers', () => {
   it('normalises tags', () => expect(normalizeTag('  Machine   Learning ')).toBe('machine learning'));

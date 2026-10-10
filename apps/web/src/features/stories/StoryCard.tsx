@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import { Sparkles } from 'lucide-react';
-import type { StorySummary } from '@bridgeup/shared';
+import type { StorySummary } from '@crossroads/shared';
 import { RelativeTime } from '@/components/shared/RelativeTime';
 import { UserAvatar } from '@/components/shared/UserAvatar';
 import { titleCase } from '@/lib/utils';

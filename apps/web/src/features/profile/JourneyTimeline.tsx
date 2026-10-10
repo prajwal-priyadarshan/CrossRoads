@@ -9,7 +9,7 @@ import {
   Trophy,
   Users,
 } from 'lucide-react';
-import type { Milestone, MilestoneCategory } from '@bridgeup/shared';
+import type { Milestone, MilestoneCategory } from '@crossroads/shared';
 import { cn } from '@/lib/utils';
 
 const CATEGORY: Record<MilestoneCategory, { icon: ComponentType<{ className?: string }>; tone: string; label: string }> = {

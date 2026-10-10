@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { railQuerySchema } from '@bridgeup/shared';
+import { railQuerySchema } from '@crossroads/shared';
 import { requireOnboarded } from '../../middleware/auth';
 import { validate } from '../../middleware/validate';
 import { getRail } from './home.service';

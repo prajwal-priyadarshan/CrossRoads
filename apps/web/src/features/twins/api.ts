@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import type { PathTwins } from '@bridgeup/shared';
+import type { PathTwins } from '@crossroads/shared';
 import { api } from '@/lib/api';
 import { qk } from '@/lib/queryKeys';
 

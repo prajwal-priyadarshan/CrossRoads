@@ -1,4 +1,4 @@
-# BridgeUp — Technical Requirements Document (TRD)
+# Crossroads — Technical Requirements Document (TRD)
 
 > **Version:** 2.0 · **Date:** 2026-10-10 · Companion to `PRD.md` and `phases/`
 >
@@ -135,7 +135,7 @@ The repository root is the npm-workspaces root. This tree reflects the verified 
 ├── package.json                  workspaces + scripts: dev, build, typecheck, test, smoke, lint, format, db:seed:all
 ├── CLAUDE.md · README.md
 ├── docs/                         PRD.md, TRD.md, README.md (doc index), phases/phase-00..11.md
-├── packages/shared/src/          @bridgeup/shared — imported by both apps
+├── packages/shared/src/          @crossroads/shared — imported by both apps
 │   ├── constants.ts              topics (+ relatedInterests), skills, interests, goal tracks, badges, levels …
 │   ├── schemas/                  zod request schemas, one file per domain + index.ts
 │   └── types/                    response types: enums, users, posts, home, campus, config + index.ts
@@ -199,8 +199,8 @@ The repository root is the npm-workspaces root. This tree reflects the verified 
 | `SESSION_DAYS` | `7` | Cookie and token lifetime |
 | `ALLOWED_EMAIL_DOMAINS` | `amrita.edu` | Comma-separated; subdomains (e.g. `am.students.amrita.edu`) are accepted |
 | `DEMO_LOGIN_HANDLES` | `ananya,rahul,meera,admin` | Demo-login buttons, in order (DEMO_MODE only) |
-| `DEMO_EMAIL_SUFFIX` | `@demo.bridgeup` | Marks demo accounts |
-| `APP_NAME`, `LOG_LEVEL` | `BridgeUp`, (`info`/`debug`) | Display name; log verbosity |
+| `DEMO_EMAIL_SUFFIX` | `@demo.crossroads` | Marks demo accounts |
+| `APP_NAME`, `LOG_LEVEL` | `Crossroads`, (`info`/`debug`) | Display name; log verbosity |
 | `RATE_LIMIT_AUTH_PER_15M`, `RATE_LIMIT_WRITE_PER_MIN`, `RATE_LIMIT_AI_PER_HOUR` | `20`, `60`, `20` | Rate-limit sizes |
 | `ACADEMIC_YEAR_START_MONTH` | `7` | Month the odd semester starts (semester maths) |
 | `API_DOCS_ENABLED` | (on outside production) | Swagger UI at `/api/docs` |
@@ -208,7 +208,7 @@ The repository root is the npm-workspaces root. This tree reflects the verified 
 | `WEB_ORIGIN` | `http://localhost:5173` | Used for CORS in local dev |
 | `EMAIL_MODE` | `console` | `console` prints codes to the log; `resend` sends email |
 | `RESEND_API_KEY` | — | Only when `EMAIL_MODE=resend` |
-| `EMAIL_FROM` | `BridgeUp <onboarding@yourdomain>` | Must be a verified sender in Resend ⚠️ |
+| `EMAIL_FROM` | `Crossroads <onboarding@yourdomain>` | Must be a verified sender in Resend ⚠️ |
 | `DEMO_MODE` | `true` | Enables the demo-login endpoint and console codes; **turn off for any real launch** |
 | `AI_API_KEY` | — | Server only; AI features fall back gracefully if missing (free key: console.groq.com) |
 | `AI_BASE_URL` | `https://api.groq.com/openai/v1` | Any OpenAI-compatible endpoint |
@@ -1071,7 +1071,7 @@ const rows = await prisma.$queryRaw`
 | Format | JSON in, JSON out; `Content-Type: application/json` required on writes |
 | Success | `200 { data }` or `201 { data }`; paginated lists: `{ data: { items: [...], nextCursor: string \| null } }`; small fixed lists: `{ data: [...] }` |
 | Errors | `{ error: { code, message, fields? } }` with HTTP status: 400 `VALIDATION`, 401 `UNAUTHENTICATED`, 403 `FORBIDDEN`, 404 `NOT_FOUND`, 409 `CONFLICT`, 429 `RATE_LIMITED`, 500 `INTERNAL` |
-| Validation | zod schemas from `@bridgeup/shared`; `fields` maps field path → message |
+| Validation | zod schemas from `@crossroads/shared`; `fields` maps field path → message |
 | Pagination | Cursor = last item's `createdAt|id`; `limit` default 20, max 50 |
 | IDs | UUID strings |
 | Dates | ISO 8601 strings in UTC; the client formats them |
@@ -1376,7 +1376,7 @@ Loading the user on every request costs one indexed query; it means role changes
 
 ### 9.5 Demo login
 
-When `DEMO_MODE=true`, `POST /auth/demo-login { handle }` signs in as a seeded user whose email ends with the demo marker (e.g. `@demo.bridgeup`), so you can switch between Ananya, Rahul, Meera and the admin in seconds during the pitch. **Disable `DEMO_MODE` for any real use.**
+When `DEMO_MODE=true`, `POST /auth/demo-login { handle }` signs in as a seeded user whose email ends with the demo marker (e.g. `@demo.crossroads`), so you can switch between Ananya, Rahul, Meera and the admin in seconds during the pitch. **Disable `DEMO_MODE` for any real use.**
 
 ---
 

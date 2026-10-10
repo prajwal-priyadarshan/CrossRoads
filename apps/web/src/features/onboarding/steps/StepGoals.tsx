@@ -3,7 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import type { z } from 'zod';
 import { Check } from 'lucide-react';
-import { DEFAULT_TOPIC_SLUG, GOAL_TRACKS, TARGET_ROLES, TOPICS, stepGoalsSchema } from '@bridgeup/shared';
+import { DEFAULT_TOPIC_SLUG, GOAL_TRACKS, TARGET_ROLES, TOPICS, stepGoalsSchema } from '@crossroads/shared';
 import { FormField } from '@/components/shared/FormField';
 import { ChipPicker } from '@/components/shared/ChipPicker';
 import { CompanyMultiSelect } from '@/features/companies/CompanyMultiSelect';

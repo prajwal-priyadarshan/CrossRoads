@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { Plus, Rocket, UsersRound } from 'lucide-react';
-import { TEAM_ROLES, type TeamKind } from '@bridgeup/shared';
+import { TEAM_ROLES, type TeamKind } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';

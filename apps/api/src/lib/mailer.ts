@@ -11,7 +11,7 @@ export async function sendVerificationEmail(to: string, code: string) {
   await resend.emails.send({
     from: env.EMAIL_FROM,
     to,
-    subject: `${code} is your BridgeUp code`,
-    text: `Your BridgeUp verification code is ${code}. It expires in 10 minutes.`,
+    subject: `${code} is your Crossroads code`,
+    text: `Your Crossroads verification code is ${code}. It expires in 10 minutes.`,
   });
 }

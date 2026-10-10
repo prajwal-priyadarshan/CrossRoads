@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Check, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { OPPORTUNITY_TYPES, postCreateSchema, type OpportunityType } from '@bridgeup/shared';
+import { OPPORTUNITY_TYPES, postCreateSchema, type OpportunityType } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';

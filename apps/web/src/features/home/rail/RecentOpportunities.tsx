@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import { format } from 'date-fns';
-import type { RailData } from '@bridgeup/shared';
+import type { RailData } from '@crossroads/shared';
 import { titleCase } from '@/lib/utils';
 import { RailCard } from './RailCard';
 

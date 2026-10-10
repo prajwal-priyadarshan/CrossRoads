@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
-import type { NotificationItem } from '@bridgeup/shared';
+import type { NotificationItem } from '@crossroads/shared';
 import { api } from '@/lib/api';
 import { useMarkRead } from '@/features/notifications/api';
 

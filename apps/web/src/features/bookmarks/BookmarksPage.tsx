@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import { Bookmark } from 'lucide-react';
-import type { BookmarkList } from '@bridgeup/shared';
+import type { BookmarkList } from '@crossroads/shared';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { EmptyState } from '@/components/shared/EmptyState';

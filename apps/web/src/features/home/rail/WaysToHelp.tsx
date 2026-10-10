@@ -1,7 +1,7 @@
 import type { ComponentType } from 'react';
 import { Link } from 'react-router';
 import { ArrowRight, HandHeart, Inbox, MessageCircleQuestion, NotebookPen, Sparkles } from 'lucide-react';
-import type { RailData } from '@bridgeup/shared';
+import type { RailData } from '@crossroads/shared';
 import { RailCard } from './RailCard';
 
 const WAY_ICON: Record<string, ComponentType<{ className?: string }>> = {

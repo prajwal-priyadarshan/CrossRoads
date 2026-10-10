@@ -1,4 +1,4 @@
-import { INTERESTS, SKILLS } from '@bridgeup/shared';
+import { INTERESTS, SKILLS } from '@crossroads/shared';
 import { ChipPicker } from './ChipPicker';
 
 const SUGGESTIONS = [...new Set<string>([...SKILLS, ...INTERESTS])];

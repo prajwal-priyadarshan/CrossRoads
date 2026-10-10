@@ -1,7 +1,7 @@
 import { prisma } from '../../lib/prisma';
 import { notFound, conflict } from '../../lib/errors';
 import { notifyMany } from '../../services/notify';
-import type { ReportCreateInput } from '@bridgeup/shared';
+import type { ReportCreateInput } from '@crossroads/shared';
 
 export async function createReport(userId: string, input: ReportCreateInput) {
   const { targetType, targetId, reason, details } = input;

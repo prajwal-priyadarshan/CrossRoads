@@ -1,4 +1,4 @@
-import type { Advisor, TeamCard, TeamCreateInput, TeamDetail, TeamListQuery } from '@bridgeup/shared';
+import type { Advisor, TeamCard, TeamCreateInput, TeamDetail, TeamListQuery } from '@crossroads/shared';
 import type { Prisma } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
 import { badRequest, conflict, notFound } from '../../lib/errors';

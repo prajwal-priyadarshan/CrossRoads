@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { registerSchema, verifySchema, loginSchema, emailOnlySchema, demoLoginSchema } from '@bridgeup/shared';
+import { registerSchema, verifySchema, loginSchema, emailOnlySchema, demoLoginSchema } from '@crossroads/shared';
 import { validate } from '../../middleware/validate';
 import { authLimiter } from '../../middleware/rateLimits';
 import { requireAuth } from '../../middleware/auth';

@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 // config/env.ts validates process.env once, at import time. dotenv never overwrites a variable that
 // is already set, so these win over a local .env and the expectations below hold on any machine.
 process.env.ALLOWED_EMAIL_DOMAINS = 'Amrita.edu, college.ac.in';
-process.env.DATABASE_URL = 'postgresql://user:pass@localhost:5432/bridgeup_test';
+process.env.DATABASE_URL = 'postgresql://user:pass@localhost:5432/crossroads_test';
 process.env.JWT_SECRET = 'a'.repeat(64);
 process.env.SESSION_DAYS = '7';
 
@@ -11,7 +11,7 @@ process.env.SESSION_DAYS = '7';
 const { isAllowedDomain } = await import('../../src/modules/auth/auth.service');
 const { signSession, verifySession } = await import('../../src/lib/jwt');
 const { hashPassword, verifyPassword } = await import('../../src/lib/password');
-const { emailSchema } = await import('@bridgeup/shared');
+const { emailSchema } = await import('@crossroads/shared');
 
 describe('isAllowedDomain', () => {
   it('accepts every configured domain and their subdomains', () => {

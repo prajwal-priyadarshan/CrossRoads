@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import { useQuery } from '@tanstack/react-query';
-import type { PublicProfile, UserLite } from '@bridgeup/shared';
+import type { PublicProfile, UserLite } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { MatchRing } from '@/components/shared/MatchRing';
 import { ReasonChip } from '@/components/shared/ReasonChip';

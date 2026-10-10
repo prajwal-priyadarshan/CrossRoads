@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { alertPrefsSchema } from '@bridgeup/shared';
+import { alertPrefsSchema } from '@crossroads/shared';
 import { requireOnboarded } from '../../middleware/auth';
 import { validate } from '../../middleware/validate';
 import { writeLimiter } from '../../middleware/rateLimits';

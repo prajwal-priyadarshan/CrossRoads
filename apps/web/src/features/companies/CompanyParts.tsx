@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import { Check, Circle } from 'lucide-react';
-import type { CompanyDetail } from '@bridgeup/shared';
+import type { CompanyDetail } from '@crossroads/shared';
 import { Progress } from '@/components/ui/progress';
 import { PREP_CATEGORY_LABEL, ROUND_TYPE_LABEL, ROUND_TYPE_PILL } from '@/lib/labels';
 import { cn, titleCase } from '@/lib/utils';

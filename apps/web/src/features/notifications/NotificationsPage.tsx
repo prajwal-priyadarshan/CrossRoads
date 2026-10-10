@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Bell } from 'lucide-react';
 import { isToday, isThisWeek } from 'date-fns';
-import { NOTIFICATION_GROUPS, type NotificationItem } from '@bridgeup/shared';
+import { NOTIFICATION_GROUPS, type NotificationItem } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { EmptyState } from '@/components/shared/EmptyState';

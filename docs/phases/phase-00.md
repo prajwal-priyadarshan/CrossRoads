@@ -22,7 +22,7 @@
 
 ## 1. What you will have at the end of this phase
 
-- `bridgeup/` repository with npm workspaces: `apps/web`, `apps/api`, `packages/shared`.
+- `crossroads/` repository with npm workspaces: `apps/web`, `apps/api`, `packages/shared`.
 - `npm run dev` at the root starts both apps; the web app shows the landing page at `http://localhost:5173` and the app shell at `/home` (temporary, no auth yet).
 - `http://localhost:5173/api/health` returns `{"data":{"ok":true}}` (proving the Vite proxy works).
 - Design tokens for light and dark mode, fonts, shadcn/ui components installed, toasts working, theme toggle working.
@@ -78,7 +78,7 @@
 ### Step 1 — Create the repository and workspaces (5 min)
 
 ```bash
-mkdir bridgeup && cd bridgeup
+mkdir crossroads && cd crossroads
 git init
 npm init -y
 mkdir -p apps packages/shared/src docs/phases
@@ -88,7 +88,7 @@ Replace the root `package.json` with:
 
 ```json
 {
-  "name": "bridgeup",
+  "name": "crossroads",
   "private": true,
   "workspaces": ["apps/*", "packages/*"],
   "scripts": {
@@ -133,7 +133,7 @@ Copy `PRD.md`, `TRD.md` and the `phases/` folder into `docs/`.
 
 ```json
 {
-  "name": "@bridgeup/shared",
+  "name": "@crossroads/shared",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -289,7 +289,7 @@ cd apps/api
 npm init -y
 npm i express cors helmet cookie-parser pino pino-http dotenv zod
 npm i -D typescript tsx tsup @types/express @types/cors @types/cookie-parser @types/node pino-pretty
-npm i @bridgeup/shared@* # links the workspace package (or add "@bridgeup/shared": "*" to dependencies and run npm i at the root)
+npm i @crossroads/shared@* # links the workspace package (or add "@crossroads/shared": "*" to dependencies and run npm i at the root)
 cd ../..
 ```
 
@@ -299,7 +299,7 @@ cd ../..
 
 ```json
 {
-  "name": "@bridgeup/api",
+  "name": "@crossroads/api",
   "private": true,
   "type": "module",
   "scripts": {
@@ -352,7 +352,7 @@ export default defineConfig({
   outDir: 'dist',
   clean: true,
   sourcemap: true,
-  noExternal: ['@bridgeup/shared'], // bundle the TS shared package into the API build
+  noExternal: ['@crossroads/shared'], // bundle the TS shared package into the API build
 });
 ```
 
@@ -449,7 +449,7 @@ npm i
 npm i react-router @tanstack/react-query zustand react-hook-form @hookform/resolvers zod sonner lucide-react motion date-fns recharts clsx tailwind-merge
 npm i @fontsource-variable/inter @fontsource-variable/plus-jakarta-sans
 npm i -D tailwindcss @tailwindcss/vite @types/node
-npm i @bridgeup/shared@*   # or add "@bridgeup/shared": "*" and run npm i at the root
+npm i @crossroads/shared@*   # or add "@crossroads/shared": "*" and run npm i at the root
 cd ../..
 ```
 
@@ -542,7 +542,7 @@ export const useTheme = () => useContext(Ctx);
 </script>
 ```
 
-Also set `<title>BridgeUp — learn from those who walked your path</title>`, a meta description, and `<link rel="icon" href="/favicon.svg">`.
+Also set `<title>Crossroads — learn from those who walked your path</title>`, a meta description, and `<link rel="icon" href="/favicon.svg">`.
 
 4. `apps/web/src/lib/storage.ts`:
 
@@ -682,7 +682,7 @@ export const MOBILE_NAV = [
 **Sidebar** — `components/layout/Sidebar.tsx` (desktop, `hidden lg:flex`):
 
 - 248px wide, `fixed inset-y-0 left-0`, `border-r bg-card/60 backdrop-blur`, vertical flex.
-- Top: logo (SVG mark + "BridgeUp" in `font-display font-bold text-lg`), links to `/home`.
+- Top: logo (SVG mark + "Crossroads" in `font-display font-bold text-lg`), links to `/home`.
 - Three labelled groups (micro labels "Community", "Career", "Campus" in `text-xs uppercase tracking-wider text-muted-foreground px-3 mt-6 mb-1`).
 - Each item is a `NavLink` with classes: base `flex items-center gap-3 rounded-xl px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground transition`; active `bg-primary-soft text-primary` plus a 3px left indicator (`before:` pseudo-element or an absolutely positioned span).
 - Bottom: footer links + the **user card** (avatar, name, role badge, level for seniors/alumni) — a placeholder in this phase; wired to `useMe` in Phase 02.
@@ -734,7 +734,7 @@ Create in `apps/web/src/components/shared/`:
 |---|---|---|
 | `UserAvatar` | `user: { id, fullName, avatarUrl? }`, `size?: 'sm' \| 'md' \| 'lg' \| 'xl'` | shadcn `Avatar`; fallback shows `initials()` in white on `gradientFor(id)`; sizes 28/36/48/80px |
 | `RoleBadge` | `role`, `currentYear?` | "First year" (year 1), "Junior" (2–3), "Senior", "Alumni"; indigo-soft pill `text-xs font-medium` |
-| `VerifiedBadge` | — | Emerald `BadgeCheck` icon 14px with tooltip "Verified by BridgeUp admins" |
+| `VerifiedBadge` | — | Emerald `BadgeCheck` icon 14px with tooltip "Verified by Crossroads admins" |
 | `SelfReportedBadge` | — | Grey outline pill "Self-reported" with tooltip "Shared by the author; not independently verified" |
 | `ReasonChip` | `children` | `inline-flex items-center gap-1 rounded-full bg-primary-soft px-2.5 py-0.5 text-xs font-medium text-primary` with a 12px `Sparkles` icon |
 | `MatchRing` | `score: number`, `size?: number` | SVG circle (radius 18, stroke 4), track `stroke-muted`, progress coloured: ≥ 70 `text-success`, 40–69 `text-primary`, else `text-muted-foreground`; centre text `text-[11px] font-semibold tabular`; `aria-label="Match score 82 out of 100"` |
@@ -785,7 +785,7 @@ Copy it as `favicon.svg`.
 3. **Three value cards:** Ask a Senior · Find your people · Know every company (icon, title, 2-line description).
 4. **How it works:** 3 numbered steps (Join with college email → Tell us your goals → Get answers, people and a plan).
 5. **Wellbeing promise:** "No rankings. No pressure. Just people who want you to do well." with a link to Support.
-6. **Footer:** © BridgeUp, Support, Stories.
+6. **Footer:** © Crossroads, Support, Stories.
 
 **Router** — `apps/web/src/router.tsx` (temporary version; guards come in Phase 02):
 
@@ -803,7 +803,7 @@ export const router = createBrowserRouter([
 ]);
 ```
 
-**Temporary HomePage** shows `PageHeader` "Welcome to BridgeUp", one sample `ReasonChip`, a `MatchRing score={82}`, a "Ping API" button that calls `api('/health')` and shows a success toast with the time.
+**Temporary HomePage** shows `PageHeader` "Welcome to Crossroads", one sample `ReasonChip`, a `MatchRing score={82}`, a "Ping API" button that calls `api('/health')` and shows a success toast with the time.
 
 ### Step 9 — Run everything (2 min)
 
@@ -871,7 +871,7 @@ Create a GitHub repository and push (`git remote add origin …`, `git push -u o
 | 0.6 | Stop the API, click "Ping API" | Red toast "Something went wrong" (the app does not crash) |
 | 0.7 | Visit `/nope` | Friendly 404 page with a link home |
 | 0.8 | Tab through the landing page | Visible focus ring on every link and button |
-| 0.9 | In a component, `import { TOPICS } from '@bridgeup/shared'` and render the names | Six topic names appear |
+| 0.9 | In a component, `import { TOPICS } from '@crossroads/shared'` and render the names | Six topic names appear |
 
 ---
 
@@ -882,7 +882,7 @@ Create a GitHub repository and push (`git remote add origin …`, `git push -u o
 | `Cannot find module '@/…'` in the editor but Vite works | Add the `paths` alias to `tsconfig.app.json` too and restart the TS server |
 | shadcn `init` says no Tailwind config found | Make sure `@import "tailwindcss";` is in the CSS file referenced by `main.tsx`, and `@tailwindcss/vite` is in `vite.config.ts`; check shadcn's Vite guide |
 | `/api/health` returns the Vite HTML page | The proxy isn't configured or the API isn't running on port 4000 |
-| Import from `@bridgeup/shared` fails | Run `npm install` at the root so the workspace link exists; check the package `name` matches |
+| Import from `@crossroads/shared` fails | Run `npm install` at the root so the workspace link exists; check the package `name` matches |
 | Fonts don't change | Import the font packages in `main.tsx` and check the `--font-sans`/`--font-display` names match the package's font-family names |
 
 ---

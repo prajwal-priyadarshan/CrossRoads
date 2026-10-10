@@ -1,4 +1,4 @@
-import type { RoadmapCreateInput, RoadmapListQuery } from '@bridgeup/shared';
+import type { RoadmapCreateInput, RoadmapListQuery } from '@crossroads/shared';
 import type { Prisma } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
 import { notFound } from '../../lib/errors';

@@ -1,4 +1,4 @@
-import { clubReviewSchema, experienceCreateSchema, roadmapCreateSchema } from '@bridgeup/shared';
+import { clubReviewSchema, experienceCreateSchema, roadmapCreateSchema } from '@crossroads/shared';
 import { prisma } from '../src/lib/prisma';
 import { env } from '../src/config/env';
 import { createExperience } from '../src/modules/experiences/experiences.service';

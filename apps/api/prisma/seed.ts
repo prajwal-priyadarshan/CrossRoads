@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { prisma } from '../src/lib/prisma';
 import { env } from '../src/config/env';
-import { TOPICS, BADGES } from '@bridgeup/shared';
+import { TOPICS, BADGES } from '@crossroads/shared';
 import { companies } from './data/companies';
 import { clubs } from './data/clubs';
 import { events } from './data/events';

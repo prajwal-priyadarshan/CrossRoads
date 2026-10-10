@@ -1,6 +1,6 @@
 import { Link, useSearchParams } from 'react-router';
 import { Map as MapIcon, Plus } from 'lucide-react';
-import type { RoadmapSummary } from '@bridgeup/shared';
+import type { RoadmapSummary } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { PageHeader } from '@/components/layout/PageHeader';

@@ -1,4 +1,4 @@
-import type { SearchGroup, SearchHit, SearchQuery } from '@bridgeup/shared';
+import type { SearchGroup, SearchHit, SearchQuery } from '@crossroads/shared';
 import { Prisma } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
 import { titleCase } from '../../lib/text';

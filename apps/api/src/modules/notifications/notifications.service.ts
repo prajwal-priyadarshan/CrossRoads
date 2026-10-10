@@ -4,7 +4,7 @@ import {
   type NotificationListQuery,
   type NotificationPage,
   type NotificationType,
-} from '@bridgeup/shared';
+} from '@crossroads/shared';
 import type { Prisma } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
 import { decodeCursor, encodeCursor } from '../../lib/pagination';

@@ -1,4 +1,4 @@
-import type { TeamApplicant } from '@bridgeup/shared';
+import type { TeamApplicant } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { RelativeTime } from '@/components/shared/RelativeTime';
 import { RoleBadge } from '@/components/shared/RoleBadge';

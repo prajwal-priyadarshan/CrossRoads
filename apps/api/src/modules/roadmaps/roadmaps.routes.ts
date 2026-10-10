@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { roadmapCreateSchema, roadmapListQuerySchema, roadmapStepToggleSchema, roadmapGenerateSchema } from '@bridgeup/shared';
+import { roadmapCreateSchema, roadmapListQuerySchema, roadmapStepToggleSchema, roadmapGenerateSchema } from '@crossroads/shared';
 import { requireOnboarded } from '../../middleware/auth';
 import { validate } from '../../middleware/validate';
 import { writeLimiter, aiLimiter } from '../../middleware/rateLimits';

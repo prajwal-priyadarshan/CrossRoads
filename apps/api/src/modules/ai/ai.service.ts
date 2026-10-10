@@ -4,7 +4,7 @@ import { AppError } from '../../lib/errors';
 import { cached } from '../../lib/cache';
 import { generateJSON } from '../../lib/ai';
 import { getRelatedAnswers } from '../../services/retrieval';
-import { aiAnswerOut, aiSummaryOut } from '@bridgeup/shared';
+import { aiAnswerOut, aiSummaryOut } from '@crossroads/shared';
 import { env, aiEnabled } from '../../config/env';
 
 const ANSWER_SYSTEM_PROMPT = `You are a helpful campus assistant. Answer the student's question using ONLY the provided sources from seniors. Use citation format [n] to reference sources. Keep the answer under 300 words. Return only valid JSON.`;

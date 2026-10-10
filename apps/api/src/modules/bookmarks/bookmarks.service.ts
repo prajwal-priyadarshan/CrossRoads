@@ -1,4 +1,4 @@
-import type { BookmarkInput } from '@bridgeup/shared';
+import type { BookmarkInput } from '@crossroads/shared';
 import { prisma } from '../../lib/prisma';
 import { notFound } from '../../lib/errors';
 import { postInclude, toPostCard } from '../posts/posts.serializers';

@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage, type StateStorage } from 'zustand/middleware';
 import type { z } from 'zod';
 import { STORAGE_KEYS } from '@/lib/storageKeys';
-import type { stepAboutSchema, stepSkillsSchema, stepGoalsSchema, stepConnectSchema } from '@bridgeup/shared';
+import type { stepAboutSchema, stepSkillsSchema, stepGoalsSchema, stepConnectSchema } from '@crossroads/shared';
 
 // sessionStorage can throw (private mode, blocked storage); never let that break the wizard.
 const safeSession: StateStorage = {

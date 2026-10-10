@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { peopleQuerySchema } from '@bridgeup/shared';
+import { peopleQuerySchema } from '@crossroads/shared';
 import { requireOnboarded } from '../../middleware/auth';
 import { validate } from '../../middleware/validate';
 import { discoverPeople, suggestedPeople } from './people.service';

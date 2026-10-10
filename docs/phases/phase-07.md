@@ -14,7 +14,7 @@
 > - Import Prisma types from the generated client: `import type { Prisma } from '../../generated/prisma/client'` (not `@prisma/client`).
 > - Paginated lists return `{ data: { items, nextCursor } }`; use `LIMITS.PAGE_SIZE` from `src/config/constants.ts`, never a literal.
 > - No hardcoded settings: deployment values go in `src/config/env.ts` (+ `.env.example`); tuning numbers in `src/config/constants.ts`; topic ids come from `GET /topics` (never `index + 1`).
-> - Routes declare `requireAuth` / `requireOnboarded` / `requireRole('ADMIN')` and `validate({ body, query })` with schemas from `@bridgeup/shared`; read input from `req.valid`.
+> - Routes declare `requireAuth` / `requireOnboarded` / `requireRole('ADMIN')` and `validate({ body, query })` with schemas from `@crossroads/shared`; read input from `req.valid`.
 > - Every new endpoint gets a row in `apps/api/src/docs/openapi.ts` (Swagger at `/api/docs`) and, where useful, a check in `apps/api/scripts/smoke.ts`.
 > - Transactions that award points, evaluate badges and notify run inside `prisma.$transaction` (timeout configured in `src/lib/prisma.ts`).
 > - Before committing: `npm run typecheck && npm test && npm run build`, then `npm run smoke` against a running API.

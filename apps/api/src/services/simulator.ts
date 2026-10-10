@@ -1,7 +1,7 @@
 import { prisma } from '../lib/prisma';
 import { env, aiEnabled } from '../config/env';
 import { generateJSON } from '../lib/ai';
-import { aiQuestionOut, aiGradeOut } from '@bridgeup/shared';
+import { aiQuestionOut, aiGradeOut } from '@crossroads/shared';
 import { pickFromBank } from './questionBank';
 
 export async function topicPool(companyId: string, roundType: string) {

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { Me, RegisterInput, LoginInput } from '@bridgeup/shared';
+import type { Me, RegisterInput, LoginInput } from '@crossroads/shared';
 import { api } from '@/lib/api';
 import { qk } from '@/lib/queryKeys';
 

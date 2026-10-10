@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import { TrendingUp } from 'lucide-react';
-import type { RailData } from '@bridgeup/shared';
+import type { RailData } from '@crossroads/shared';
 import { AppIcon } from '@/components/shared/AppIcon';
 import { RailCard } from './RailCard';
 

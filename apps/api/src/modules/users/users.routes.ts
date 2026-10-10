@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { onboardingSchema, profileUpdateSchema, milestoneSchema } from '@bridgeup/shared';
+import { onboardingSchema, profileUpdateSchema, milestoneSchema } from '@crossroads/shared';
 import { requireAuth, requireOnboarded } from '../../middleware/auth';
 import { prisma } from '../../lib/prisma';
 import { notFound } from '../../lib/errors';

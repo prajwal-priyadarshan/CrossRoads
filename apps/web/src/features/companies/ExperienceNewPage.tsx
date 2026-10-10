@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import { ArrowDown, ArrowUp, Loader2, Plus, Star, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { experienceCreateSchema, experienceRoundSchema, ROUND_TYPES, type ExperienceRound } from '@bridgeup/shared';
+import { experienceCreateSchema, experienceRoundSchema, ROUND_TYPES, type ExperienceRound } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';

@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { prisma } from '../lib/prisma';
 import { env, aiEnabled } from '../config/env';
 import { generateJSON } from '../lib/ai';
-import { aiRoadmapOut } from '@bridgeup/shared';
+import { aiRoadmapOut } from '@crossroads/shared';
 import { findTwins } from './twins';
 
 const GOAL_LABEL: Record<string, string> = {

@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router';
-import type { PersonCard as Person } from '@bridgeup/shared';
+import type { PersonCard as Person } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { MatchRing } from '@/components/shared/MatchRing';

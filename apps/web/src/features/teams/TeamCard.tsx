@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import { Clock, Rocket } from 'lucide-react';
-import type { TeamCard as TeamCardType } from '@bridgeup/shared';
+import type { TeamCard as TeamCardType } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { APPLICATION_PILL, TEAM_STATUS_PILL } from '@/lib/labels';
 import { cn, titleCase } from '@/lib/utils';

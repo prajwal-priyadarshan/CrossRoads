@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import type { AppConfig } from '@bridgeup/shared';
+import type { AppConfig } from '@crossroads/shared';
 import { api } from '@/lib/api';
 import { qk } from '@/lib/queryKeys';
 

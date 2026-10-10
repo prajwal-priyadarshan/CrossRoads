@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { searchQuerySchema } from '@bridgeup/shared';
+import { searchQuerySchema } from '@crossroads/shared';
 import { requireOnboarded } from '../../middleware/auth';
 import { validate } from '../../middleware/validate';
 import { search } from './search.service';

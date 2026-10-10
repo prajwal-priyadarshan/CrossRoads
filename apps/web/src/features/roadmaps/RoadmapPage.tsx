@@ -1,7 +1,7 @@
 import type { ComponentType } from 'react';
 import { Link, useParams } from 'react-router';
 import { AlertTriangle, BookOpen, Brain, Check, Hammer, Map as MapIcon, Target } from 'lucide-react';
-import type { RoadmapStepView } from '@bridgeup/shared';
+import type { RoadmapStepView } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Progress } from '@/components/ui/progress';

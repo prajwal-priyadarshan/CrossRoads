@@ -1,5 +1,5 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import type { FeedPage, RailData } from '@bridgeup/shared';
+import type { FeedPage, RailData } from '@crossroads/shared';
 import { api } from '@/lib/api';
 import { qk } from '@/lib/queryKeys';
 import { storage } from '@/lib/storage';

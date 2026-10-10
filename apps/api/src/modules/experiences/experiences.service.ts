@@ -1,4 +1,4 @@
-import type { ExperienceCreateInput } from '@bridgeup/shared';
+import type { ExperienceCreateInput } from '@crossroads/shared';
 import { prisma } from '../../lib/prisma';
 import { badRequest, forbidden, notFound } from '../../lib/errors';
 import { normalizeTag } from '../../lib/text';

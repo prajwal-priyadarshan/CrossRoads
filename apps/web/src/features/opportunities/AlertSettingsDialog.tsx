@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Loader2 } from 'lucide-react';
-import { OPPORTUNITY_TYPES, type OpportunityType } from '@bridgeup/shared';
+import { OPPORTUNITY_TYPES, type OpportunityType } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';

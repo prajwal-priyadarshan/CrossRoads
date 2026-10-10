@@ -8,7 +8,7 @@ const csv = z.string().transform((s) => s.split(',').map((d) => d.trim().toLower
 const schema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   PORT: z.coerce.number().default(4000),
-  APP_NAME: z.string().default('BridgeUp'),
+  APP_NAME: z.string().default('Crossroads'),
   WEB_ORIGIN: z.string().default('http://localhost:5173'),
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).optional(),
 
@@ -21,12 +21,12 @@ const schema = z.object({
   ALLOWED_EMAIL_DOMAINS: csv,
   DEMO_MODE: bool('false'),
   DEMO_LOGIN_HANDLES: csv.default('ananya,rahul,meera,admin'),
-  DEMO_EMAIL_SUFFIX: z.string().default('@demo.bridgeup'),
+  DEMO_EMAIL_SUFFIX: z.string().default('@demo.crossroads'),
 
   // Email
   EMAIL_MODE: z.enum(['console', 'resend']).default('console'),
   RESEND_API_KEY: z.string().optional(),
-  EMAIL_FROM: z.string().default('BridgeUp <no-reply@example.com>'),
+  EMAIL_FROM: z.string().default('Crossroads <no-reply@example.com>'),
 
   // AI (Phase 09)
   // Any OpenAI-compatible provider; defaults to Groq's free tier

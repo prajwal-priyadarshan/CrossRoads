@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
 import { CheckCircle2, Circle } from 'lucide-react';
-import type { RailData } from '@bridgeup/shared';
+import type { RailData } from '@crossroads/shared';
 import { Progress } from '@/components/ui/progress';
 import { cn } from '@/lib/utils';
 import { RailCard } from './RailCard';

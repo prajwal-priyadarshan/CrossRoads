@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { feedQuerySchema } from '@bridgeup/shared';
+import { feedQuerySchema } from '@crossroads/shared';
 import { requireOnboarded } from '../../middleware/auth';
 import { validate } from '../../middleware/validate';
 import { getFeed } from './feed.service';

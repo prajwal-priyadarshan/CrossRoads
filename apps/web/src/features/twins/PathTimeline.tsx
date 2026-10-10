@@ -1,7 +1,7 @@
 import type { ComponentType } from 'react';
 import { motion } from 'motion/react';
 import { BookOpen, Briefcase, Building2, Code2, Rocket, Trophy, Users } from 'lucide-react';
-import type { MilestoneCategory, TwinMilestone } from '@bridgeup/shared';
+import type { MilestoneCategory, TwinMilestone } from '@crossroads/shared';
 import { cn } from '@/lib/utils';
 
 export const MILESTONE_STYLE: Record<MilestoneCategory, { icon: ComponentType<{ className?: string }>; tone: string; label: string }> = {

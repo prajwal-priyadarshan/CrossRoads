@@ -4,7 +4,7 @@ import { validate } from '../../middleware/validate';
 import {
   reportResolveSchema, adminUserUpdateSchema, allowlistSchema,
   eventUpsertSchema, companyUpsertSchema, clubUpsertSchema, storyUpsertSchema
-} from '@bridgeup/shared';
+} from '@crossroads/shared';
 import * as service from './admin.service';
 
 export const adminRouter = Router();
