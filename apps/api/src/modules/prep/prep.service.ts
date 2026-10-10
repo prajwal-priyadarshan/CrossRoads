@@ -37,7 +37,14 @@ export async function getDashboard(userId: string) {
       const simAvg = latestSim && latestSim.total > 0 ? (latestSim.score / latestSim.total) * 100 : undefined;
       const r = readinessFor(user, c, user.prepItems, simAvg);
       const missing = c.skillsTested.filter((s) => !user.skills.includes(s)).slice(0, 4);
-      return { companyId: c.id, companyName: c.name, companySlug: c.slug, ...r, missing, latestSimScore: latestSim };
+      return {
+        companyId: c.id,
+        companyName: c.name,
+        companySlug: c.slug,
+        ...r,
+        missing,
+        latestSimScore: simAvg == null ? null : Math.round(simAvg),
+      };
     }),
   );
 

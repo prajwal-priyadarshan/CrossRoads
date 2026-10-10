@@ -161,6 +161,15 @@ const ROUTES: Row[] = [
 
   // OA / interview simulator (Phase 09)
   { method: 'post', path: '/sim/sessions', tag: 'Prep', summary: 'Start a simulator session and get the first question', auth: 'onboarded', body: S.simStartSchema },
+  { method: 'get', path: '/sim/sessions', tag: 'Prep', summary: 'Your simulator sessions and scores', auth: 'onboarded' },
+  { method: 'get', path: '/sim/sessions/:id', tag: 'Prep', summary: 'One simulator session with its questions and answers', auth: 'onboarded' },
+  { method: 'post', path: '/sim/sessions/:id/answer', tag: 'Prep', summary: 'Answer the current question; MCQ is graded, others are graded against the rubric', auth: 'onboarded', body: S.simAnswerSchema },
+  { method: 'post', path: '/sim/sessions/:id/finish', tag: 'Prep', summary: 'Finish a session and get topic accuracy and what to revise', auth: 'onboarded' },
+  { method: 'post', path: '/prep/items', tag: 'Prep', summary: 'Add a custom prep item to a track', auth: 'onboarded', body: S.prepItemSchema, status: 201 },
+  { method: 'post', path: '/prep/items/import', tag: 'Prep', summary: 'Import prep items from a company', auth: 'onboarded' },
+  { method: 'patch', path: '/prep/items/:id', tag: 'Prep', summary: 'Tick or rename a prep item', auth: 'onboarded', body: S.prepItemUpdateSchema },
+  { method: 'delete', path: '/prep/items/:id', tag: 'Prep', summary: 'Delete a prep item', auth: 'onboarded' },
+  { method: 'post', path: '/roadmaps/generate', tag: 'Campus', summary: 'Generate a roadmap from alumni journeys and target companies (AI with a non-AI fallback)', auth: 'onboarded', body: S.roadmapGenerateSchema, status: 201 },
 ];
 
 const errorSchema = z.object({

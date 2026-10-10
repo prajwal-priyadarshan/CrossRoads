@@ -180,15 +180,15 @@ export function PrepDashboardPage() {
           <h2 className="font-semibold">Company readiness</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {readiness.map((r) => (
-              <Card key={r.company?.id ?? r.company?.slug}>
+              <Card key={r.companyId}>
                 <CardContent className="pt-4 flex items-start gap-4">
                   <ScoreRing score={r.score} />
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold truncate">{r.company?.name}</p>
+                    <p className="font-semibold truncate">{r.companyName}</p>
                     <p className="text-xs text-muted-foreground">Skills: {r.skill}% matched</p>
-                    {r.missingSkills?.length > 0 && (
+                    {r.missing?.length > 0 && (
                       <div className="flex flex-wrap gap-1 mt-1">
-                        {r.missingSkills.slice(0, 4).map((s: string) => (
+                        {r.missing.map((s: string) => (
                           <Badge key={s} variant="outline" className="text-xs">{s}</Badge>
                         ))}
                       </div>
@@ -198,10 +198,10 @@ export function PrepDashboardPage() {
                     )}
                     <div className="flex gap-2 mt-2">
                       <Button asChild variant="ghost" size="sm" className="h-7 text-xs px-2">
-                        <Link to={`/companies/${r.company?.slug}`}>View company <ChevronRight className="size-3" /></Link>
+                        <Link to={`/companies/${r.companySlug}`}>View company <ChevronRight className="size-3" /></Link>
                       </Button>
                       <Button asChild variant="ghost" size="sm" className="h-7 text-xs px-2">
-                        <Link to={`/prep/simulator?company=${r.company?.slug}`}>Practice</Link>
+                        <Link to={`/prep/simulator?company=${r.companySlug}`}>Practice</Link>
                       </Button>
                     </div>
                   </div>

@@ -34,8 +34,17 @@ export function AdminReports() {
             <p className="text-sm">Reported by: {r.reporter.fullName}</p>
             {r.details && <p className="text-sm italic">"{r.details}"</p>}
             {r.targetPreview && (
-              <div className="p-3 bg-muted rounded-md text-sm">
-                <strong>Preview:</strong> {JSON.stringify(r.targetPreview)}
+              <div className="space-y-1 rounded-md bg-muted p-3 text-sm">
+                <strong>Reported content</strong>
+                {(r.targetPreview as { title?: string }).title && (
+                  <p className="font-medium">{(r.targetPreview as { title?: string }).title}</p>
+                )}
+                {(r.targetPreview as { excerpt?: string }).excerpt && (
+                  <p className="text-muted-foreground">{(r.targetPreview as { excerpt?: string }).excerpt}</p>
+                )}
+                {(r.targetPreview as { author?: string }).author && (
+                  <p className="text-xs">by {(r.targetPreview as { author?: string }).author}</p>
+                )}
               </div>
             )}
             <div className="flex gap-2 pt-2">

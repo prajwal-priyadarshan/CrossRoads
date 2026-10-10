@@ -19,8 +19,10 @@ const createdReportIds: string[] = [];
 
 /** Removes everything the smoke run created, including points and notifications it caused. */
 const createdMessageIds: string[] = [];
+const createdSimIds: string[] = [];
 
 async function cleanup() {
+  if (createdSimIds.length) await prisma.simSession.deleteMany({ where: { id: { in: createdSimIds } } });
   if (createdMessageIds.length) {
     // Remove the smoke messages, then point each thread's preview back at its newest real message
     const touched = await prisma.message.findMany({ where: { id: { in: createdMessageIds } }, select: { conversationId: true } });
@@ -399,6 +401,27 @@ async function main() {
     const id = (expectStatus(await ananya.post('/chat/conversations', { userId: rahulId }), 201) as any).id;
     expectStatus(await suresh.get(`/chat/conversations/${id}/messages`), 404);
     return '403 to start, 404 to read';
+  });
+  await check('prep: readiness names each target company', async () => {
+    const d = (expectStatus(await ananya.get('/prep/dashboard'), 200) as any);
+    const r = d.readiness.find((x: any) => x.companyName);
+    if (!r || !r.companySlug || typeof r.score !== 'number') throw new Error('readiness missing name, slug or score');
+    return `${d.readiness.length} companies`;
+  });
+  await check('sim: start, answer, finish', async () => {
+    const start = expectStatus(await ananya.post('/sim/sessions', { companySlug: 'northwind-labs', roundType: 'APTITUDE', maxQuestions: 3 }), 201) as any;
+    createdSimIds.push(start.session.id);
+    const q = start.question;
+    expectStatus(await ananya.post(`/sim/sessions/${start.session.id}/answer`, { questionId: q.id, answer: '1' }), 200);
+    const done = expectStatus(await ananya.post(`/sim/sessions/${start.session.id}/finish`), 200) as any;
+    if (!Array.isArray(done.revise)) throw new Error('finish did not return revision topics');
+    expectStatus(await ananya.get(`/sim/sessions/${start.session.id}`), 200);
+    return `question ${q.format}, revise ${done.revise.length}`;
+  });
+  await check('ai: answers fall back without an API key', async () => {
+    const r = expectStatus(await ananya.post('/ai/answer', { title: 'How should a first year start DSA?' }), 200) as any;
+    if (!['ok', 'fallback', 'no_sources'].includes(r.status)) throw new Error(`status ${r.status}`);
+    return `status ${r.status}, ${r.sources?.length ?? 0} sources`;
   });
   await check('auth: logout clears the session', async () => {
     const c = await login('meera');
