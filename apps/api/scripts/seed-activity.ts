@@ -385,7 +385,7 @@ async function main() {
     data: { reporterId: priya.id, targetType: 'POST', targetId: allPosts[0]?.id ?? 'none', reason: 'MISLEADING', details: 'The deadline in this post looks wrong. Please check.', status: 'OPEN' },
   });
 
-  console.log(`Seeded ${questions.length} questions, 1 discussion, ${opportunities.length} opportunities, 3 teams, 2 stories, ${connections.length} connections, ${threads.length} chat threads. ${events.length} events, ${campaigns.length} campaigns, 1 official post. Admin: ${admin.handle}`);
+  console.log(`Seeded ${questions.length} questions, 1 discussion, ${opportunities.length} opportunities, 3 teams, ${2 + moreStories.length} stories, ${connections.length} connections, ${threads.length} chat threads. ${events.length} events, ${campaigns.length} campaigns, 1 official post. Admin: ${admin.handle}`);
 }
 
 main()

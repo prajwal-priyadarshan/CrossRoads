@@ -519,6 +519,18 @@ async function main() {
   await check('auth: sign-up without the data notice is refused', async () => {
     expectStatus(await new Client().post('/auth/register', { fullName: 'No Consent', email: 'noconsent@gmail.com', password: 'secret123' }), 400);
   });
+  await check('guide: answers from the project docs, or says nothing matches', async () => {
+    const hit = expectStatus(await ananya.post('/guide/ask', { question: 'How does matching work for people?' }), 200) as any;
+    if (hit.status === 'no_match' || !hit.sources.length) throw new Error('no sources for a project question');
+    const miss = expectStatus(await ananya.post('/guide/ask', { question: 'What is the capital of France?' }), 200) as any;
+    if (miss.status !== 'no_match' || miss.sources.length) throw new Error('off-topic question should not invent sources');
+    return `${hit.status} with ${hit.sources.length} sources`;
+  });
+  await check('stories: published stories with a spotlight', async () => {
+    const list = expectStatus(await anon.get('/stories'), 200) as any;
+    if (list.items.length < 4) throw new Error(`only ${list.items.length} stories`);
+    return `${list.items.length} stories`;
+  });
   await check('auth: logout clears the session', async () => {
     const c = await login('meera');
     expectStatus(await c.post('/auth/logout'), 200);

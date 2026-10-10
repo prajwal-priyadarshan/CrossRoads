@@ -6,6 +6,7 @@ import { MobileNav } from './MobileNav';
 import { CommandPalette } from './CommandPalette';
 import { useChatStream } from '@/features/chat/useChatStream';
 import { useMe } from '@/hooks/useMe';
+import { ProjectGuide } from '@/features/guide/ProjectGuide';
 
 export function AppShell() {
   const { data: me } = useMe();
@@ -21,6 +22,7 @@ export function AppShell() {
       </div>
       <MobileNav />
       <CommandPalette />
+      <ProjectGuide />
       <BadgeCelebration />
     </div>
   );
