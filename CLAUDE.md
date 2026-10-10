@@ -15,6 +15,7 @@ BridgeUp is a college-community/mentorship platform (juniors <-> seniors/alumni:
 - zod is pinned to v3 everywhere.
 - Prisma is pinned to **7.10.0** (npm `latest` is an 8.0 rc). Prisma 7 specifics: generator `prisma-client` writes to `apps/api/src/generated/prisma` (gitignored; import `PrismaClient`/`Prisma` from `../generated/prisma/client`, run `prisma generate` after install), the datasource URL lives in `apps/api/prisma.config.ts` (uses `DIRECT_URL`), and the app client needs the `@prisma/adapter-pg` driver adapter with the pooled `DATABASE_URL` (`src/lib/prisma.ts`).
 - Database is Neon. Connection strings must not include `channel_binding=require` (Prisma P1001 otherwise). Secrets live only in the gitignored `apps/api/.env`.
+- Only `amrita.edu` and its subdomains (e.g. `am.students.amrita.edu`) may register, via `ALLOWED_EMAIL_DOMAINS=amrita.edu` and the suffix match in `auth.service.ts` (`isAllowedDomain`). Alumni need an `AllowedEmail` invite.
 - Write multi-file edits with the Write tool; large shell heredocs batches were unreliable here.
 
 ## Document map (read in this order)

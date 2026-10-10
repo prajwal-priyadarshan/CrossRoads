@@ -1,5 +1,6 @@
 import type { ComponentType } from 'react';
-import { NavLink } from 'react-router';
+import { Link, NavLink } from 'react-router';
+import { useMe } from '@/hooks/useMe';
 import { cn } from '@/lib/utils';
 import { Logo } from './Logo';
 import { UserAvatar } from '@/components/shared/UserAvatar';
@@ -37,6 +38,7 @@ function Group({ label, items }: { label?: string; items: Item[] }) {
 }
 
 export function Sidebar() {
+  const { data: me } = useMe();
   return (
     <aside className="fixed inset-y-0 left-0 z-40 hidden w-[248px] flex-col border-r bg-card/60 px-3 py-4 backdrop-blur lg:flex">
       <Logo className="px-3 pb-2" />
@@ -46,15 +48,16 @@ export function Sidebar() {
         <Group label="Campus" items={CAMPUS_NAV} />
       </div>
       <div className="space-y-3 border-t pt-3">
-        <Group items={FOOTER_NAV.filter((i) => !i.adminOnly)} />
-        {/* Placeholder user card: wired to useMe in Phase 02 */}
-        <div className="flex items-center gap-3 rounded-xl bg-muted/60 p-2.5">
-          <UserAvatar user={{ id: 'guest', fullName: 'Guest' }} size="md" />
-          <div className="min-w-0">
-            <p className="truncate text-sm font-semibold">Guest</p>
-            <RoleBadge role="STUDENT" currentYear={1} />
-          </div>
-        </div>
+        <Group items={FOOTER_NAV.filter((i) => !i.adminOnly || me?.role === 'ADMIN')} />
+        {me && (
+          <Link to="/me" className="flex items-center gap-3 rounded-xl bg-muted/60 p-2.5 transition hover:bg-muted">
+            <UserAvatar user={me} size="md" />
+            <div className="min-w-0">
+              <p className="truncate text-sm font-semibold">{me.fullName}</p>
+              <RoleBadge role={me.role} currentYear={me.currentYear} />
+            </div>
+          </Link>
+        )}
       </div>
     </aside>
   );
