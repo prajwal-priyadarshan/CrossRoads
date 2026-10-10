@@ -17,6 +17,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { ProfileSkeleton } from '@/components/shared/Skeletons';
 import { ConnectDialog } from '@/features/people/ConnectDialog';
+import { ReportButton } from '@/components/shared/ReportButton';
 import { APPLICATION_PILL, TEAM_STATUS_PILL } from '@/lib/labels';
 import { cn, titleCase } from '@/lib/utils';
 import { useMe } from '@/hooks/useMe';
@@ -60,6 +61,7 @@ export function TeamPage() {
             <span className={cn('self-center rounded-full px-2.5 py-0.5 text-xs font-medium', TEAM_STATUS_PILL[team.status])}>
               {titleCase(team.status.toLowerCase())}
             </span>
+            {!team.isOwner && <ReportButton targetType="TEAM" targetId={team.id} />}
           </>
         }
       />

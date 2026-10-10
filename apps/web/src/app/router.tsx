@@ -55,6 +55,10 @@ const appRoutes: RouteObject[] = [
   { path: '/teams/:id', ...page(() => import('@/features/teams/TeamPage'), 'TeamPage') },
   { path: '/notifications', ...page(() => import('@/features/notifications/NotificationsPage'), 'NotificationsPage') },
 
+  // Success stories (Phase 08)
+  { path: '/stories', ...page(() => import('@/features/stories/StoriesPage'), 'StoriesPage') },
+  { path: '/stories/:slug', ...page(() => import('@/features/stories/StoryPage'), 'StoryPage') },
+
   // Admin (Phase 08)
   { element: <RequireAdmin />, children: [{ path: '/admin', ...page(() => import('@/features/admin/AdminPage'), 'AdminPage') }] },
   
@@ -77,7 +81,7 @@ export const router = createBrowserRouter([
           { path: '/verify', ...page(() => import('@/features/auth/VerifyPage'), 'VerifyPage') },
         ],
       },
-      // Phase 08 / 10: /stories, /stories/:slug, /support (public)
+      // Phase 10: /support (public)
       {
         element: <RequireAuth />,
         children: [

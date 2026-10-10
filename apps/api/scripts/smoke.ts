@@ -15,6 +15,7 @@ type Res = { status: number; body: any };
 const results: { name: string; ok: boolean; detail: string }[] = [];
 const createdPostIds: string[] = [];
 const createdTeamIds: string[] = [];
+const createdReportIds: string[] = [];
 
 /** Removes everything the smoke run created, including points and notifications it caused. */
 async function cleanup() {
@@ -22,6 +23,11 @@ async function cleanup() {
     // Applications cascade with the team; the notifications they caused link to /teams/<id>
     await prisma.notification.deleteMany({ where: { OR: createdTeamIds.map((id) => ({ link: { contains: id } })) } });
     await prisma.team.deleteMany({ where: { id: { in: createdTeamIds } } });
+  }
+  if (createdReportIds.length) {
+    // The admin notification it caused has a static link (/admin/reports), not the report id
+    await prisma.notification.deleteMany({ where: { type: 'SYSTEM', link: '/admin/reports', title: 'New report: SPAM' } });
+    await prisma.report.deleteMany({ where: { id: { in: createdReportIds } } });
   }
   if (!createdPostIds.length) return;
   const comments = await prisma.comment.findMany({ where: { postId: { in: createdPostIds } }, select: { id: true } });
@@ -127,6 +133,10 @@ async function main() {
   await check('routing: unknown route gets 404 JSON', async () => {
     expectStatus(await anon.get('/does-not-exist'), 404);
   });
+  await check('stories: public, no session needed', async () => {
+    const d = expectStatus(await anon.get('/stories'), 200);
+    return `${d.items.length} stories, no cookie required`;
+  });
 
   const ananya = await login('ananya');
   const rahul = await login('rahul');
@@ -166,6 +176,7 @@ async function main() {
     ['teams: founder advisors', '/teams/advisors', (d) => `${d.length} advisors`],
     ['notifications: list', '/notifications', (d) => `${d.items.length}`],
     ['notifications: unread count', '/notifications/unread-count', (d) => `${d.count} unread`],
+    ['stories: list', '/stories', (d) => `${d.items.length} stories`],
   ];
   for (const [name, path, describe] of reads) {
     await check(name, async () => describe(expectStatus(await ananya.get(path), 200, path)));
@@ -315,6 +326,26 @@ async function main() {
     const closed = expectStatus(await ananya.get('/teams?includeClosed=true'), 200) as any[];
     if (!closed.some((t) => t.id === team.id)) throw new Error('closed listing missing with includeClosed');
     return 'apply, accept, full and close all behave';
+  });
+
+  await check('flow: report a post, admin notified, duplicate is idempotent', async () => {
+    const topics = expectStatus(await rahul.get('/topics'), 200) as Array<{ id: number; slug: string }>;
+    const topicId = topics[0]!.id;
+    const { id } = expectStatus(
+      await rahul.post('/posts', { kind: 'DISCUSSION', title: 'Smoke test: content to report', topicId, tags: [] }),
+      201,
+      'create post',
+    );
+    createdPostIds.push(id);
+    const first = expectStatus(
+      await ananya.post('/reports', { targetType: 'POST', targetId: id, reason: 'SPAM', details: 'Smoke test report' }),
+      200,
+      'report',
+    );
+    createdReportIds.push(first.id);
+    const again = expectStatus(await ananya.post('/reports', { targetType: 'POST', targetId: id, reason: 'SPAM' }), 200, 'duplicate');
+    if (first.id !== again.id) throw new Error('duplicate report created a second row');
+    return `report ${first.id}`;
   });
 
   await check('auth: logout clears the session', async () => {

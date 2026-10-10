@@ -1,11 +1,12 @@
 import { Link } from 'react-router';
-import { ExternalLink, Flag, MessageSquare, UserPlus } from 'lucide-react';
+import { ExternalLink, MessageSquare, UserPlus } from 'lucide-react';
 import { OPPORTUNITY_TYPES, type OpportunityItem } from '@bridgeup/shared';
 import { Button } from '@/components/ui/button';
 import { AppIcon } from '@/components/shared/AppIcon';
 import { BookmarkButton } from '@/components/shared/BookmarkButton';
 import { ReasonChip } from '@/components/shared/ReasonChip';
 import { RelativeTime } from '@/components/shared/RelativeTime';
+import { ReportButton } from '@/components/shared/ReportButton';
 import { RoleBadge } from '@/components/shared/RoleBadge';
 import { UserAvatar } from '@/components/shared/UserAvatar';
 import { ConnectDialog } from '@/features/people/ConnectDialog';
@@ -94,12 +95,7 @@ export function OpportunityCard({ item, isMine }: { item: OpportunityItem; isMin
             {item.commentCount} {item.commentCount === 1 ? 'comment' : 'comments'}
           </Link>
         </Button>
-        {/* Reporting arrives with moderation in Phase 08 */}
-        <Button size="sm" variant="ghost" className="ml-auto text-muted-foreground" asChild>
-          <Link to={`/post/${item.id}`} aria-label="Open the post to report it">
-            <Flag className="size-3.5" />
-          </Link>
-        </Button>
+        <ReportButton targetType="POST" targetId={item.id} className="ml-auto text-muted-foreground" />
       </div>
     </article>
   );

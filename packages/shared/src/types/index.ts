@@ -5,4 +5,5 @@ export * from './home';
 export * from './campus';
 export * from './teams';
 export * from './notifications';
+export * from './stories';
 export * from './config';
