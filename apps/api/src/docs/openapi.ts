@@ -70,6 +70,7 @@ const ROUTES: Row[] = [
   // Home, bookmarks, search
   { method: 'get', path: '/feed', tag: 'Home', summary: 'Ranked feed with a reason per item', auth: 'onboarded', query: S.feedQuerySchema },
   { method: 'get', path: '/home/rail', tag: 'Home', summary: 'Everything the home right rail needs', auth: 'onboarded', query: S.railQuerySchema },
+  { method: 'get', path: '/alumni/dashboard', tag: 'Home', summary: 'Alumni dashboard: mentees, requests, open questions, own answers (ALUMNI only)', auth: 'onboarded' },
   { method: 'get', path: '/events/week', tag: 'Home', summary: 'Events in the next 7 days for your year', auth: 'onboarded' },
   { method: 'put', path: '/bookmarks', tag: 'Home', summary: 'Toggle a bookmark', auth: 'onboarded', body: S.bookmarkSchema },
   { method: 'get', path: '/bookmarks', tag: 'Home', summary: 'Your bookmarks grouped by type', auth: 'onboarded', query: S.bookmarksQuerySchema },

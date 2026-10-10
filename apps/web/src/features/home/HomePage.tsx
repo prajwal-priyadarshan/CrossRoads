@@ -16,6 +16,7 @@ import { PostCard } from '@/features/community/PostCard';
 import { SortToggle } from '@/features/community/SortToggle';
 import { useFollowTopic, useTopics } from '@/features/community/api';
 import { useFeed, useRail, type FeedTab } from './api';
+import { AlumniDashboard } from '@/features/alumni/AlumniDashboard';
 import {
   PendingRequests,
   QuestsCard,
@@ -136,6 +137,8 @@ export function HomePage() {
   const { data: topics } = useTopics();
 
   if (!me) return <FeedSkeleton />;
+  // Alumni get their own mentoring dashboard, not the student feed and rail
+  if (me.role === 'ALUMNI') return <AlumniDashboard me={me} />;
 
   const r = rail.data;
   const items = feed.data?.pages.flatMap((p) => p.items) ?? [];

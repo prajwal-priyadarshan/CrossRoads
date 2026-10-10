@@ -3,6 +3,7 @@ export const qk = {
   config: ['config'] as const,
   feed: (tab: string, topic?: string) => ['feed', tab, topic ?? 'all'] as const,
   rail: ['home', 'rail'] as const,
+  alumniDashboard: ['alumni', 'dashboard'] as const,
   posts: (params: Record<string, unknown>) => ['posts', params] as const,
   post: (id: string) => ['post', id] as const,
   similar: (q: string) => ['similar', q] as const,
