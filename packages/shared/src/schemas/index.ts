@@ -13,4 +13,7 @@ export * from './alerts';
 export * from './teams';
 export * from './moderation';
 export * from './stories';
+export * from './ai';
+export * from './prep';
+export * from './sim';
 export * from './notifications';

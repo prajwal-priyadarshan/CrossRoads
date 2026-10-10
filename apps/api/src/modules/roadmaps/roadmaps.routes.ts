@@ -11,6 +11,14 @@ roadmapsRouter.get('/roadmaps', requireOnboarded, validate({ query: roadmapListQ
   res.json({ data: await svc.listRoadmaps(req.user!.id, req.valid.query) });
 });
 
+import { gatherContext, deterministicRoadmap } from '../../services/roadmapBuilder';
+
+roadmapsRouter.post('/roadmaps/generate', requireOnboarded, async (req, res) => {
+  const ctx = await gatherContext(req.user!.id, req.body);
+  const out = deterministicRoadmap(ctx, req.body.goalTrack);
+  res.json({ data: out });
+});
+
 roadmapsRouter.get('/roadmaps/:id', requireOnboarded, async (req, res) => {
   res.json({ data: await svc.getRoadmap(req.user!.id, String(req.params.id)) });
 });

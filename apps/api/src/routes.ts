@@ -24,6 +24,9 @@ import { notificationsRouter } from './modules/notifications/notifications.route
 import { gamificationRouter } from './modules/gamification/gamification.routes';
 import { reportsRouter } from './modules/reports/reports.routes';
 import { storiesRouter } from './modules/stories/stories.routes';
+import { aiRouter } from './modules/ai/ai.routes';
+import { prepRouter } from './modules/prep/prep.routes';
+import { simRouter } from './modules/sim/sim.routes';
 import { adminRouter } from './modules/admin/admin.routes';
 export const routes = Router();
 routes.use('/', systemRouter);
@@ -52,3 +55,6 @@ routes.use('/', gamificationRouter);
 routes.use('/', reportsRouter);
 routes.use('/', storiesRouter);
 routes.use('/admin', adminRouter);
+routes.use('/ai', aiRouter);
+routes.use('/prep', prepRouter);
+routes.use('/sim', simRouter);

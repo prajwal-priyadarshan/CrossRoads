@@ -57,6 +57,11 @@ const appRoutes: RouteObject[] = [
 
   // Admin (Phase 08)
   { element: <RequireAdmin />, children: [{ path: '/admin', ...page(() => import('@/features/admin/AdminPage'), 'AdminPage') }] },
+  
+  // Prep (Phase 09)
+  { path: '/prep', ...page(() => import('@/features/prep/PrepDashboardPage'), 'PrepDashboardPage') },
+  { path: '/prep/simulator', ...page(() => import('@/features/prep/SimulatorSetupPage'), 'SimulatorSetupPage') },
+  { path: '/roadmaps/generate', ...page(() => import('@/features/roadmaps/RoadmapGeneratePage'), 'RoadmapGeneratePage') },
 ];
 
 export const router = createBrowserRouter([
