@@ -2,7 +2,7 @@ import { prisma } from '../../lib/prisma';
 import { notFound } from '../../lib/errors';
 import { userLiteSelect } from '../users/users.serializers';
 import { LIMITS } from '../../config/constants';
-import { encodeCursor, decodeCursor } from '../../lib/cursors';
+import { encodeCursor, decodeCursor } from '../../lib/pagination';
 
 export async function listStories(q: { tag?: string; cursor?: string }) {
   const cur = decodeCursor(q.cursor);

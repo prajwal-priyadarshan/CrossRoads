@@ -5,7 +5,7 @@ import { avg, groupBy, round1 } from '../../src/lib/collections';
 import { LEVELS } from '@bridgeup/shared';
 
 // levelFor lives with the gamification service; import lazily so the DB client is not needed
-const { levelFor } = await import('../../src/services/gamification');
+const { levelFor } = await import('@bridgeup/shared');
 
 describe('text helpers', () => {
   it('normalises tags', () => expect(normalizeTag('  Machine   Learning ')).toBe('machine learning'));

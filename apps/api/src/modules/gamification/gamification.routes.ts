@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { requireAuth } from '../../lib/auth';
+import { requireAuth } from '../../middleware/auth';
 import { mentorWall, getContributions } from '../users/users.service';
 
 export const gamificationRouter = Router();
@@ -15,7 +15,7 @@ gamificationRouter.get('/mentor-wall', requireAuth, async (req, res, next) => {
 
 gamificationRouter.get('/users/:handle/contributions', requireAuth, async (req, res, next) => {
   try {
-    const data = await getContributions(req.params.handle!);
+    const data = await getContributions(req.params.handle as string);
     res.json({ data });
   } catch (err) {
     next(err);

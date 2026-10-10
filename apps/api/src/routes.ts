@@ -21,7 +21,10 @@ import { opportunitiesRouter } from './modules/opportunities/opportunities.route
 import { alertsRouter } from './modules/alerts/alerts.routes';
 import { teamsRouter } from './modules/teams/teams.routes';
 import { notificationsRouter } from './modules/notifications/notifications.routes';
-
+import { gamificationRouter } from './modules/gamification/gamification.routes';
+import { reportsRouter } from './modules/reports/reports.routes';
+import { storiesRouter } from './modules/stories/stories.routes';
+import { adminRouter } from './modules/admin/admin.routes';
 export const routes = Router();
 routes.use('/', systemRouter);
 routes.use('/auth', authRouter);
@@ -45,4 +48,7 @@ routes.use('/', opportunitiesRouter);
 routes.use('/', alertsRouter);
 routes.use('/', teamsRouter);
 routes.use('/', notificationsRouter);
-// Add new module routers here and document them in docs/openapi.ts
+routes.use('/', gamificationRouter);
+routes.use('/', reportsRouter);
+routes.use('/', storiesRouter);
+routes.use('/admin', adminRouter);

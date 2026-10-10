@@ -14,7 +14,7 @@ storiesRouter.get('/stories', async (req, res, next) => {
 
 storiesRouter.get('/stories/:slug', async (req, res, next) => {
   try {
-    const data = await getStory(req.params.slug!);
+    const data = await getStory(req.params.slug as string);
     res.json({ data });
   } catch (err) {
     next(err);

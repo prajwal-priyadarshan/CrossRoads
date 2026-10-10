@@ -4,7 +4,7 @@ import { prisma } from '../../lib/prisma';
 import { normalizeTag } from '../../lib/text';
 import { badRequest, notFound } from '../../lib/errors';
 import { scoreMatch } from '../../services/matching';
-import { asMatchProfile, toPublicProfile } from './users.serializers';
+import { asMatchProfile, toPublicProfile, userLiteSelect } from './users.serializers';
 
 /** Serializer for the signed-in user. Never leaks the password hash. */
 export function toMe(u: User) {

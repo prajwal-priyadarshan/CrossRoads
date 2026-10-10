@@ -6,6 +6,7 @@ export const reportCreateSchema = z.object({
   reason: z.enum(['SPAM', 'MISLEADING', 'INAPPROPRIATE', 'HARASSMENT', 'OTHER']),
   details: z.string().trim().max(500).default(''),
 });
+export type ReportCreateInput = z.infer<typeof reportCreateSchema>;
 
 export const reportResolveSchema = z.object({
   action: z.enum(['REMOVE', 'DISMISS'])

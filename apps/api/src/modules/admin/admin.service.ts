@@ -27,8 +27,8 @@ export async function adminGetReports(status?: string) {
           break;
         }
         case 'EXPERIENCE': {
-          const e = await prisma.experience.findUnique({ where: { id: r.targetId }, include: { author: true } });
-          if (e) targetPreview = { title: `${e.role} at ${e.companyName}`, author: e.author.fullName };
+          const e = await prisma.experience.findUnique({ where: { id: r.targetId }, include: { author: true, company: true } });
+          if (e) targetPreview = { title: `${e.role} at ${e.company.name}`, author: e.author.fullName };
           break;
         }
         case 'PROFILE': {
