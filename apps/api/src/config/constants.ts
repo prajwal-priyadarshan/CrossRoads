@@ -2,6 +2,9 @@
 export const LIMITS = {
   /** Default and maximum page sizes for cursor lists */
   PAGE_SIZE: 20,
+  /** Chat: messages per page (newest first) and conversations shown in the inbox */
+  CHAT_PAGE_SIZE: 30,
+  CHAT_LIST_MAX: 50,
   /** Candidates scored in memory for people matching and twins */
   MATCH_CANDIDATES: 300,
   TWIN_CANDIDATES: 200,

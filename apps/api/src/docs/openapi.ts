@@ -70,6 +70,11 @@ const ROUTES: Row[] = [
   // Home, bookmarks, search
   { method: 'get', path: '/feed', tag: 'Home', summary: 'Ranked feed with a reason per item', auth: 'onboarded', query: S.feedQuerySchema },
   { method: 'get', path: '/home/rail', tag: 'Home', summary: 'Everything the home right rail needs', auth: 'onboarded', query: S.railQuerySchema },
+  { method: 'get', path: '/chat/conversations', tag: 'Chat', summary: 'Your conversations with unread counts (connected people only)', auth: 'onboarded' },
+  { method: 'post', path: '/chat/conversations', tag: 'Chat', summary: 'Open a conversation with a connected person', auth: 'onboarded', body: S.chatStartSchema, status: 201 },
+  { method: 'get', path: '/chat/conversations/:id/messages', tag: 'Chat', summary: 'Messages in a conversation, newest first, cursor paged', auth: 'onboarded', query: S.chatMessagesQuerySchema },
+  { method: 'post', path: '/chat/conversations/:id/messages', tag: 'Chat', summary: 'Send a message (connected people only)', auth: 'onboarded', body: S.chatSendSchema, status: 201 },
+  { method: 'post', path: '/chat/conversations/:id/read', tag: 'Chat', summary: 'Mark a conversation as read', auth: 'onboarded' },
   { method: 'get', path: '/alumni/dashboard', tag: 'Home', summary: 'Alumni dashboard: mentees, requests, open questions, own answers (ALUMNI only)', auth: 'onboarded' },
   { method: 'get', path: '/events/week', tag: 'Home', summary: 'Events in the next 7 days for your year', auth: 'onboarded' },
   { method: 'put', path: '/bookmarks', tag: 'Home', summary: 'Toggle a bookmark', auth: 'onboarded', body: S.bookmarkSchema },

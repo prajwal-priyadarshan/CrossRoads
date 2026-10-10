@@ -37,6 +37,7 @@ async function clearPrevious() {
   await prisma.vote.deleteMany({ where: { userId: { in: demoIds } } });
   await prisma.bookmark.deleteMany({ where: { userId: { in: demoIds } } });
   await prisma.post.deleteMany({ where: { authorId: { in: demoIds } } });
+  await prisma.conversation.deleteMany({ where: { OR: [{ userAId: { in: demoIds } }, { userBId: { in: demoIds } }] } });
 }
 
 async function main() {
@@ -224,6 +225,49 @@ async function main() {
     });
   }
 
+  // ── Chat threads between connected people (messages are stored oldest first, Prisma sorts on read) ──
+  const threads = [
+    {
+      a: ananya, b: meera, read: 'a' as const,
+      messages: [
+        { from: ananya, body: 'Hi Meera, thanks for accepting. Could I ask about projects that got you interviews?', ago: 5 },
+        { from: meera, body: 'Of course. A small end-to-end project with a README and a live demo beats five notebooks.', ago: 5 },
+        { from: ananya, body: 'That helps a lot. I am thinking of a recommendation prototype for the library. Is that too small?', ago: 4 },
+        { from: meera, body: 'Not at all. Scope it to one user flow and write down what you measured.', ago: 4 },
+      ],
+    },
+    {
+      a: priya, b: meera, read: 'b' as const,
+      messages: [
+        { from: priya, body: 'Could you share which first-year project helped you the most?', ago: 3 },
+        { from: meera, body: 'The one where I had to deploy something people actually used. Send me your plan and I will look.', ago: 2 },
+      ],
+    },
+    {
+      a: ananya, b: rahul, read: 'a' as const,
+      messages: [
+        { from: ananya, body: 'Your DSA answer was really clear. Do you have a weekly plan you follow?', ago: 2 },
+        { from: rahul, body: 'Three problems a day, one of them revisited from last week. Happy to share the sheet.', ago: 1 },
+      ],
+    },
+  ];
+  for (const t of threads) {
+    const [userAId, userBId] = t.a.id < t.b.id ? [t.a.id, t.b.id] : [t.b.id, t.a.id];
+    const last = t.messages.at(-1)!;
+    const convo = await prisma.conversation.create({
+      data: {
+        userAId, userBId,
+        lastMessageAt: daysAgo(last.ago), lastMessagePreview: last.body.slice(0, 140), lastMessageSenderId: last.from.id,
+        // The thread's reader has read everything; the other side still has the last message unread
+        readAtA: t.read === 'a' ? daysAgo(0) : daysAgo(last.ago + 1),
+        readAtB: t.read === 'b' ? daysAgo(0) : daysAgo(last.ago + 1),
+      },
+    });
+    for (const m of t.messages) {
+      await prisma.message.create({ data: { conversationId: convo.id, senderId: m.from.id, body: m.body, createdAt: daysAgo(m.ago) } });
+    }
+  }
+
   // ── Prep tracker and one finished simulator session for Ananya ──
   const northwind = await prisma.company.findUnique({ where: { slug: 'northwind-labs' } });
   await prisma.prepItem.createMany({
@@ -256,7 +300,7 @@ async function main() {
     data: { reporterId: priya.id, targetType: 'POST', targetId: allPosts[0]?.id ?? 'none', reason: 'MISLEADING', details: 'The deadline in this post looks wrong. Please check.', status: 'OPEN' },
   });
 
-  console.log(`Seeded ${questions.length} questions, 1 discussion, ${opportunities.length} opportunities, 3 teams, 2 stories, ${connections.length} connections. Admin: ${admin.handle}`);
+  console.log(`Seeded ${questions.length} questions, 1 discussion, ${opportunities.length} opportunities, 3 teams, 2 stories, ${connections.length} connections, ${threads.length} chat threads. Admin: ${admin.handle}`);
 }
 
 main()

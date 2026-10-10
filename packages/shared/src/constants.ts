@@ -116,3 +116,6 @@ export const NOTIFICATION_GROUPS = {
   opportunities: { label: 'Opportunities', types: ['OPPORTUNITY'] },
   badges: { label: 'Badges', types: ['BADGE'] },
 } as const;
+
+/** Chat: longest message a person can send. */
+export const CHAT_MESSAGE_MAX = 2000;

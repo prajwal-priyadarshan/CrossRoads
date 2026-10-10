@@ -17,3 +17,4 @@ export * from './ai';
 export * from './prep';
 export * from './sim';
 export * from './notifications';
+export * from './chat';

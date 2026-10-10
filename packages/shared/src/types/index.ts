@@ -8,3 +8,4 @@ export * from './notifications';
 export * from './stories';
 export * from './config';
 export * from './alumni';
+export * from './chat';
