@@ -3,7 +3,7 @@ import { prisma } from '../../lib/prisma';
 import { notFound } from '../../lib/errors';
 import { POINTS, awardPoints } from '../../services/gamification';
 
-export async function castVote(userId: string, { targetType, targetId, value }: VoteInput) {
+async function applyVote(userId: string, { targetType, targetId, value }: VoteInput) {
   // The target must exist and not be removed
   let authorId: string;
   let isAnswer = false;
@@ -42,4 +42,14 @@ export async function castVote(userId: string, { targetType, targetId, value }: 
     }
     return { score: updated.score, myVote: value };
   });
+}
+
+/** Two quick clicks can race to create the same vote row; the loser retries once and then sees the stored vote. */
+export async function castVote(userId: string, input: VoteInput) {
+  try {
+    return await applyVote(userId, input);
+  } catch (err) {
+    if ((err as { code?: string }).code === 'P2002') return applyVote(userId, input);
+    throw err;
+  }
 }
