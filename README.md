@@ -5,7 +5,7 @@
 
 <br />
 
-<img src="apps/web/public/brand/crossroads-mark.png" alt="Crossroads logo" width="120" />
+<img src="apps/web/public/brand/crossroads-mark.png" alt="Crossroads logo" width="160" />
 
 # Crossroads
 
@@ -383,22 +383,82 @@ Disabled in production unless `API_DOCS_ENABLED=true`.
 
 ## <img src="https://api.iconify.design/lucide/image.svg?color=%2371717a" width="22" valign="middle" /> &nbsp;Screenshots
 
-<table>
-<tr>
-<td align="center" width="25%"><img src="docs/screenshots/landing-page.webp" width="180" alt="Landing page" /><br /><sub>Landing page</sub></td>
-<td align="center" width="25%"><img src="docs/screenshots/home-feed.webp" width="180" alt="Home feed" /><br /><sub>Home feed</sub></td>
-<td align="center" width="25%"><img src="docs/screenshots/everything-in-one-place.webp" width="180" alt="Feature map" /><br /><sub>Feature map</sub></td>
-<td align="center" width="25%"><img src="docs/screenshots/ask-a-senior.webp" width="180" alt="Ask a Senior" /><br /><sub>Ask a Senior</sub></td>
-</tr>
-<tr>
-<td align="center" width="25%"><img src="docs/screenshots/companies.webp" width="180" alt="Companies" /><br /><sub>Companies</sub></td>
-<td align="center" width="25%"><img src="docs/screenshots/path-twins.webp" width="180" alt="Path Twins" /><br /><sub>Path Twins</sub></td>
-<td align="center" width="25%"><img src="docs/screenshots/teams.webp" width="180" alt="Teams" /><br /><sub>Teams</sub></td>
-<td width="25%"></td>
-</tr>
-</table>
-
 </div>
+
+### 1. Landing Page
+*First touchpoint introducing Crossroads: hero banner, value proposition, core features, and college email authentication.*
+
+<p align="center">
+  <a href="docs/screenshots/landing-page.webp">
+    <img src="docs/screenshots/landing-page.webp" alt="Landing page" width="100%" />
+  </a>
+</p>
+
+<br />
+
+### 2. Personalised Home Feed
+*Dynamic student hub featuring daily quests, peer updates, recommended mentors, and career readiness tracking.*
+
+<p align="center">
+  <a href="docs/screenshots/home-feed.webp">
+    <img src="docs/screenshots/home-feed.webp" alt="Home feed" width="100%" />
+  </a>
+</p>
+
+<br />
+
+### 3. Everything in One Place (Platform Directory)
+*Interactive capability map organizing academic guidance, career roadmaps, placement prep, and campus communities.*
+
+<p align="center">
+  <a href="docs/screenshots/everything-in-one-place.webp">
+    <img src="docs/screenshots/everything-in-one-place.webp" alt="Feature map" width="100%" />
+  </a>
+</p>
+
+<br />
+
+### 4. Ask a Senior (Q&A with Grounded AI Citations)
+*Threaded community discussions with verified senior answers and AI-grounded citation panels.*
+
+<p align="center">
+  <a href="docs/screenshots/ask-a-senior.webp">
+    <img src="docs/screenshots/ask-a-senior.webp" alt="Ask a Senior" width="100%" />
+  </a>
+</p>
+
+<br />
+
+### 5. Companies & Placement Preparation
+*Round-wise interview debriefs, skill gap roadmaps, and adaptive practice questions.*
+
+<p align="center">
+  <a href="docs/screenshots/companies.webp">
+    <img src="docs/screenshots/companies.webp" alt="Companies" width="100%" />
+  </a>
+</p>
+
+<br />
+
+### 6. Path Twins (Peer Trajectory Matching)
+*Matching juniors with seniors who took similar paths, comparing coursework, electives, projects, and careers.*
+
+<p align="center">
+  <a href="docs/screenshots/path-twins.webp">
+    <img src="docs/screenshots/path-twins.webp" alt="Path Twins" width="100%" />
+  </a>
+</p>
+
+<br />
+
+### 7. Community & Student Teams
+*Project collaboration, club hubs, hackathon squad recruitment, and study circles.*
+
+<p align="center">
+  <a href="docs/screenshots/teams.webp">
+    <img src="docs/screenshots/teams.webp" alt="Teams" width="100%" />
+  </a>
+</p>
 
 ---
 
