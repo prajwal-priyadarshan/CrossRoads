@@ -60,8 +60,7 @@ export function ClubsPage() {
   const { data, isLoading } = useClubs({ category: category || undefined, sort });
   const { data: rail } = useRail();
   const clubEvents = (rail?.thisWeek ?? []).filter((e) => e.category === 'CLUB').map((e) => e.title.toLowerCase());
-  const recruiting = (c: ClubSummary) =>
-    clubEvents.some((t) => t.includes(c.name.toLowerCase()) || (c.slug === 'code-circle' && t.includes('coding club')));
+  const recruiting = (c: ClubSummary) => clubEvents.some((t) => t.includes(c.name.toLowerCase()));
 
   return (
     <div className="space-y-5">

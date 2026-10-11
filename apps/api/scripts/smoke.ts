@@ -201,7 +201,7 @@ async function main() {
     ['campus: company experiences filtered', '/companies/quantis-capital/experiences?minDifficulty=4', (d) => `${d.length}`],
     ['campus: company alumni', '/companies/northwind-labs/alumni', (d) => `${d.length}`],
     ['campus: clubs', '/clubs?sort=useful', (d) => `${d.length} clubs`],
-    ['campus: club detail', '/clubs/code-circle', (d) => `${d.reviewCount} reviews`],
+    ['campus: club detail', '/clubs/init-club', (d) => `${d.reviewCount} reviews`],
     [
       'campus: path twins',
       '/path-twins',
@@ -231,7 +231,7 @@ async function main() {
   }
 
   await check('rules: first year cannot review a club', async () => {
-    expectStatus(await ananya.put('/clubs/code-circle/review', { usefulness: 4, timeCost: 2, review: 'Trying as a first year to review this club.' }), 403);
+    expectStatus(await ananya.put('/clubs/init-club/review', { usefulness: 4, timeCost: 2, review: 'Trying as a first year to review this club.' }), 403);
   });
   await check('rules: profile update ignores role and points', async () => {
     const before = expectStatus(await ananya.get('/auth/me'), 200);

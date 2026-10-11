@@ -29,6 +29,8 @@ export const CLUB_CATEGORY_LABEL: Record<string, string> = {
   SPORTS: 'Sports',
   ENTREPRENEURSHIP: 'Entrepreneurship',
   SOCIAL: 'Social',
+  SPIRITUAL: 'Spiritual',
+  SCIENCE: 'Science',
 };
 
 export const GOAL_LABEL: Record<string, string> = {

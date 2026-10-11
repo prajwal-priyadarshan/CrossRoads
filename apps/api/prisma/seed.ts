@@ -20,6 +20,8 @@ async function main() {
   for (const c of clubs) {
     await prisma.club.upsert({ where: { slug: c.slug }, update: c, create: c });
   }
+  // Clubs removed from data/clubs.ts are deleted; ClubReview cascades.
+  await prisma.club.deleteMany({ where: { slug: { notIn: clubs.map((c) => c.slug) } } });
 
   // Events are time-relative: replace them on every seed
   await prisma.event.deleteMany({
