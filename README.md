@@ -1,7 +1,7 @@
 <div align="center">
 
-## 📢 GENESIS'26 HACKATHON
-### 👥 Team: **FAB4** &nbsp;|&nbsp; 🆔 Team ID: `GEN26-A0H-H052`
+## GENESIS'26 HACKATHON
+### Team: **FAB4** &nbsp;|&nbsp; Team ID: `GEN26-A0H-H052`
 
 <br />
 
@@ -36,7 +36,7 @@
 
 <div align="center">
 
-## 👥 Team: FAB4
+## Team: FAB4
 **Hackathon:** GENESIS'26 &nbsp;|&nbsp; **Team Name:** FAB4 &nbsp;|&nbsp; **Team ID:** `GEN26-A0H-H052`
 
 | Member | Roll No. |
