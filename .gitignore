@@ -7,3 +7,4 @@ dist
 *.log
 apps/api/src/generated
 .playwright-mcp/
+.claude/
