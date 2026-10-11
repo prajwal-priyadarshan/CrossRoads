@@ -101,7 +101,7 @@ export function LandingPage() {
       <header className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 md:px-8">
         <div className="flex items-center gap-2.5">
           <Logo to="/" />
-          <span className="font-display text-lg font-bold tracking-tight">Crossroads</span>
+          <span className="font-display text-xl font-bold tracking-tight">Crossroads</span>
         </div>
         <nav className="ml-6 hidden items-center gap-5 text-sm text-muted-foreground md:flex">
           <Link to="/stories" className="hover:text-foreground">Stories</Link>
