@@ -34,7 +34,18 @@ export type RoadmapCreateInput = z.infer<typeof roadmapCreateSchema>;
 export type RoadmapListQuery = z.output<typeof roadmapListQuerySchema>;
 
 export const roadmapGenerateSchema = z.object({
-  goalTrack: z.enum(GOAL_TRACK_VALUES),
+  goalTrack: z
+    .string()
+    .transform((v) => {
+      const map: Record<string, string> = {
+        SOFTWARE_ENGINEERING: 'PRODUCT',
+        DATA_SCIENCE: 'PRODUCT',
+        DESIGN: 'PRODUCT',
+        OTHER: 'UNDECIDED',
+      };
+      return map[v] ?? v;
+    })
+    .pipe(z.enum(GOAL_TRACK_VALUES)),
   targetRole: z.string().trim().optional(),
   targetCompanySlugs: z.array(z.string()).max(4).optional(),
 });
