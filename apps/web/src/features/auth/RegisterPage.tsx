@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Lock, Mail, User } from 'lucide-react';
 import { toast } from 'sonner';
 import { registerSchema, type RegisterInput } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
@@ -61,7 +61,17 @@ export function RegisterPage() {
     >
       <form onSubmit={onSubmit} className="space-y-4" noValidate>
         <FormField label="Full name" htmlFor="fullName" error={errors.fullName?.message}>
-          <Input id="fullName" autoComplete="name" aria-invalid={!!errors.fullName} {...field('fullName')} />
+          <div className="relative">
+            <User className="pointer-events-none absolute inset-y-0 left-3 my-auto size-4 text-muted-foreground" aria-hidden="true" />
+            <Input
+              id="fullName"
+              autoComplete="name"
+              className="pl-9"
+              aria-invalid={!!errors.fullName}
+              aria-describedby={errors.fullName ? 'fullName-message' : undefined}
+              {...field('fullName')}
+            />
+          </div>
         </FormField>
         <FormField
           label="College email"
@@ -69,7 +79,18 @@ export function RegisterPage() {
           error={errors.email?.message}
           hint={`Use your college email, e.g. ${exampleEmail(config)}`}
         >
-          <Input id="email" type="email" autoComplete="email" aria-invalid={!!errors.email} {...field('email')} />
+          <div className="relative">
+            <Mail className="pointer-events-none absolute inset-y-0 left-3 my-auto size-4 text-muted-foreground" aria-hidden="true" />
+            <Input
+              id="email"
+              type="email"
+              autoComplete="email"
+              className="pl-9"
+              aria-invalid={!!errors.email}
+              aria-describedby="email-message"
+              {...field('email')}
+            />
+          </div>
         </FormField>
         <FormField
           label="Password"
@@ -78,12 +99,14 @@ export function RegisterPage() {
           hint="8+ characters, a letter and a number"
         >
           <div className="relative">
+            <Lock className="pointer-events-none absolute inset-y-0 left-3 my-auto size-4 text-muted-foreground" aria-hidden="true" />
             <Input
               id="password"
               type={show ? 'text' : 'password'}
               autoComplete="new-password"
-              className="pr-10"
+              className="pr-10 pl-9"
               aria-invalid={!!errors.password}
+              aria-describedby="password-message"
               {...field('password')}
             />
             <button
@@ -96,7 +119,7 @@ export function RegisterPage() {
             </button>
           </div>
         </FormField>
-        <label className="flex items-start gap-3 text-sm text-muted-foreground">
+        <label className="flex items-start gap-3 rounded-lg border border-transparent p-1 text-sm text-muted-foreground transition-colors hover:border-border">
           <input type="checkbox" className="mt-1 size-4 accent-primary" {...field('consent')} />
           <span>
             I have read{' '}
@@ -107,8 +130,12 @@ export function RegisterPage() {
             data at any time.
           </span>
         </label>
-        {errors.consent && <p className="text-sm text-destructive">{errors.consent.message}</p>}
-        <Button type="submit" className="w-full" disabled={register.isPending}>
+        {errors.consent && (
+          <p className="text-sm text-destructive" role="alert">
+            {errors.consent.message}
+          </p>
+        )}
+        <Button type="submit" size="lg" className="h-11 w-full text-base" disabled={register.isPending}>
           {register.isPending && <Loader2 className="animate-spin" />} Create account
         </Button>
       </form>
