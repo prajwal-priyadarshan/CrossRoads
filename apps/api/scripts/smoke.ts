@@ -202,7 +202,16 @@ async function main() {
     ['campus: company alumni', '/companies/northwind-labs/alumni', (d) => `${d.length}`],
     ['campus: clubs', '/clubs?sort=useful', (d) => `${d.length} clubs`],
     ['campus: club detail', '/clubs/code-circle', (d) => `${d.reviewCount} reviews`],
-    ['campus: path twins', '/path-twins', (d) => `${d.twins.length} twins`],
+    [
+      'campus: path twins',
+      '/path-twins',
+      (d) => {
+        if (!d.twins.every((t: any) => 'aiInsight' in t && (t.aiInsight === null || typeof t.aiInsight === 'string')))
+          throw new Error('twin missing aiInsight (should be a string or null)');
+        const withInsight = d.twins.filter((t: any) => t.aiInsight).length;
+        return `${d.twins.length} twins, ${withInsight} with an AI insight`;
+      },
+    ],
     ['campus: roadmaps', '/roadmaps', (d) => `${d.length} roadmaps`],
     ['campus: my roadmaps', '/roadmaps?mine=true', (d) => `${d.length}`],
     ['opportunities: closing soon', '/opportunities', (d) => `${d.items.length} open`],

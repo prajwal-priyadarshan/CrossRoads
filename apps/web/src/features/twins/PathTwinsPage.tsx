@@ -1,5 +1,5 @@
 import { Link } from 'react-router';
-import { Route } from 'lucide-react';
+import { Route, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { EmptyState } from '@/components/shared/EmptyState';
@@ -82,6 +82,12 @@ export function PathTwinsPage() {
                       <ReasonChip key={r}>{r}</ReasonChip>
                     ))}
                   </div>
+                )}
+                {t.aiInsight && (
+                  <p className="flex items-start gap-1.5 rounded-xl bg-primary-soft p-3 text-sm text-primary">
+                    <Sparkles className="mt-0.5 size-3.5 shrink-0" />
+                    {t.aiInsight}
+                  </p>
                 )}
                 <PathTimeline byYear={t.milestonesByYear} />
                 <footer className="flex flex-wrap gap-2 border-t pt-4">
