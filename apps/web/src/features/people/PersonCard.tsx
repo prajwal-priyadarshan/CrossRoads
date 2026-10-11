@@ -48,9 +48,9 @@ export function PersonCard({ person, featured = false }: { person: Person; featu
         {reasons.map((r) => (
           <Tooltip key={r}>
             <TooltipTrigger asChild>
-              <span className="max-w-full">
+              <span className="min-w-0 max-w-full">
                 <ReasonChip>
-                  <span className="max-w-[16rem] truncate">{r}</span>
+                  <span className="min-w-0 max-w-[14rem] truncate">{r}</span>
                 </ReasonChip>
               </span>
             </TooltipTrigger>
