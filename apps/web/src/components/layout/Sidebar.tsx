@@ -47,7 +47,7 @@ function SidebarNav() {
   const forStudent = (items: Item[]) => (me?.role === 'ALUMNI' ? items.filter((i) => !STUDENT_ONLY.has(i.to)) : items);
   return (
     <div className="flex h-full flex-col">
-      <Logo to="/home" className="px-3 pb-2" />
+      <Logo className="px-3 pb-2" />
       <div className="flex-1 overflow-y-auto">
         <Group items={PRIMARY_NAV} />
         <Group label="Career" items={forStudent(CAREER_NAV)} />

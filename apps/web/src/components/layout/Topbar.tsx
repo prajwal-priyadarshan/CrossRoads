@@ -16,7 +16,7 @@ export function Topbar() {
       <Button variant="ghost" size="icon" aria-label="Open menu" className="lg:hidden" onClick={() => setSidebarOpen(true)}>
         <PanelLeft className="size-5" />
       </Button>
-      <Logo to="/home" className="lg:hidden" />
+      <Logo className="lg:hidden" />
       <Button
         variant="outline"
         className="hidden w-full max-w-md justify-start text-muted-foreground lg:flex"
