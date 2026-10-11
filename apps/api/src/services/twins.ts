@@ -117,7 +117,8 @@ export async function findTwins(viewerId: string) {
   };
 }
 
-const TWIN_INSIGHT_PROMPT = `You explain to a student why a senior or alumni is a good "path twin" — someone who started in a similar place and can show them what's ahead. For each person given, write ONE warm, specific sentence (at most two) grounded ONLY in the reasons and milestones provided — never invent facts or companies not mentioned. Mention one concrete thing the student could learn from or ask them about. Return only valid JSON matching the given shape, with exactly one entry per personId given.`;
+const TWIN_INSIGHT_PROMPT = `You explain to a student why a senior or alumni is a good "path twin" — someone who started in a similar place and can show them what's ahead. For each person given, write ONE warm, specific sentence, under 220 characters, grounded ONLY in the reasons and milestones provided — never invent facts or companies not mentioned. Mention one concrete thing the student could learn from or ask them about.
+Return only valid JSON with exactly one key "insights": an array with exactly one object per person listed, each object having exactly two keys — "personId" (copy the id exactly as given) and "insight" (the sentence, under 220 characters). Example shape: {"insights":[{"personId":"abc123","insight":"..."}]}`;
 
 type TwinForInsight = {
   person: { id: string; fullName: string; role: string; company: string | null; jobTitle: string | null };

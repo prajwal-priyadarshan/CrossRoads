@@ -51,5 +51,5 @@ export const aiAssistantOut = z.object({
 export type AiAssistantOut = z.infer<typeof aiAssistantOut>;
 
 export const aiTwinInsightsOut = z.object({
-  insights: z.array(z.object({ personId: z.string(), insight: z.string().min(1).max(220) })).max(3),
+  insights: z.array(z.object({ personId: z.string(), insight: z.string().min(1).max(320) })).max(3),
 });
