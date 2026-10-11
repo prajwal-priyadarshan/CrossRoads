@@ -132,7 +132,7 @@ export function LandingPage() {
           <div>
             <span className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium text-muted-foreground">
               <span className="size-1.5 rounded-full bg-warm" />
-              Guidance meets opportunity
+              Built for Amrita Vishwa Vidyapeetham
             </span>
             <h1 className="mt-5 font-display text-4xl font-bold tracking-tight md:text-6xl">
               Your seniors have walked your path. Now they can <span className="text-warm">light it.</span>
@@ -238,6 +238,7 @@ export function LandingPage() {
         <span>© {new Date().getFullYear()}</span>
         <Link to="/support" className="hover:text-foreground">Support</Link>
         <Link to="/stories" className="hover:text-foreground">Stories</Link>
+        <span className="ml-auto text-xs">Built for Amrita Vishwa Vidyapeetham</span>
       </footer>
     </div>
   );
