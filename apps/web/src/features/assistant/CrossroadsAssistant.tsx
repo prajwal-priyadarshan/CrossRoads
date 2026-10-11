@@ -35,10 +35,10 @@ const DESTINATION: Record<NonNullable<AssistantResponse['destination']>, { to: s
 const GREETING: Message = {
   role: 'assistant',
   content:
-    "Hi! I can help you find a mentor, search past questions and interview experiences, or point you to prep tools. What are you looking for?",
+    "Hi! I can help you find a mentor, search past questions and interview experiences, point you to prep tools, or explain how Crossroads itself works. What are you looking for?",
 };
 
-/** Floating chat concierge: routes free text to people search, platform search or a feature, reusing those existing endpoints. */
+/** Floating chat concierge: routes free text to people search, platform search, a feature, or the project docs — one assistant for both "help me use this" and "how is this built" instead of two separate widgets. */
 export function CrossroadsAssistant() {
   const [open, setOpen] = useState(false);
   const [text, setText] = useState('');
@@ -67,7 +67,7 @@ export function CrossroadsAssistant() {
   return (
     <>
       <Button
-        className="fixed bottom-20 left-4 z-40 rounded-full shadow-md lg:bottom-6 lg:left-6"
+        className="fixed bottom-20 right-4 z-40 rounded-full shadow-md lg:bottom-6 lg:right-6"
         onClick={() => setOpen(true)}
         aria-label="Open Crossroads Assistant"
       >
@@ -80,7 +80,7 @@ export function CrossroadsAssistant() {
             <SheetTitle className="flex items-center gap-1.5">
               <Sparkles className="size-4 text-primary" /> Crossroads Assistant
             </SheetTitle>
-            <SheetDescription>Find mentors, past answers, interview experiences or the right feature.</SheetDescription>
+            <SheetDescription>Find mentors, past answers and interview experiences, the right feature, or how Crossroads itself works.</SheetDescription>
           </SheetHeader>
 
           <div className="flex-1 space-y-4 overflow-y-auto px-4 py-2">
@@ -137,6 +137,20 @@ export function CrossroadsAssistant() {
                     <Button asChild size="sm" className="mt-1" onClick={() => setOpen(false)}>
                       <Link to={DESTINATION[m.data.destination].to}>{DESTINATION[m.data.destination].label}</Link>
                     </Button>
+                  )}
+
+                  {m.data?.action === 'docs' && !!m.data.docs?.sources.length && (
+                    <div className="space-y-1 pt-1">
+                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">From the project docs</p>
+                      {m.data.docs.sources.map((s) => (
+                        <div key={s.n} className="rounded-xl bg-background/60 p-2 text-foreground">
+                          <p className="truncate text-xs font-medium">
+                            {s.file} › {s.heading}
+                          </p>
+                          <p className="line-clamp-2 text-xs text-muted-foreground">{s.excerpt}</p>
+                        </div>
+                      ))}
+                    </div>
                   )}
                 </div>
               </div>

@@ -541,6 +541,12 @@ async function main() {
     if (r.destination !== 'prep') throw new Error(`expected destination prep, got ${r.destination}`);
     return `action=${r.action}, destination=${r.destination}, usedAI=${r.usedAI}`;
   });
+  await check('assistant: routes a how-is-this-built question to the project docs', async () => {
+    const r = expectStatus(await ananya.post('/assistant/ask', { message: 'what tech stack is Crossroads built with?' }), 200) as any;
+    if (r.action !== 'docs') throw new Error(`expected docs, got ${r.action}`);
+    if (!r.docs || !['ok', 'fallback', 'no_match'].includes(r.docs.status)) throw new Error('missing or bad docs.status');
+    return `action=${r.action}, docs.status=${r.docs.status}, usedAI=${r.usedAI}`;
+  });
   await check('assistant: a plain greeting gets a conversational reply, not an action', async () => {
     const r = expectStatus(await ananya.post('/assistant/ask', { message: 'hey, what can you help with?' }), 200) as any;
     if (!['none', 'navigate', 'search', 'people_search'].includes(r.action)) throw new Error(`unexpected action ${r.action}`);

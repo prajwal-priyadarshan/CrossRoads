@@ -4,6 +4,7 @@ import { aiEnabled } from '../../config/env';
 import { aiAssistantOut, type AiAssistantOut, type SearchQuery } from '@crossroads/shared';
 import { search } from '../search/search.service';
 import { aiDiscoverPeople } from '../people/people.service';
+import { askGuide } from '../guide/guide.service';
 
 type HistoryItem = { role: 'user' | 'assistant'; content: string };
 
@@ -12,8 +13,11 @@ Actions:
 - "people_search": they want to find a mentor, senior, alumni or peer. Set "query" to a short description of who they want.
 - "search": they want to find existing content (questions, posts, opportunities, interview experiences, teams, companies, success stories). Set "searchType" to one of: question, post, opportunity, experience, team, company, story (use "all" only if genuinely unclear which), and "query" to the search text.
 - "navigate": they want a specific platform feature rather than a search. Set "destination" to exactly one of: prep (placement readiness dashboard), roadmaps-generate (AI roadmap generator), people-mentor (mentor finder), ask-new (post a new question), sim-setup (mock interview simulator).
+- "docs": they're asking how Crossroads itself is built or how one of its features/algorithms works under the hood (architecture, tech stack, how matching or roadmaps work, etc.) — not a question for other students, a question about the product.
 - "none": greetings, thanks, or anything that does not fit the above — reply conversationally and briefly suggest what you can help with.
 Never invent a platform feature beyond the ones listed here. Return only valid JSON matching the given shape.`;
+
+const DOCS_RE = /\b(architecture|tech stack|codebase|source code|under the hood|how (is|was) (this|it|crossroads) (built|made|implemented))\b|how does .+ work\b/i;
 
 /** Keyword-based fallback used when AI is disabled or the call fails — same action shape, no model required. */
 function deterministicAssistant(message: string): AiAssistantOut {
@@ -30,6 +34,9 @@ function deterministicAssistant(message: string): AiAssistantOut {
   if (/\b(mock interview|simulator|practice interview)\b/.test(m)) {
     return { reply: 'The interview simulator is a good place to practice.', action: 'navigate', destination: 'sim-setup' };
   }
+  if (DOCS_RE.test(m)) {
+    return { reply: 'Let me check the project docs for that.', action: 'docs' };
+  }
   if (/\b(internship|opportunity|job|hiring)\b/.test(m)) {
     return { reply: 'Here is what I found in opportunities:', action: 'search', searchType: 'opportunity', query: message };
   }
@@ -44,7 +51,7 @@ function deterministicAssistant(message: string): AiAssistantOut {
   }
   return {
     reply:
-      "I can help you find a mentor, search past questions and interview experiences, or point you to prep tools. Try something like “find an alumni mentor in machine learning”.",
+      "I can help you find a mentor, search past questions and interview experiences, point you to prep tools, or explain how Crossroads itself works. Try something like “find an alumni mentor in machine learning”.",
     action: 'none',
   };
 }
@@ -82,6 +89,16 @@ export async function askAssistant(viewerId: string, message: string, history: H
     const q: SearchQuery = { q: (parsed.query || message).slice(0, 80), type: parsed.searchType ?? 'all', limit: 6 };
     const results = await search(q);
     return { ...base, results };
+  }
+  if (parsed.action === 'docs') {
+    const docs = await askGuide(message);
+    const reply =
+      docs.status === 'ok' && docs.answer
+        ? docs.answer
+        : docs.status === 'fallback'
+          ? "Here's what the project docs say about that:"
+          : "I couldn't find anything about that in the project docs.";
+    return { ...base, reply, docs };
   }
   return base;
 }

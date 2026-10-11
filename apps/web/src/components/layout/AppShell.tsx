@@ -6,7 +6,6 @@ import { MobileNav } from './MobileNav';
 import { CommandPalette } from './CommandPalette';
 import { useChatStream } from '@/features/chat/useChatStream';
 import { useMe } from '@/hooks/useMe';
-import { ProjectGuide } from '@/features/guide/ProjectGuide';
 import { CrossroadsAssistant } from '@/features/assistant/CrossroadsAssistant';
 
 export function AppShell() {
@@ -23,7 +22,6 @@ export function AppShell() {
       </div>
       <MobileNav />
       <CommandPalette />
-      <ProjectGuide />
       {me?.onboarded && <CrossroadsAssistant />}
       <BadgeCelebration />
     </div>

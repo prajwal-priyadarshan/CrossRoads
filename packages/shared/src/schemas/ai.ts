@@ -43,7 +43,7 @@ export const ASSISTANT_DESTINATIONS = ['prep', 'roadmaps-generate', 'people-ment
 
 export const aiAssistantOut = z.object({
   reply: z.string().min(1).max(500),
-  action: z.enum(['search', 'people_search', 'navigate', 'none']),
+  action: z.enum(['search', 'people_search', 'navigate', 'docs', 'none']),
   searchType: z.enum(SEARCH_TYPES).optional(),
   query: z.string().max(200).optional(),
   destination: z.enum(ASSISTANT_DESTINATIONS).optional(),
