@@ -5,7 +5,7 @@ import { POINTS, awardPoints } from '../../services/gamification';
 
 async function applyVote(userId: string, { targetType, targetId, value }: VoteInput) {
   // The target must exist and not be removed
-  let authorId: string;
+  let authorId: string | null; // null when the content's author has since deleted their account
   let isAnswer = false;
   if (targetType === 'POST') {
     const p = await prisma.post.findFirst({ where: { id: targetId, isRemoved: false }, select: { authorId: true } });
@@ -36,8 +36,8 @@ async function applyVote(userId: string, { targetType, targetId, value }: VoteIn
         ? await tx.post.update({ where: { id: targetId }, data: { score: { increment: delta } }, select: { score: true } })
         : await tx.comment.update({ where: { id: targetId }, data: { score: { increment: delta } }, select: { score: true } });
 
-    // Helpful vote on an answer: +2 to the answer author, once per voter
-    if (isAnswer && value === 1 && authorId !== userId) {
+    // Helpful vote on an answer: +2 to the answer author, once per voter (no one to award if the author left)
+    if (isAnswer && value === 1 && authorId && authorId !== userId) {
       await awardPoints(tx, authorId, `HELPFUL:${userId}`, POINTS.HELPFUL_VOTE, targetId);
     }
     return { score: updated.score, myVote: value };

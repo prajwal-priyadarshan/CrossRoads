@@ -14,6 +14,7 @@ import { qk } from '@/lib/queryKeys';
 import { personSubline } from '@/lib/people';
 
 /** Right-rail card for a post's author, with match reasons and Connect. */
+/** `author` is null when that person has since deleted their account. */
 export function AuthorCard({
   author,
   title = 'Posted by',
@@ -21,20 +22,29 @@ export function AuthorCard({
   defaultKind,
   defaultTopic,
 }: {
-  author: UserLite;
+  author: UserLite | null;
   title?: string;
   connectLabel?: string;
   defaultKind?: 'CONNECT' | 'MENTORSHIP';
   defaultTopic?: string;
 }) {
   const { data: me } = useMe();
-  const isMe = me?.id === author.id;
+  const isMe = me?.id === author?.id;
   // Reuses the profile query for the match score and reasons
   const { data: profile } = useQuery({
-    queryKey: qk.user(author.handle),
-    queryFn: () => api<PublicProfile>(`/users/${author.handle}`),
-    enabled: !isMe,
+    queryKey: qk.user(author?.handle ?? ''),
+    queryFn: () => api<PublicProfile>(`/users/${author!.handle}`),
+    enabled: !isMe && !!author,
   });
+
+  if (!author) {
+    return (
+      <div className="space-y-3 rounded-2xl border bg-card p-4">
+        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{title}</p>
+        <p className="text-sm text-muted-foreground">A deleted user. Their contribution is kept, but their profile is gone.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-3 rounded-2xl border bg-card p-4">

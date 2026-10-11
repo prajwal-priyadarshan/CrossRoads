@@ -21,7 +21,8 @@ export type PostCard = {
   excerpt: string;
   topic: TopicRef | null;
   tags: string[];
-  author: UserLite;
+  /** null when the author's account has been deleted; their contribution is retained (see docs/phases/phase-12.md §6) */
+  author: UserLite | null;
   score: number;
   commentCount: number;
   hasBestAnswer: boolean;
@@ -44,7 +45,7 @@ export type CommentNode = {
   body: string;
   score: number;
   createdAt: string;
-  author: UserLite;
+  author: UserLite | null;
   myVote: number;
   isBest: boolean;
   replies: CommentNode[];

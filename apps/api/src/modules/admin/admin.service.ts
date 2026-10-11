@@ -25,17 +25,17 @@ export async function adminGetReports(viewer: { isSafeguardingCoordinator: boole
       switch (r.targetType) {
         case 'POST': {
           const p = await prisma.post.findUnique({ where: { id: r.targetId }, include: { author: true } });
-          if (p) targetPreview = { title: p.title, excerpt: p.body.substring(0, 100), author: p.author.fullName };
+          if (p) targetPreview = { title: p.title, excerpt: p.body.substring(0, 100), author: p.author?.fullName ?? 'A deleted user' };
           break;
         }
         case 'COMMENT': {
           const c = await prisma.comment.findUnique({ where: { id: r.targetId }, include: { author: true } });
-          if (c) targetPreview = { body: c.body.substring(0, 100), author: c.author.fullName };
+          if (c) targetPreview = { body: c.body.substring(0, 100), author: c.author?.fullName ?? 'A deleted user' };
           break;
         }
         case 'EXPERIENCE': {
           const e = await prisma.experience.findUnique({ where: { id: r.targetId }, include: { author: true, company: true } });
-          if (e) targetPreview = { title: `${e.role} at ${e.company.name}`, author: e.author.fullName };
+          if (e) targetPreview = { title: `${e.role} at ${e.company.name}`, author: e.author?.fullName ?? 'A deleted user' };
           break;
         }
         case 'PROFILE': {

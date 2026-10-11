@@ -571,6 +571,32 @@ async function main() {
     if (await prisma.user.findUnique({ where: { email: `${handle}@gmail.com` } })) throw new Error('account still exists');
     return 'wrong password refused, account removed';
   });
+  await check('account: a deleted user\'s best answer stays, attributed to no one', async () => {
+    const throwaway = new Client();
+    const handle = `smokeanswer${Date.now().toString(36)}`;
+    const email = `${handle}@gmail.com`;
+    expectStatus(await throwaway.post('/auth/register', { fullName: 'Smoke Answerer', email, password: 'secret123', consent: true }), 201);
+    await prisma.user.update({ where: { email }, data: { emailVerified: true, onboarded: true } });
+    expectStatus(await throwaway.post('/auth/login', { email, password: 'secret123' }), 200);
+
+    const topics = expectStatus(await rahul.get('/topics'), 200) as Array<{ id: number }>;
+    const post = expectStatus(
+      await rahul.post('/posts', { kind: 'QUESTION', title: 'Smoke: does a deleted answerer\'s answer survive?', body: 'Smoke test body with enough length to pass validation.', tags: ['dsa'], topicId: topics[0]!.id }),
+      201,
+    ) as any;
+    const answer = expectStatus(await throwaway.post(`/posts/${post.id}/comments`, { body: 'Smoke test: this is the answer that should survive account deletion.' }), 201) as any;
+    expectStatus(await rahul.post(`/posts/${post.id}/best-answer`, { commentId: answer.comment.id }), 200);
+    expectStatus(await throwaway.req('DELETE', '/me', { password: 'secret123' }), 200);
+
+    const after = expectStatus(await rahul.get(`/posts/${post.id}`), 200) as any;
+    const best = after.comments.find((c: any) => c.isBest);
+    if (!best || !best.body.includes('this is the answer that should survive')) throw new Error('the best answer was lost, not anonymised');
+    if (best.author !== null) throw new Error('answer author should be null after account deletion, not destroyed');
+    if (after.post.author === null) throw new Error('the asker (still active) should not be nulled');
+
+    createdPostIds.push(post.id);
+    return 'content kept, author set to null';
+  });
   await check('auth: sign-up without the data notice is refused', async () => {
     expectStatus(await new Client().post('/auth/register', { fullName: 'No Consent', email: 'noconsent@gmail.com', password: 'secret123' }), 400);
   });

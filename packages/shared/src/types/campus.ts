@@ -35,7 +35,7 @@ export type ExperienceCard = {
   outcome: 'SELECTED' | 'NOT_SELECTED' | null;
   isVerified: boolean;
   createdAt: string;
-  author: UserLite;
+  author: UserLite | null;
   company: { slug: string; name: string };
   bookmarked: boolean;
 };
@@ -82,7 +82,7 @@ export type ClubReview = {
   review: string;
   createdAt: string;
   updatedAt: string;
-  author: UserLite;
+  author: UserLite | null;
 };
 
 export type ClubDetail = ClubSummary & { reviews: ClubReview[]; myReview: ClubReview | null; members: UserLite[] };

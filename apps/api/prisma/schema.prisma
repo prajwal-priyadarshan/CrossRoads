@@ -302,7 +302,7 @@ model TopicFollow {
 // ───────────── Posts, comments, votes, bookmarks ─────────────
 model Post {
   id              String           @id @default(uuid())
-  authorId        String
+  authorId        String?
   kind            PostKind
   title           String
   body            String           @default("")
@@ -320,7 +320,7 @@ model Post {
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
 
-  author     User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author     User?     @relation(fields: [authorId], references: [id], onDelete: SetNull)
   topic      Topic?    @relation(fields: [topicId], references: [id])
   comments   Comment[] @relation("PostComments")
   bestAnswer Comment?  @relation("BestAnswer", fields: [bestAnswerId], references: [id], onDelete: SetNull)
@@ -334,7 +334,7 @@ model Post {
 model Comment {
   id        String   @id @default(uuid())
   postId    String
-  authorId  String
+  authorId  String?
   parentId  String?
   body      String
   score     Int      @default(0)
@@ -342,7 +342,7 @@ model Comment {
   createdAt DateTime @default(now())
 
   post         Post      @relation("PostComments", fields: [postId], references: [id], onDelete: Cascade)
-  author       User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author       User?     @relation(fields: [authorId], references: [id], onDelete: SetNull)
   parent       Comment?  @relation("Replies", fields: [parentId], references: [id], onDelete: Cascade)
   replies      Comment[] @relation("Replies")
   bestAnswerOf Post?     @relation("BestAnswer")
@@ -415,7 +415,7 @@ model Company {
 
 model Experience {
   id         String   @id @default(uuid())
-  authorId   String
+  authorId   String?
   companyId  String
   role       String
   year       Int
@@ -429,7 +429,7 @@ model Experience {
   isRemoved  Boolean  @default(false)
   createdAt  DateTime @default(now())
 
-  author  User    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author  User?   @relation(fields: [authorId], references: [id], onDelete: SetNull)
   company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 
   @@index([companyId, year])
@@ -452,15 +452,15 @@ model Club {
 model ClubReview {
   id         String   @id @default(uuid())
   clubId     String
-  authorId   String
+  authorId   String?
   usefulness Int // 1–5
   timeCost   Int // 1–5
   review     String   @default("")
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  club   Club @relation(fields: [clubId], references: [id], onDelete: Cascade)
-  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  club   Club  @relation(fields: [clubId], references: [id], onDelete: Cascade)
+  author User? @relation(fields: [authorId], references: [id], onDelete: SetNull)
 
   @@unique([clubId, authorId])
 }

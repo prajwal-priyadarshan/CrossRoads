@@ -26,7 +26,7 @@ export async function institutionAnalytics(): Promise<AdminAnalytics> {
   const activeIds = new Set([...posters.map((p) => p.authorId), ...commenters.map((c) => c.authorId)]);
   const answersByDept = new Map<string, number>();
   for (const c of comments) {
-    const dept = c.author.department;
+    const dept = c.author?.department;
     if (dept) answersByDept.set(dept, (answersByDept.get(dept) ?? 0) + 1);
   }
   const usersByDept = new Map(departmentGroups.map((g) => [g.department as string, g._count._all]));

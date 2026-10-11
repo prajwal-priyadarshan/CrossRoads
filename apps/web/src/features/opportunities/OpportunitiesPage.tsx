@@ -112,7 +112,7 @@ export function OpportunitiesPage() {
         <>
           <div className="grid gap-4 lg:grid-cols-2">
             {items.map((item) => (
-              <OpportunityCard key={item.id} item={item} isMine={item.author.id === me?.id} />
+              <OpportunityCard key={item.id} item={item} isMine={item.author?.id === me?.id} />
             ))}
           </div>
           {hasNextPage && (

@@ -16,29 +16,46 @@ import { cn, isSafeUrl, titleCase } from '@/lib/utils';
 
 export function ExperienceCard({ exp, showCompany = false }: { exp: Experience; showCompany?: boolean }) {
   const { data: me } = useMe();
-  const first = exp.author.fullName.split(' ')[0];
-  const mine = me?.id === exp.author.id;
+  // exp.author is null once that alumnus/senior deletes their account; the experience itself is kept
+  const first = exp.author?.fullName.split(' ')[0] ?? 'this person';
+  const mine = !!exp.author && me?.id === exp.author.id;
 
   return (
     <article id={`exp-${exp.id}`} className="scroll-mt-24 space-y-4 rounded-2xl border bg-card p-5">
       <header className="flex flex-wrap items-start gap-3">
-        <UserAvatar user={exp.author} size="md" />
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <Link to={`/u/${exp.author.handle}`} className="font-semibold hover:underline">
-              {exp.author.fullName}
-            </Link>
-            <RoleBadge role={exp.author.role} currentYear={exp.author.currentYear} />
-          </div>
-          <p className="text-sm text-muted-foreground">
+        {exp.author ? (
+          <>
+            <UserAvatar user={exp.author} size="md" />
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <Link to={`/u/${exp.author.handle}`} className="font-semibold hover:underline">
+                  {exp.author.fullName}
+                </Link>
+                <RoleBadge role={exp.author.role} currentYear={exp.author.currentYear} />
+              </div>
+              <p className="text-sm text-muted-foreground">
             {showCompany && (
               <Link to={`/companies/${exp.company.slug}`} className="font-medium text-foreground hover:underline">
                 {exp.company.name} ·{' '}
               </Link>
             )}
-            {titleCase(exp.role)} · {exp.year}
-          </p>
-        </div>
+                {titleCase(exp.role)} · {exp.year}
+              </p>
+            </div>
+          </>
+        ) : (
+          <div className="min-w-0 flex-1">
+            <p className="font-semibold text-muted-foreground">A deleted user</p>
+            <p className="text-sm text-muted-foreground">
+              {showCompany && (
+                <Link to={`/companies/${exp.company.slug}`} className="font-medium text-foreground hover:underline">
+                  {exp.company.name} ·{' '}
+                </Link>
+              )}
+              {titleCase(exp.role)} · {exp.year}
+            </p>
+          </div>
+        )}
         <div className="flex flex-wrap items-center gap-2">
           {exp.isVerified ? <VerifiedBadge /> : <SelfReportedBadge />}
           <DifficultyDots value={exp.difficulty} />
@@ -117,7 +134,7 @@ export function ExperienceCard({ exp, showCompany = false }: { exp: Experience; 
 
       <footer className="flex items-center gap-2">
         <BookmarkButton targetType="EXPERIENCE" targetId={exp.id} bookmarked={exp.bookmarked} />
-        {!mine && (
+        {exp.author && !mine && (
           <ConnectDialog
             recipient={exp.author}
             defaultKind="MENTORSHIP"

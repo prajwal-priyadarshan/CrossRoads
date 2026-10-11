@@ -44,11 +44,17 @@ export function OpportunityCard({ item, isMine }: { item: OpportunityItem; isMin
       {item.excerpt && <p className="line-clamp-2 text-sm text-muted-foreground">{item.excerpt}</p>}
 
       <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-        <UserAvatar user={item.author} size="sm" />
-        <Link to={`/u/${item.author.handle}`} className="font-medium text-foreground hover:underline">
-          {item.author.fullName}
-        </Link>
-        <RoleBadge role={item.author.role} currentYear={item.author.currentYear} />
+        {item.author ? (
+          <>
+            <UserAvatar user={item.author} size="sm" />
+            <Link to={`/u/${item.author.handle}`} className="font-medium text-foreground hover:underline">
+              {item.author.fullName}
+            </Link>
+            <RoleBadge role={item.author.role} currentYear={item.author.currentYear} />
+          </>
+        ) : (
+          <span className="font-medium">A deleted user</span>
+        )}
         <span>
           · <RelativeTime iso={item.createdAt} />
         </span>
@@ -77,7 +83,7 @@ export function OpportunityCard({ item, isMine }: { item: OpportunityItem; isMin
             </a>
           </Button>
         )}
-        {!isMine && (
+        {item.author && !isMine && (
           <ConnectDialog
             recipient={item.author}
             defaultKind="CONNECT"

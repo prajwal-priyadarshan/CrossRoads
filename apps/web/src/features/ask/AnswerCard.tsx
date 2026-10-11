@@ -27,16 +27,17 @@ export function AnswerCard({
   answer: CommentNode;
   postId: string;
   questionTitle: string;
-  asker: UserLite;
+  /** null when the asker has since deleted their account */
+  asker: UserLite | null;
   meId: string;
   canMarkBest: boolean;
   onMarkBest: (id: string) => void;
 }) {
   const [replying, setReplying] = useState(false);
   const a = answer.author;
-  const senior = a.role === 'SENIOR' || a.role === 'ALUMNI';
-  const mine = a.id === meId;
-  const iAmAsker = asker.id === meId;
+  const senior = a?.role === 'SENIOR' || a?.role === 'ALUMNI';
+  const mine = a?.id === meId;
+  const iAmAsker = asker?.id === meId;
 
   return (
     <article
@@ -51,23 +52,34 @@ export function AnswerCard({
         </p>
       )}
       <div className="flex items-center gap-3">
-        <UserAvatar user={a} size="md" />
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <Link to={`/u/${a.handle}`} className="font-semibold hover:underline">
-              {a.fullName}
-            </Link>
-            {senior && (
-              <span className="rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground">
-                {a.role === 'ALUMNI' ? 'Alumni' : 'Senior'}
-              </span>
-            )}
-            {a.isVerified && <VerifiedBadge />}
+        {a ? (
+          <>
+            <UserAvatar user={a} size="md" />
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <Link to={`/u/${a.handle}`} className="font-semibold hover:underline">
+                  {a.fullName}
+                </Link>
+                {senior && (
+                  <span className="rounded-full bg-primary px-2 py-0.5 text-xs font-semibold text-primary-foreground">
+                    {a.role === 'ALUMNI' ? 'Alumni' : 'Senior'}
+                  </span>
+                )}
+                {a.isVerified && <VerifiedBadge />}
+              </div>
+              <p className="truncate text-xs text-muted-foreground">
+                {personSubline({ ...a, batchYear: null })} · <RelativeTime iso={answer.createdAt} />
+              </p>
+            </div>
+          </>
+        ) : (
+          <div className="min-w-0 flex-1">
+            <p className="font-semibold text-muted-foreground">A deleted user</p>
+            <p className="truncate text-xs text-muted-foreground">
+              <RelativeTime iso={answer.createdAt} />
+            </p>
           </div>
-          <p className="truncate text-xs text-muted-foreground">
-            {personSubline({ ...a, batchYear: null })} · <RelativeTime iso={answer.createdAt} />
-          </p>
-        </div>
+        )}
       </div>
 
       <PlainText text={answer.body} />
@@ -89,7 +101,7 @@ export function AnswerCard({
             Mark as best
           </Button>
         )}
-        {!mine && senior && (
+        {a && !mine && senior && (
           <ConnectDialog
             recipient={a}
             defaultKind="MENTORSHIP"
@@ -101,7 +113,7 @@ export function AnswerCard({
             }
           />
         )}
-        {mine && !iAmAsker && (
+        {asker && mine && !iAmAsker && (
           <ConnectDialog
             recipient={asker}
             defaultKind="MENTORSHIP"

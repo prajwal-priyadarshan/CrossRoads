@@ -15,7 +15,8 @@ export type FeedPost = {
   topic: { name: string } | null;
   tags: string[];
   opportunityType: string | null;
-  author: { role: string; department: string | null };
+  /** null when the post's author has since deleted their account */
+  author: { role: string; department: string | null } | null;
   score: number;
   commentCount: number;
   bestAnswerId: string | null;
@@ -34,7 +35,7 @@ export function rankFeed<T extends FeedPost>(viewer: FeedViewer, followedTopicId
     if (p.kind === 'OPPORTUNITY' && ((p.opportunityType && viewer.alertTypes.includes(p.opportunityType)) || tagHits.length)) {
       terms.push([1.5, `Opportunity for ${titleCase(tagHits[0] ?? (p.opportunityType ?? '').toLowerCase().replace(/_/g, ' '))}`]);
     }
-    if ((p.author.role === 'SENIOR' || p.author.role === 'ALUMNI') && (viewer.currentYear ?? 9) <= 2) {
+    if (p.author && (p.author.role === 'SENIOR' || p.author.role === 'ALUMNI') && (viewer.currentYear ?? 9) <= 2) {
       terms.push([1, p.author.role === 'ALUMNI' ? 'From an alumnus' : `From a senior in ${p.author.department ?? 'your college'}`]);
     }
     const helpTag = p.tags.find((t) => viewer.skills.includes(t));

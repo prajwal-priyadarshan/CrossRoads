@@ -22,7 +22,16 @@ import { useDeletePost } from './api';
 
 export const postHref = (p: Pick<Post, 'id' | 'kind'>) => (p.kind === 'QUESTION' ? `/ask/${p.id}` : `/post/${p.id}`);
 
+/** `author` is null when that person has since deleted their account; their content stays, attributed to no one. */
 export function AuthorLine({ author, role = true }: { author: Post['author']; role?: boolean }) {
+  if (!author) {
+    return (
+      <span className="inline-flex items-center gap-1.5 text-muted-foreground">
+        <span className="grid size-5 shrink-0 place-items-center rounded-full bg-muted text-[9px]">?</span>
+        <span className="font-medium">A deleted user</span>
+      </span>
+    );
+  }
   const senior = author.role === 'SENIOR' || author.role === 'ALUMNI';
   return (
     <span className="inline-flex items-center gap-1.5">
@@ -48,7 +57,7 @@ export function PostCard({ post, reason }: { post: Post; reason?: ReactNode }) {
   const { data: me } = useMe();
   const del = useDeletePost();
   const isQuestion = post.kind === 'QUESTION';
-  const canDelete = me && (me.id === post.author.id || me.role === 'ADMIN');
+  const canDelete = me && ((post.author && me.id === post.author.id) || me.role === 'ADMIN');
   const href = postHref(post);
 
   return (

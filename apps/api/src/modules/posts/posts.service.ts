@@ -126,7 +126,9 @@ export async function createPost(userId: string, input: PostCreateInput) {
         link: `/ask/${post.id}`,
       });
     }
-    const alerted = input.kind === 'OPPORTUNITY' ? await notifyOpportunityAlerts(tx, post) : 0;
+    // post.authorId is typed nullable (an author can later delete their account), but it was just set to
+    // userId above, so this is always true here.
+    const alerted = input.kind === 'OPPORTUNITY' ? await notifyOpportunityAlerts(tx, { ...post, authorId: userId }) : 0;
     return { id: post.id, alerted };
   });
 }
@@ -163,7 +165,7 @@ export async function deletePost(user: { id: string; role: string }, id: string)
 export async function createComment(userId: string, postId: string, input: CommentCreateInput) {
   const post = await prisma.post.findFirst({ where: { id: postId, isRemoved: false } });
   if (!post) throw notFound('Post not found');
-  let parent: { authorId: string } | null = null;
+  let parent: { authorId: string | null } | null = null;
   if (input.parentId) {
     const p = await prisma.comment.findFirst({ where: { id: input.parentId, postId, isRemoved: false } });
     if (!p) throw badRequest('Reply target not found');
@@ -180,7 +182,8 @@ export async function createComment(userId: string, postId: string, input: Comme
     const link = post.kind === 'QUESTION' ? `/ask/${postId}` : `/post/${postId}`;
     const isAnswer = post.kind === 'QUESTION' && !input.parentId;
 
-    if (post.authorId !== userId) {
+    // No one to notify if the question- or post-author has since deleted their account; their content survives
+    if (post.authorId && post.authorId !== userId) {
       await notify(tx, {
         userId: post.authorId,
         type: isAnswer ? 'ANSWER' : 'COMMENT',
@@ -190,7 +193,7 @@ export async function createComment(userId: string, postId: string, input: Comme
       });
     }
     // Reply: notify the parent author unless they are the replier or already notified as the post author
-    if (parent && parent.authorId !== userId && parent.authorId !== post.authorId) {
+    if (parent && parent.authorId && parent.authorId !== userId && parent.authorId !== post.authorId) {
       await notify(tx, {
         userId: parent.authorId,
         type: 'COMMENT',
@@ -217,7 +220,9 @@ export async function markBestAnswer(userId: string, postId: string, commentId: 
   if (!answer) throw badRequest('That answer is not on this question');
   return prisma.$transaction(async (tx) => {
     const updated = await tx.post.update({ where: { id: postId }, data: { bestAnswerId: commentId } });
-    if (answer.authorId !== userId) {
+    // The answer content stays the best answer even if its author has since deleted their account;
+    // there is simply no one left to award points to or notify.
+    if (answer.authorId && answer.authorId !== userId) {
       const firstTime = await awardPoints(tx, answer.authorId, 'BEST_ANSWER', POINTS.BEST_ANSWER, commentId);
       if (firstTime) {
         await notify(tx, {

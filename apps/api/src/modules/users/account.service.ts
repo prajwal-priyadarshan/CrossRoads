@@ -36,7 +36,14 @@ export async function exportMyData(userId: string) {
   };
 }
 
-/** Deletes the account and everything it owns (cascades remove posts, comments, messages, requests and tickets). */
+/**
+ * Deletes the account and all personal data: profile, messages, connection requests, event tickets, points
+ * history. Public contributions that other students rely on — questions, answers, interview experiences and
+ * club reviews — are kept, with their author set to null (shown as "A deleted user"); removing them would
+ * destroy value for everyone who has already read, bookmarked or built on them, per docs/phases/phase-12.md §6.
+ * Enforced at the database level: those four tables' authorId foreign keys are ON DELETE SET NULL, everything
+ * else (messages, team applications, votes, bookmarks, notifications, etc.) is ON DELETE CASCADE.
+ */
 export async function deleteMyAccount(userId: string, password: string) {
   const user = await prisma.user.findUniqueOrThrow({ where: { id: userId }, select: { passwordHash: true } });
   if (!(await verifyPassword(password, user.passwordHash))) throw unauthorized('That password is not right');

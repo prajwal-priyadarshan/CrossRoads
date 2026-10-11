@@ -167,15 +167,26 @@ export function ClubPage() {
           {club.reviews.map((r) => (
             <article key={r.id} className="space-y-3 rounded-2xl border bg-card p-4">
               <div className="flex items-center gap-3">
-                <UserAvatar user={r.author} size="md" />
-                <div className="min-w-0 flex-1">
-                  <Link to={`/u/${r.author.handle}`} className="font-semibold hover:underline">
-                    {r.author.fullName}
-                  </Link>
-                  <p className="text-xs text-muted-foreground">
-                    <RoleBadge role={r.author.role} currentYear={r.author.currentYear} /> · <RelativeTime iso={r.updatedAt} />
-                  </p>
-                </div>
+                {r.author ? (
+                  <>
+                    <UserAvatar user={r.author} size="md" />
+                    <div className="min-w-0 flex-1">
+                      <Link to={`/u/${r.author.handle}`} className="font-semibold hover:underline">
+                        {r.author.fullName}
+                      </Link>
+                      <p className="text-xs text-muted-foreground">
+                        <RoleBadge role={r.author.role} currentYear={r.author.currentYear} /> · <RelativeTime iso={r.updatedAt} />
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <div className="min-w-0 flex-1">
+                    <p className="font-semibold text-muted-foreground">A deleted user</p>
+                    <p className="text-xs text-muted-foreground">
+                      <RelativeTime iso={r.updatedAt} />
+                    </p>
+                  </div>
+                )}
               </div>
               <div className="grid max-w-sm gap-2 sm:grid-cols-2">
                 <RatingMeter label="Usefulness" value={r.usefulness} tone="useful" />
