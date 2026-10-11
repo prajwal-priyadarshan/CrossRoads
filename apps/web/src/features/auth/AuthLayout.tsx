@@ -38,7 +38,6 @@ export function AuthLayout({
               <blockquote className="font-display text-xl font-semibold leading-snug">
                 &ldquo;I wish I had this in my first year.&rdquo;
               </blockquote>
-              <figcaption className="mt-3 text-sm opacity-70">Example quote, not a real testimonial</figcaption>
             </figure>
             <ul className="space-y-4">
               {BENEFITS.map(({ icon: Icon, text }) => (
