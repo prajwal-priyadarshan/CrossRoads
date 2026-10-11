@@ -136,14 +136,14 @@ const ROUTES: Row[] = [
   { method: 'get', path: '/stories/:slug', tag: 'Stories', summary: 'One story with related stories', auth: 'public' },
 
   // Reporting and moderation
-  { method: 'post', path: '/reports', tag: 'Moderation', summary: 'Report a post, comment, experience, profile, team or story', auth: 'auth', body: S.reportCreateSchema },
+  { method: 'post', path: '/reports', tag: 'Moderation', summary: 'Report a post, comment, experience, profile, team, story or conversation. HARASSMENT reports route only to safeguarding coordinators', auth: 'auth', body: S.reportCreateSchema },
 
   // Gamification
   { method: 'get', path: '/mentor-wall', tag: 'Gamification', summary: 'Top mentors by points this month (opted-in seniors/alumni)', auth: 'auth' },
   { method: 'get', path: '/users/:handle/contributions', tag: 'Gamification', summary: 'Contribution counts, badges and recent points for a profile', auth: 'auth' },
 
   // Admin
-  { method: 'get', path: '/admin/reports', tag: 'Admin', summary: 'Open content reports', auth: 'admin' },
+  { method: 'get', path: '/admin/reports', tag: 'Admin', summary: 'Open reports. HARASSMENT reports and conversation content are withheld unless the viewer is a safeguarding coordinator', auth: 'admin' },
   { method: 'patch', path: '/admin/reports/:id', tag: 'Admin', summary: 'Resolve a report (remove the content or dismiss)', auth: 'admin', body: S.reportResolveSchema },
   { method: 'get', path: '/admin/users', tag: 'Admin', summary: 'Users for moderation', auth: 'admin' },
   { method: 'patch', path: '/admin/users/:id', tag: 'Admin', summary: 'Update a user\'s role or verification', auth: 'admin', body: S.adminUserUpdateSchema },

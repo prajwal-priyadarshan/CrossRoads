@@ -22,11 +22,21 @@ const createdMessageIds: string[] = [];
 const createdSimIds: string[] = [];
 const createdReceipts: string[] = [];
 const createdOfficialPostIds: string[] = [];
+const createdSafeguardingReportIds: string[] = [];
+const createdSafeguardingConvoIds: string[] = [];
 
 async function cleanup() {
   if (createdSimIds.length) await prisma.simSession.deleteMany({ where: { id: { in: createdSimIds } } });
   if (createdReceipts.length) await prisma.donation.deleteMany({ where: { receipt: { in: createdReceipts } } });
   if (createdOfficialPostIds.length) await prisma.post.deleteMany({ where: { id: { in: createdOfficialPostIds } } });
+  if (createdSafeguardingReportIds.length) {
+    await prisma.notification.deleteMany({ where: { type: 'SYSTEM', link: '/admin/reports?category=safety' } });
+    await prisma.report.deleteMany({ where: { id: { in: createdSafeguardingReportIds } } });
+  }
+  if (createdSafeguardingConvoIds.length) {
+    await prisma.message.deleteMany({ where: { conversationId: { in: createdSafeguardingConvoIds } } });
+    await prisma.conversation.deleteMany({ where: { id: { in: createdSafeguardingConvoIds } } });
+  }
   if (createdMessageIds.length) {
     // Remove the smoke messages, then point each thread's preview back at its newest real message
     const touched = await prisma.message.findMany({ where: { id: { in: createdMessageIds } }, select: { conversationId: true } });
@@ -429,6 +439,51 @@ async function main() {
     const id = (expectStatus(await ananya.post('/chat/conversations', { userId: rahulId }), 201) as any).id;
     expectStatus(await suresh.get(`/chat/conversations/${id}/messages`), 404);
     return '403 to start, 404 to read';
+  });
+  await check('safeguarding: a harassment report is withheld from non-coordinator admins', async () => {
+    const admin = await login('admin');
+    const rahulId = (expectStatus(await rahul.get('/auth/me'), 200) as any).id;
+    const convo = (expectStatus(await ananya.post('/chat/conversations', { userId: rahulId }), 201) as any).id;
+    createdSafeguardingConvoIds.push(convo);
+    const sent = expectStatus(await ananya.post(`/chat/conversations/${convo}/messages`, { body: 'smoke: harassment test message' }), 201) as any;
+    createdMessageIds.push(sent.id);
+
+    const report = expectStatus(
+      await ananya.post('/reports', { targetType: 'CONVERSATION', targetId: convo, reason: 'HARASSMENT', details: 'smoke test' }),
+      200,
+      'file harassment report',
+    ) as any;
+    createdSafeguardingReportIds.push(report.id);
+
+    const plainList = expectStatus(await admin.get('/admin/reports?status=OPEN'), 200) as any[];
+    if (plainList.some((r) => r.id === report.id)) throw new Error('non-coordinator admin can see a harassment report');
+
+    expectStatus(await admin.patch(`/admin/reports/${report.id}`, { action: 'DISMISS' }), 404);
+    return 'hidden from the list and from direct resolve';
+  });
+  await check('safeguarding: a coordinator sees the report with real message content', async () => {
+    const admin = await login('admin');
+    const adminId = (expectStatus(await admin.get('/auth/me'), 200) as any).id;
+    expectStatus(await admin.patch(`/admin/users/${adminId}`, { isSafeguardingCoordinator: true }), 200, 'promote to coordinator');
+    try {
+      const list = expectStatus(await admin.get('/admin/reports?status=OPEN'), 200) as any[];
+      const found = list.find((r) => createdSafeguardingReportIds.includes(r.id));
+      if (!found) throw new Error('coordinator cannot see their own harassment report');
+      if (!found.targetPreview?.messages?.some((m: any) => m.body.includes('harassment test message'))) {
+        throw new Error('coordinator view is missing the flagged message content');
+      }
+      expectStatus(await admin.patch(`/admin/reports/${found.id}`, { action: 'DISMISS' }), 200, 'coordinator resolves');
+      return 'coordinator sees content and can resolve';
+    } finally {
+      await admin.patch(`/admin/users/${adminId}`, { isSafeguardingCoordinator: false }); // leave admin as a plain admin
+    }
+  });
+  await check('safeguarding: the user-update response never includes a password hash', async () => {
+    const admin = await login('admin');
+    const adminId = (expectStatus(await admin.get('/auth/me'), 200) as any).id;
+    const res = await admin.patch(`/admin/users/${adminId}`, { isVerified: true });
+    expectStatus(res, 200);
+    if (JSON.stringify(res.body).includes('passwordHash')) throw new Error('admin user-update response leaks passwordHash');
   });
   await check('prep: readiness names each target company', async () => {
     const d = (expectStatus(await ananya.get('/prep/dashboard'), 200) as any);

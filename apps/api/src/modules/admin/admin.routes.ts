@@ -5,6 +5,7 @@ import {
   reportResolveSchema, adminUserUpdateSchema, allowlistSchema,
   eventUpsertSchema, companyUpsertSchema, clubUpsertSchema, storyUpsertSchema
 } from '@crossroads/shared';
+import { prisma } from '../../lib/prisma';
 import * as service from './admin.service';
 import { institutionAnalytics, createOfficialPost } from './analytics';
 import { officialPostSchema } from '@crossroads/shared';
@@ -24,10 +25,16 @@ adminRouter.post('/official-posts', validate({ body: officialPostSchema }), asyn
 
 // Reports
 adminRouter.get('/reports', async (req, res, next) => {
-  try { res.json({ data: await service.adminGetReports(req.query.status as string) }); } catch (err) { next(err); }
+  try {
+    const viewer = await prisma.user.findUniqueOrThrow({ where: { id: req.user!.id }, select: { isSafeguardingCoordinator: true } });
+    res.json({ data: await service.adminGetReports(viewer, req.query.status as string) });
+  } catch (err) { next(err); }
 });
 adminRouter.patch('/reports/:id', validate({ body: reportResolveSchema }), async (req, res, next) => {
-  try { res.json({ data: await service.adminResolveReport(req.params.id as string, req.valid.body.action) }); } catch (err) { next(err); }
+  try {
+    const viewer = await prisma.user.findUniqueOrThrow({ where: { id: req.user!.id }, select: { isSafeguardingCoordinator: true } });
+    res.json({ data: await service.adminResolveReport(viewer, req.params.id as string, req.valid.body.action) });
+  } catch (err) { next(err); }
 });
 
 // Users

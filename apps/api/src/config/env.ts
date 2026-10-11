@@ -22,6 +22,10 @@ const schema = z.object({
   DEMO_MODE: bool('false'),
   DEMO_LOGIN_HANDLES: csv.default('ananya,rahul,meera,admin'),
   DEMO_EMAIL_SUFFIX: z.string().default('@demo.crossroads'),
+  // Safeguarding (phase 12): harassment / safety escalation is emailed here in addition to the in-app coordinator queue.
+  // Unconfigured is a deploy blocker for this feature, not a TODO — see docs/phases/phase-12.md §5.
+  SAFEGUARDING_CONTACT_EMAIL: z.string().email().optional(),
+
   // Alumni may register with any personal email as ALUMNI (open for now; restrict to AllowedEmail invites later)
   ALUMNI_OPEN_SIGNUP: bool('false'),
   // Dev/demo only: skip the emailed 6-digit code and mark new accounts verified. Refused in production (see below)

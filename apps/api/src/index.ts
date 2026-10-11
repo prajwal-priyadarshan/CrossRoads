@@ -8,6 +8,12 @@ const server = createApp().listen(env.PORT, () => {
   if (docsEnabled) logger.info(`API docs on http://localhost:${env.PORT}/api/docs`);
 });
 
+if (!env.SAFEGUARDING_CONTACT_EMAIL) {
+  // Deploy blocker, not a TODO (phase-12 §5): without a real contact, harassment reports only reach the
+  // in-app coordinator queue, with no one outside the platform to escalate to.
+  logger.warn('SAFEGUARDING_CONTACT_EMAIL is not set. Harassment reports will not be emailed to anyone outside the app.');
+}
+
 // Graceful shutdown: stop accepting connections, finish in-flight requests, close the DB pool
 let shuttingDown = false;
 async function shutdown(signal: string) {

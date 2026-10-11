@@ -4,11 +4,18 @@ import { notifyMany, notify } from '../../services/notify';
 import { grantBadge } from '../../services/gamification';
 import type { Prisma } from '../../generated/prisma/client';
 
-export async function adminGetReports(status?: string) {
+/**
+ * `viewer`: a plain ADMIN never sees HARASSMENT reports or conversation content (phase-12 §5) — the safety
+ * queue is restricted to coordinators specifically. A coordinator sees both the general and safety queues.
+ */
+export async function adminGetReports(viewer: { isSafeguardingCoordinator: boolean }, status?: string) {
   const reports = await prisma.report.findMany({
-    where: status ? { status: status as any } : {},
+    where: {
+      ...(status ? { status: status as any } : {}),
+      ...(viewer.isSafeguardingCoordinator ? {} : { reason: { not: 'HARASSMENT' } }),
+    },
     include: { reporter: { select: { id: true, handle: true, fullName: true, avatarUrl: true } } },
-    orderBy: { createdAt: 'desc' }
+    orderBy: { createdAt: 'desc' },
   });
 
   // Fetch targets manually
@@ -46,6 +53,27 @@ export async function adminGetReports(status?: string) {
           if (s) targetPreview = { title: s.title };
           break;
         }
+        case 'CONVERSATION': {
+          // Private message content — never exposed to a non-coordinator, since this branch is unreachable
+          // for them (HARASSMENT reports are excluded above), but the guard stays explicit rather than implied.
+          if (!viewer.isSafeguardingCoordinator) break;
+          const convo = await prisma.conversation.findUnique({
+            where: { id: r.targetId },
+            include: { userA: { select: { fullName: true, handle: true } }, userB: { select: { fullName: true, handle: true } } },
+          });
+          if (!convo) break;
+          const messages = await prisma.message.findMany({
+            where: { conversationId: r.targetId },
+            orderBy: { createdAt: 'asc' },
+            take: 100,
+            include: { sender: { select: { fullName: true } } },
+          });
+          targetPreview = {
+            participants: [convo.userA.fullName, convo.userB.fullName],
+            messages: messages.map((m) => ({ from: m.sender.fullName, body: m.body, at: m.createdAt })),
+          };
+          break;
+        }
       }
     } catch (e) {
       // Target may have been deleted
@@ -56,9 +84,11 @@ export async function adminGetReports(status?: string) {
   return withTargets;
 }
 
-export async function adminResolveReport(id: string, action: 'REMOVE' | 'DISMISS') {
+export async function adminResolveReport(viewer: { isSafeguardingCoordinator: boolean }, id: string, action: 'REMOVE' | 'DISMISS') {
   const report = await prisma.report.findUnique({ where: { id } });
   if (!report) throw notFound('Report not found');
+  // Resolving is part of review; a non-coordinator must not be able to act on a safety report even by id
+  if (report.reason === 'HARASSMENT' && !viewer.isSafeguardingCoordinator) throw notFound('Report not found');
 
   return prisma.$transaction(async (tx) => {
     if (action === 'REMOVE') {
@@ -103,14 +133,19 @@ export async function adminGetUsers(q?: string, role?: string) {
   };
   return prisma.user.findMany({
     where,
-    select: { id: true, fullName: true, handle: true, email: true, role: true, currentYear: true, isVerified: true, points: true, createdAt: true, avatarUrl: true },
+    select: { id: true, fullName: true, handle: true, email: true, role: true, currentYear: true, isVerified: true, isSafeguardingCoordinator: true, points: true, createdAt: true, avatarUrl: true },
     orderBy: { createdAt: 'desc' },
     take: 100
   });
 }
 
-export async function adminUpdateUser(id: string, data: { isVerified?: boolean; role?: any }) {
-  return prisma.user.update({ where: { id }, data });
+export async function adminUpdateUser(id: string, data: { isVerified?: boolean; role?: any; isSafeguardingCoordinator?: boolean }) {
+  // Never return the full row here — it includes passwordHash, and this endpoint has no serializer between it and res.json
+  return prisma.user.update({
+    where: { id },
+    data,
+    select: { id: true, fullName: true, handle: true, email: true, role: true, isVerified: true, isSafeguardingCoordinator: true },
+  });
 }
 
 export async function adminAllowlistEmail(email: string, role: 'ALUMNI' | 'STUDENT') {

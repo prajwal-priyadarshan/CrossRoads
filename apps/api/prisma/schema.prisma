@@ -122,6 +122,7 @@ enum ReportTarget {
   PROFILE
   TEAM
   STORY
+  CONVERSATION
 }
 
 enum ReportReason {
@@ -200,45 +201,47 @@ model EmailCode {
 
 // ───────────── Users ─────────────
 model User {
-  id               String     @id @default(uuid())
-  email            String     @unique
-  passwordHash     String
-  emailVerified    Boolean    @default(false)
-  isSuspended      Boolean    @default(false)
-  handle           String     @unique
-  fullName         String
-  avatarUrl        String?
-  role             Role       @default(STUDENT)
-  department       String?
-  batchYear        Int? // graduation year
-  currentYear      Int? // 1–5; null for alumni
-  company          String? // current company (alumni, interns)
-  jobTitle         String?
-  bio              String     @default("")
-  skills           String[]   @default([])
-  interests        String[]   @default([])
-  targetRoles      String[]   @default([])
-  targetCompanies  String[]   @default([]) // company slugs
-  goalTrack        GoalTrack?
-  canHelpWith      String[]   @default([])
-  lookingFor       String[]   @default([])
-  projects         Json       @default("[]") // [{ title, description, url? }]
-  achievements     String[]   @default([])
-  linkedinUrl      String?
-  githubUrl        String?
-  showEmail        Boolean    @default(false)
-  showLinkedin     Boolean    @default(true)
-  showGithub       Boolean    @default(true)
-  mentorAvailable  Boolean    @default(false)
-  mentorTopics     String[]   @default([])
-  mentorSlots      String     @default("") // e.g. "Sat 5–6 pm, Sun 11–12"
-  showOnMentorWall Boolean    @default(true)
-  isVerified       Boolean    @default(false)
-  onboarded        Boolean    @default(false)
-  consentAt        DateTime?
-  points           Int        @default(0)
-  createdAt        DateTime   @default(now())
-  updatedAt        DateTime   @updatedAt
+  id                        String     @id @default(uuid())
+  email                     String     @unique
+  passwordHash              String
+  emailVerified             Boolean    @default(false)
+  isSuspended               Boolean    @default(false)
+  /// Can review safeguarding (HARASSMENT) reports and the flagged conversation content. Separate from ADMIN: most admins should not see this.
+  isSafeguardingCoordinator Boolean    @default(false)
+  handle                    String     @unique
+  fullName                  String
+  avatarUrl                 String?
+  role                      Role       @default(STUDENT)
+  department                String?
+  batchYear                 Int? // graduation year
+  currentYear               Int? // 1–5; null for alumni
+  company                   String? // current company (alumni, interns)
+  jobTitle                  String?
+  bio                       String     @default("")
+  skills                    String[]   @default([])
+  interests                 String[]   @default([])
+  targetRoles               String[]   @default([])
+  targetCompanies           String[]   @default([]) // company slugs
+  goalTrack                 GoalTrack?
+  canHelpWith               String[]   @default([])
+  lookingFor                String[]   @default([])
+  projects                  Json       @default("[]") // [{ title, description, url? }]
+  achievements              String[]   @default([])
+  linkedinUrl               String?
+  githubUrl                 String?
+  showEmail                 Boolean    @default(false)
+  showLinkedin              Boolean    @default(true)
+  showGithub                Boolean    @default(true)
+  mentorAvailable           Boolean    @default(false)
+  mentorTopics              String[]   @default([])
+  mentorSlots               String     @default("") // e.g. "Sat 5–6 pm, Sun 11–12"
+  showOnMentorWall          Boolean    @default(true)
+  isVerified                Boolean    @default(false)
+  onboarded                 Boolean    @default(false)
+  consentAt                 DateTime?
+  points                    Int        @default(0)
+  createdAt                 DateTime   @default(now())
+  updatedAt                 DateTime   @updatedAt
 
   posts             Post[]
   comments          Comment[]

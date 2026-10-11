@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { ListSkeleton } from '@/components/shared/Skeletons';
 import { RelativeTime } from '@/components/shared/RelativeTime';
+import { ReportButton } from '@/components/shared/ReportButton';
 import { UserAvatar } from '@/components/shared/UserAvatar';
 import { ApiError } from '@/lib/api';
 import { cn } from '@/lib/utils';
@@ -105,6 +106,7 @@ function Thread({ id, other, onBack }: { id: string; other: ChatConversation['ot
             {[other.jobTitle, other.company].filter(Boolean).join(' at ') || other.role.toLowerCase()}
           </div>
         </div>
+        <ReportButton targetType="CONVERSATION" targetId={id} safetyOnly className="ml-auto shrink-0" />
       </div>
 
       <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-4">

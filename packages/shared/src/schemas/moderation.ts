@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const reportCreateSchema = z.object({
-  targetType: z.enum(['POST', 'COMMENT', 'EXPERIENCE', 'PROFILE', 'TEAM', 'STORY']),
+  targetType: z.enum(['POST', 'COMMENT', 'EXPERIENCE', 'PROFILE', 'TEAM', 'STORY', 'CONVERSATION']),
   targetId: z.string().uuid(),
   reason: z.enum(['SPAM', 'MISLEADING', 'INAPPROPRIATE', 'HARASSMENT', 'OTHER']),
   details: z.string().trim().max(500).default(''),
@@ -26,6 +26,9 @@ export const eventUpsertSchema = z.object({
 export const adminUserUpdateSchema = z.object({
   isVerified: z.boolean().optional(),
   role: z.enum(['ADMIN', 'ALUMNI', 'SENIOR', 'STUDENT']).optional(),
+  // Grants or revokes access to the safeguarding (harassment) report queue and flagged conversation content.
+  // Scoped narrowly on purpose — most admins should not have this (phase-12 §5).
+  isSafeguardingCoordinator: z.boolean().optional(),
 });
 
 export const allowlistSchema = z.object({
