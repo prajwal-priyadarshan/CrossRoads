@@ -87,7 +87,13 @@ export async function resend(email: string) {
 }
 
 export async function login(email: string, password: string) {
-  const user = await prisma.user.findUnique({ where: { email } });
+  const normalized = email.toLowerCase().trim();
+  let user = await prisma.user.findUnique({ where: { email: normalized } });
+  if (!user && normalized.endsWith('@demo.bridgeup')) {
+    user = await prisma.user.findUnique({ where: { email: normalized.replace('@demo.bridgeup', '@demo.crossroads') } });
+  } else if (!user && normalized.endsWith('@demo.crossroads')) {
+    user = await prisma.user.findUnique({ where: { email: normalized.replace('@demo.crossroads', '@demo.bridgeup') } });
+  }
   if (!user || !(await verifyPassword(password, user.passwordHash))) {
     throw unauthorized('Email or password is incorrect');
   }
@@ -98,6 +104,7 @@ export async function login(email: string, password: string) {
 export async function demoLogin(handle: string) {
   if (!env.DEMO_MODE) throw forbidden('Demo login is disabled');
   const user = await prisma.user.findUnique({ where: { handle } });
-  if (!user || !user.email.endsWith(env.DEMO_EMAIL_SUFFIX)) throw forbidden('Not a demo account');
+  const isDemo = user && (user.email.endsWith(env.DEMO_EMAIL_SUFFIX) || user.email.endsWith('@demo.crossroads') || user.email.endsWith('@demo.bridgeup'));
+  if (!user || !isDemo) throw forbidden('Not a demo account');
   return user;
 }
