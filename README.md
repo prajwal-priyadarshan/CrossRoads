@@ -26,33 +26,6 @@
 
 <div align="center">
 
-## <img src="https://api.iconify.design/lucide/image.svg?color=%2371717a" width="22" valign="middle" /> &nbsp;Screenshots
-
-<table>
-<tr>
-<td width="50%"><img src="docs/screenshots/landing-page.webp" alt="Landing page" /><br /><sub align="center">Landing page</sub></td>
-<td width="50%"><img src="docs/screenshots/home-feed.webp" alt="Personalised home feed" /><br /><sub>Personalised home feed</sub></td>
-</tr>
-<tr>
-<td width="50%"><img src="docs/screenshots/everything-in-one-place.webp" alt="Full feature map" /><br /><sub>Full feature map</sub></td>
-<td width="50%"><img src="docs/screenshots/ask-a-senior.webp" alt="Ask a Senior" /><br /><sub>Ask a Senior</sub></td>
-</tr>
-<tr>
-<td width="50%"><img src="docs/screenshots/companies.webp" alt="Companies that visit campus" /><br /><sub>Companies that visit campus</sub></td>
-<td width="50%"><img src="docs/screenshots/path-twins.webp" alt="Path Twins" /><br /><sub>Path Twins</sub></td>
-</tr>
-<tr>
-<td width="50%"><img src="docs/screenshots/teams.webp" alt="Teams" /><br /><sub>Teams</sub></td>
-<td width="50%"></td>
-</tr>
-</table>
-
-</div>
-
----
-
-<div align="center">
-
 ## <img src="https://api.iconify.design/lucide/info.svg?color=%2371717a" width="22" valign="middle" /> &nbsp;About the Project
 
 </div>
@@ -377,6 +350,22 @@ mindmap
 With the API running, open **Swagger UI at [http://localhost:4000/api/docs](http://localhost:4000/api/docs)**.
 Sign in via `POST /auth/demo-login` from the docs page to try authenticated endpoints.
 Disabled in production unless `API_DOCS_ENABLED=true`.
+
+---
+
+<div align="center">
+
+## <img src="https://api.iconify.design/lucide/image.svg?color=%2371717a" width="22" valign="middle" /> &nbsp;Screenshots
+
+<img src="docs/screenshots/landing-page.webp" width="140" alt="Landing page" />
+<img src="docs/screenshots/home-feed.webp" width="140" alt="Home feed" />
+<img src="docs/screenshots/everything-in-one-place.webp" width="140" alt="Feature map" />
+<img src="docs/screenshots/ask-a-senior.webp" width="140" alt="Ask a Senior" />
+<img src="docs/screenshots/companies.webp" width="140" alt="Companies" />
+<img src="docs/screenshots/path-twins.webp" width="140" alt="Path Twins" />
+<img src="docs/screenshots/teams.webp" width="140" alt="Teams" />
+
+</div>
 
 ---
 
