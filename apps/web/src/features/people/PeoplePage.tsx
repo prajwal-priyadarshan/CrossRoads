@@ -9,6 +9,7 @@ import { EmptyState } from '@/components/shared/EmptyState';
 import { CardSkeleton } from '@/components/shared/Skeletons';
 import { cn } from '@/lib/utils';
 import { usePeople } from './api';
+import { AiPeopleSearch } from './AiPeopleSearch';
 import { FILTER_KEYS, PeopleFilters, type FilterValues } from './PeopleFilters';
 import { PersonCard } from './PersonCard';
 
@@ -74,6 +75,10 @@ export function PeoplePage() {
           </div>
         }
       />
+
+      <div className="mb-4">
+        <AiPeopleSearch onApply={update} />
+      </div>
 
       {mode === 'mentor' && (
         <div className="mb-4 flex items-start gap-2 rounded-xl bg-primary-soft p-3 text-sm text-primary">

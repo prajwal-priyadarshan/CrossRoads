@@ -28,3 +28,4 @@ export const aiPeopleFilterOut = z.object({
   mentorAvailable: z.boolean().default(false),
   summary: z.string().max(160),
 });
+export type AiPeopleFilters = z.infer<typeof aiPeopleFilterOut>;
