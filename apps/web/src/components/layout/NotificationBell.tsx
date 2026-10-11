@@ -112,7 +112,7 @@ export function NotificationBell() {
             {isLoading ? (
               <p className="p-3 text-center text-sm text-muted-foreground">Loading…</p>
             ) : !items.length ? (
-              <p className="p-3 text-center text-sm text-muted-foreground">You're all caught up ✨</p>
+              <p className="p-3 text-center text-sm text-muted-foreground">You're all caught up</p>
             ) : (
               items.map((n) => <Row key={n.id} n={n} onOpen={openItem} />)
             )}

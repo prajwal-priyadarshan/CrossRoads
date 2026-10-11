@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { useMutation } from '@tanstack/react-query';
-import { Loader2, Lightbulb } from 'lucide-react';
+import { Loader2, Lightbulb, Star } from 'lucide-react';
 import { api, ApiError } from '@/lib/api';
 import { UserAvatar } from '@/components/shared/UserAvatar';
 import { RoleBadge } from '@/components/shared/RoleBadge';
@@ -91,7 +91,12 @@ export function AiAnswerPanel({ questionId }: { questionId: string }) {
                     <UserAvatar user={s.author} size="sm" />
                     {s.author.fullName}
                     <RoleBadge role={s.author.role as 'STUDENT' | 'SENIOR' | 'ALUMNI' | 'ADMIN'} currentYear={s.author.currentYear} />
-                    {s.isBest && <span className="text-amber-600 dark:text-amber-400">★ best answer</span>}
+                    {s.isBest && (
+                      <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400">
+                        <Star className="size-3 fill-current" aria-hidden="true" />
+                        best answer
+                      </span>
+                    )}
                   </p>
                   <p className="mt-1 line-clamp-2 text-muted-foreground">{s.answer}</p>
                 </div>

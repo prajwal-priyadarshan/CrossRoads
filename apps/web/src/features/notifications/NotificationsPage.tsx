@@ -70,7 +70,7 @@ export function NotificationsPage() {
       {isLoading ? (
         <ListSkeleton rows={5} />
       ) : !items.length ? (
-        <EmptyState icon={Bell} title="You're all caught up ✨" />
+        <EmptyState icon={Bell} title="You're all caught up" />
       ) : (
         <div className="space-y-6">
           {sections.map(

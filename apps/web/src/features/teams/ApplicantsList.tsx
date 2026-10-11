@@ -1,4 +1,5 @@
 import type { TeamApplicant } from '@crossroads/shared';
+import { Check } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { RelativeTime } from '@/components/shared/RelativeTime';
 import { RoleBadge } from '@/components/shared/RoleBadge';
@@ -41,8 +42,9 @@ export function ApplicantsList({ teamId, applications }: { teamId: string; appli
           {a.skillOverlap.length > 0 && (
             <div className="flex flex-wrap gap-1.5">
               {a.skillOverlap.map((s) => (
-                <span key={s} className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
-                  ✓ {titleCase(s)}
+                <span key={s} className="flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-xs text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
+                  <Check className="size-3" aria-hidden="true" />
+                  {titleCase(s)}
                 </span>
               ))}
             </div>

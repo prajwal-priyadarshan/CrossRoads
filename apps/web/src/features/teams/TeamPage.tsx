@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router';
-import { Clock, Rocket } from 'lucide-react';
+import { Check, Clock, Rocket } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -79,13 +79,13 @@ export function TeamPage() {
                     <span
                       key={s}
                       className={cn(
-                        'rounded-full px-2 py-0.5 text-xs',
+                        'flex items-center gap-1 rounded-full px-2 py-0.5 text-xs',
                         team.skillMatch.includes(s)
                           ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300'
                           : 'bg-muted',
                       )}
                     >
-                      {team.skillMatch.includes(s) ? '✓ ' : ''}
+                      {team.skillMatch.includes(s) && <Check className="size-3" aria-hidden="true" />}
                       {titleCase(s)}
                     </span>
                   ))}
