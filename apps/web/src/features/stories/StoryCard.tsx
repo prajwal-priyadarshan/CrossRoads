@@ -31,7 +31,7 @@ export function StoryCard({ story }: { story: StorySummary }) {
           )}
           {story.publishedAt && <RelativeTime iso={story.publishedAt} />}
         </div>
-        {story.tags.length > 0 && (
+        {Array.isArray(story.tags) && story.tags.length > 0 && (
           <div className="flex flex-wrap gap-1.5">
             {story.tags.slice(0, 3).map((t) => (
               <span key={t} className="rounded-full bg-muted px-2 py-0.5 text-xs">

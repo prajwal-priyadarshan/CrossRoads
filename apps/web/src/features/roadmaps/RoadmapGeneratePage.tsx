@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import { Check, Code2, Database, Lightbulb, Palette, Layers } from 'lucide-react';
+import { Check, Code2, Database, Lightbulb, Layers, GraduationCap, Briefcase, FlaskConical } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -11,11 +11,13 @@ import { api } from '@/lib/api';
 import { cn } from '@/lib/utils';
 
 const GOAL_TRACKS = [
-  { value: 'SOFTWARE_ENGINEERING', label: 'Software Engineering', icon: Code2 },
-  { value: 'DATA_SCIENCE', label: 'Data Science', icon: Database },
-  { value: 'PRODUCT', label: 'Product', icon: Lightbulb },
-  { value: 'DESIGN', label: 'Design', icon: Palette },
-  { value: 'OTHER', label: 'Other', icon: Layers },
+  { value: 'PRODUCT', label: 'Product Company (SDE)', icon: Code2, desc: 'SDE, AI & product roles' },
+  { value: 'SERVICE', label: 'IT Services', icon: Layers, desc: 'Consulting & systems roles' },
+  { value: 'QUANT_FINANCE', label: 'Quant & Finance', icon: Database, desc: 'Trading, fintech & math' },
+  { value: 'STARTUP', label: 'Campus Startup', icon: Lightbulb, desc: 'Founding & early building' },
+  { value: 'RESEARCH', label: 'Research & Labs', icon: FlaskConical, desc: 'Papers & research labs' },
+  { value: 'MS', label: 'MS / Higher Studies', icon: GraduationCap, desc: 'Master’s & PhD preparation' },
+  { value: 'MBA', label: 'MBA', icon: Briefcase, desc: 'Management & consulting' },
 ] as const;
 
 const TARGET_ROLES = ['SDE', 'SDE-2', 'Data Analyst', 'Data Scientist', 'ML Engineer', 'Product Manager', 'UX Designer', 'DevOps', 'Backend Engineer', 'Frontend Engineer'];
@@ -31,7 +33,11 @@ export function RoadmapGeneratePage() {
   const navigate = useNavigate();
   const [params] = useSearchParams();
 
-  const [goalTrack, setGoalTrack] = useState(params.get('track') ?? '');
+  const [goalTrack, setGoalTrack] = useState(() => {
+    const t = params.get('track');
+    if (t === 'SOFTWARE_ENGINEERING' || t === 'DATA_SCIENCE') return 'PRODUCT';
+    return t ?? '';
+  });
   const [targetRole, setTargetRole] = useState('');
   const [selectedCompanies, setSelectedCompanies] = useState<string[]>(() => {
     const c = params.get('company');
@@ -93,20 +99,21 @@ export function RoadmapGeneratePage() {
       <section className="space-y-3">
         <h2 className="text-sm font-semibold">Goal track <span className="text-destructive">*</span></h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          {GOAL_TRACKS.map(({ value, label, icon: Icon }) => (
+          {GOAL_TRACKS.map(({ value, label, desc, icon: Icon }) => (
             <button
               key={value}
               type="button"
               onClick={() => setGoalTrack(value)}
               className={cn(
-                'flex flex-col items-center gap-2 rounded-xl border p-4 text-sm font-medium transition',
+                'flex flex-col items-center text-center gap-1.5 rounded-xl border p-3.5 text-sm font-medium transition',
                 goalTrack === value
                   ? 'border-primary bg-primary-soft text-primary'
                   : 'bg-card hover:bg-muted',
               )}
             >
-              <Icon className="size-5" />
-              {label}
+              <Icon className="size-5 shrink-0 text-primary" />
+              <span>{label}</span>
+              <span className="text-[11px] font-normal text-muted-foreground">{desc}</span>
             </button>
           ))}
         </div>

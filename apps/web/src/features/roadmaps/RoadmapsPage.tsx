@@ -1,5 +1,5 @@
 import { Link, useSearchParams } from 'react-router';
-import { Map as MapIcon, Plus } from 'lucide-react';
+import { Map as MapIcon, Plus, Sparkles } from 'lucide-react';
 import type { RoadmapSummary } from '@crossroads/shared';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
@@ -70,11 +70,18 @@ export function RoadmapsPage() {
         title="Roadmaps"
         description="Real paths from seniors who reached your goal."
         actions={
-          <Button asChild variant={helper ? 'default' : 'outline'}>
-            <Link to="/roadmaps/new">
-              <Plus /> Share your roadmap
-            </Link>
-          </Button>
+          <div className="flex flex-wrap items-center gap-2">
+            <Button asChild variant="default">
+              <Link to="/roadmaps/generate">
+                <Sparkles className="size-4 mr-1.5" /> Generate plan
+              </Link>
+            </Button>
+            <Button asChild variant={helper ? 'default' : 'outline'}>
+              <Link to="/roadmaps/new">
+                <Plus className="size-4 mr-1.5" /> Share roadmap
+              </Link>
+            </Button>
+          </div>
         }
       />
       <SortToggle<'explore' | 'mine'>
@@ -98,7 +105,18 @@ export function RoadmapsPage() {
         <EmptyState
           icon={MapIcon}
           title={view === 'mine' ? 'No roadmaps yet' : 'No roadmaps for this goal yet'}
-          description={view === 'mine' ? 'Save a roadmap or tick a step to see it here.' : 'Be the first to share the path you took.'}
+          description={
+            view === 'mine'
+              ? 'Save an alumni roadmap or generate your personal plan.'
+              : 'Be the first to share the path you took, or generate your personal plan.'
+          }
+          action={
+            <Button asChild variant="default">
+              <Link to="/roadmaps/generate">
+                <Sparkles className="size-4 mr-1.5" /> Generate personal plan
+              </Link>
+            </Button>
+          }
         />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
