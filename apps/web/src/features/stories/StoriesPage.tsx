@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { BookOpen } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { PageHeader } from '@/components/layout/PageHeader';
+import { PublicPageHeader } from '@/components/layout/PublicPageHeader';
 import { EmptyState } from '@/components/shared/EmptyState';
 import { CardSkeleton } from '@/components/shared/Skeletons';
 import { StoryCard } from './StoryCard';
@@ -14,7 +15,9 @@ export function StoriesPage() {
   const allTags = [...new Set(items.flatMap((s) => s.tags))].slice(0, 10);
 
   return (
-    <div className="space-y-5">
+    <div className="min-h-screen bg-background">
+      <PublicPageHeader />
+      <div className="mx-auto max-w-5xl space-y-5 px-6 py-10">
       <PageHeader title="Success stories" description="Journeys from your campus — placements, startups, research and more." />
 
       {allTags.length > 0 && (
@@ -65,6 +68,7 @@ export function StoriesPage() {
           )}
         </>
       )}
+      </div>
     </div>
   );
 }

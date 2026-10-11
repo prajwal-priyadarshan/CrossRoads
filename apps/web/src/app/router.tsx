@@ -62,10 +62,6 @@ const appRoutes: RouteObject[] = [
   { path: '/teams/:id', ...page(() => import('@/features/teams/TeamPage'), 'TeamPage') },
   { path: '/notifications', ...page(() => import('@/features/notifications/NotificationsPage'), 'NotificationsPage') },
 
-  // Success stories (Phase 08)
-  { path: '/stories', ...page(() => import('@/features/stories/StoriesPage'), 'StoriesPage') },
-  { path: '/stories/:slug', ...page(() => import('@/features/stories/StoryPage'), 'StoryPage') },
-
   // Admin (Phase 08)
   { element: <RequireAdmin />, children: [{ path: '/admin', ...page(() => import('@/features/admin/AdminPage'), 'AdminPage') }] },
   
@@ -93,6 +89,9 @@ export const router = createBrowserRouter([
       { path: '/', ...page(() => import('@/features/landing/LandingPage'), 'LandingPage') },
       // Phase 10: /support (public)
       { path: '/support', ...page(() => import('@/features/support/SupportPage'), 'SupportPage') },
+      // Success stories are public — no sign-in needed to read them
+      { path: '/stories', ...page(() => import('@/features/stories/StoriesPage'), 'StoriesPage') },
+      { path: '/stories/:slug', ...page(() => import('@/features/stories/StoryPage'), 'StoryPage') },
       // Phase 12: /data-notice (public, linked from the sign-up consent checkbox)
       { path: '/data-notice', ...page(() => import('@/features/legal/DataNoticePage'), 'DataNoticePage') },
       {

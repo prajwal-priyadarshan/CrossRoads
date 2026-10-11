@@ -12,6 +12,7 @@ export type SeedUser = {
   handle: string;
   fullName: string;
   email: string;
+  avatarUrl?: string;
   role: Role;
   currentYear: number | null;
   batchYear: number;
@@ -53,7 +54,9 @@ const social = (h: string) => ({
 });
 
 const DEMO_SUFFIX = process.env.DEMO_EMAIL_SUFFIX || '@demo.crossroads';
-const base = (handle: string, fullName: string) => ({ handle, fullName, email: `${handle}${DEMO_SUFFIX}` });
+// Illustrated (non-photographic) avatars, not real people's photos, seeded per handle for a consistent face per demo user.
+const avatar = (handle: string) => `https://api.dicebear.com/9.x/avataaars/svg?seed=${handle}&skinColor=d08b5b,ae5d29,edb98a`;
+const base = (handle: string, fullName: string) => ({ handle, fullName, email: `${handle}${DEMO_SUFFIX}`, avatarUrl: avatar(handle) });
 
 export const users: SeedUser[] = [
   // ───────────── First years (7) ─────────────

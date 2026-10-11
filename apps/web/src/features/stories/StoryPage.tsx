@@ -1,6 +1,7 @@
 import { useParams } from 'react-router';
 import { Star } from 'lucide-react';
 import { PageHeader } from '@/components/layout/PageHeader';
+import { PublicPageHeader } from '@/components/layout/PublicPageHeader';
 import { ProfileSkeleton } from '@/components/shared/Skeletons';
 import { RelativeTime } from '@/components/shared/RelativeTime';
 import { ReportButton } from '@/components/shared/ReportButton';
@@ -16,9 +17,12 @@ export function StoryPage() {
   if (isLoading) return <ProfileSkeleton />;
   if (!data) {
     return (
-      <div className="mx-auto max-w-3xl space-y-4 py-12 text-center">
-        <h1 className="font-display text-2xl font-bold">Story not found</h1>
-        <p className="text-muted-foreground">The story you are looking for does not exist or has been removed.</p>
+      <div className="min-h-screen bg-background">
+        <PublicPageHeader />
+        <div className="mx-auto max-w-3xl space-y-4 px-6 py-12 text-center">
+          <h1 className="font-display text-2xl font-bold">Story not found</h1>
+          <p className="text-muted-foreground">The story you are looking for does not exist or has been removed.</p>
+        </div>
       </div>
     );
   }
@@ -34,7 +38,9 @@ export function StoryPage() {
   const tags = Array.isArray(story.tags) ? story.tags : [];
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6">
+    <div className="min-h-screen bg-background">
+      <PublicPageHeader />
+      <div className="mx-auto max-w-3xl space-y-6 px-6 py-10">
       <PageHeader
         title={story.title ?? 'Story Spotlight'}
         actions={story.id ? <ReportButton targetType="STORY" targetId={story.id} /> : null}
@@ -83,6 +89,7 @@ export function StoryPage() {
           </div>
         </section>
       )}
+      </div>
     </div>
   );
 }
