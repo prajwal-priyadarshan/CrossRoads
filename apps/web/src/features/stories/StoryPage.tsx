@@ -13,14 +13,31 @@ export function StoryPage() {
   const { slug } = useParams<{ slug: string }>();
   const { data, isLoading } = useStory(slug!);
 
-  if (isLoading || !data) return <ProfileSkeleton />;
-  const { related, ...story } = data;
+  if (isLoading) return <ProfileSkeleton />;
+  if (!data) {
+    return (
+      <div className="mx-auto max-w-3xl space-y-4 py-12 text-center">
+        <h1 className="font-display text-2xl font-bold">Story not found</h1>
+        <p className="text-muted-foreground">The story you are looking for does not exist or has been removed.</p>
+      </div>
+    );
+  }
+
+  // Handle both flat StoryDetail ({ ...story, related }) and nested ({ story, related }) responses
+  const rawStory = ('story' in (data as any) && (data as any).story ? (data as any).story : data) as any;
+  const story = rawStory ?? {};
+  const related = (Array.isArray((data as any).related)
+    ? (data as any).related
+    : Array.isArray(story.related)
+      ? story.related
+      : []) as any[];
+  const tags = Array.isArray(story.tags) ? story.tags : [];
 
   return (
     <div className="mx-auto max-w-3xl space-y-6">
       <PageHeader
-        title={story.title}
-        actions={<ReportButton targetType="STORY" targetId={story.id} />}
+        title={story.title ?? 'Story Spotlight'}
+        actions={story.id ? <ReportButton targetType="STORY" targetId={story.id} /> : null}
       />
 
       {story.coverUrl && <img src={story.coverUrl} alt="" className="aspect-[16/9] w-full rounded-2xl object-cover" />}
@@ -46,9 +63,9 @@ export function StoryPage() {
 
       <p className="whitespace-pre-wrap text-base leading-relaxed">{story.body}</p>
 
-      {story.tags.length > 0 && (
+      {tags.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
-          {story.tags.map((t) => (
+          {tags.map((t: string) => (
             <span key={t} className="rounded-full bg-muted px-2 py-0.5 text-xs">
               {titleCase(t)}
             </span>
