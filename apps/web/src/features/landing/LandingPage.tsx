@@ -98,10 +98,10 @@ export function LandingPage() {
   const { data: me } = useMe();
   return (
     <div className="min-h-dvh bg-background">
-      <header className="mx-auto flex h-16 max-w-6xl items-center gap-4 px-4 md:px-8">
-        <div className="flex items-center gap-2.5">
+      <header className="mx-auto flex h-20 max-w-6xl items-center gap-4 px-4 md:px-8">
+        <div className="flex items-center gap-3">
           <Logo to="/" />
-          <span className="font-display text-lg font-bold tracking-tight">Crossroads</span>
+          <span className="font-display text-2xl font-bold tracking-tight md:text-3xl">Crossroads</span>
         </div>
         <nav className="ml-6 hidden items-center gap-5 text-sm text-muted-foreground md:flex">
           <Link to="/stories" className="hover:text-foreground">Stories</Link>

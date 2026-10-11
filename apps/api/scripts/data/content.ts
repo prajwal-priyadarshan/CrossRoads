@@ -208,6 +208,10 @@ export const clubReviews: SeedReview[] = [
   { author: 'manoj', club: 'photography-club', usefulness: 3, timeCost: 3, review: 'Fun, flexible and a good way to meet people outside your own branch.' },
   { author: 'imran', club: 'natya-dance-club', usefulness: 2, timeCost: 5, review: 'Rehearsals before fests are long, but performing on stage is a confidence boost unlike anything else.' },
   { author: 'gautham', club: 'natya-dance-club', usefulness: 3, timeCost: 5, review: 'Serious commitment close to competitions. Coaches are understanding around exam weeks.' },
+  { author: 'sana', club: 'iic-council', usefulness: 5, timeCost: 3, review: 'The design-thinking workshops reframed how I approach problems before writing a line of code. Great for anyone eyeing a startup.' },
+  { author: 'anitha', club: 'iic-council', usefulness: 4, timeCost: 3, review: 'IPR sessions were more useful than I expected. Good bridge between the engineering side and the business side.' },
+  { author: 'suresh', club: 'acm-club', usefulness: 5, timeCost: 4, review: 'ICPC prep through this club is serious and well structured. If you want competitive programming, start here.' },
+  { author: 'aishwarya', club: 'acm-club', usefulness: 4, timeCost: 3, review: 'Workshops are genuinely technical, not surface level. Good mentors from seniors who have placed well.' },
 ];
 
 type StepKind = 'SKILL' | 'PROJECT' | 'RESOURCE' | 'PRACTICE';

@@ -80,4 +80,26 @@ export const clubs = [
     recruitmentMonth: 'August',
     joinUrl: null,
   },
+  {
+    slug: 'iic-council',
+    name: 'IIC Council',
+    category: 'ENTREPRENEURSHIP',
+    description:
+      "The campus chapter of the Ministry of Education's Institution's Innovation Council — runs ideation sessions, design-thinking workshops, IPR awareness drives and startup support. (Demo data)",
+    timeCommitment: '3–5 h/week',
+    skillsGained: ['design thinking', 'ideation', 'ipr basics', 'startup building'],
+    recruitmentMonth: 'August',
+    joinUrl: null,
+  },
+  {
+    slug: 'acm-club',
+    name: 'ACM Club',
+    category: 'TECH',
+    description:
+      'The campus ACM Student Chapter — runs the ACM-ICPC programming contest track, technical workshops and hackathons, backed by the Association for Computing Machinery. (Demo data)',
+    timeCommitment: '4–6 h/week',
+    skillsGained: ['competitive programming', 'algorithms', 'public speaking', 'event management'],
+    recruitmentMonth: 'August',
+    joinUrl: null,
+  },
 ];
