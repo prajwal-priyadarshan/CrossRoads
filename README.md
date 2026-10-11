@@ -1,5 +1,10 @@
 <div align="center">
 
+## 📢 GENESIS'26 HACKATHON
+### 👥 Team: **FAB4** &nbsp;|&nbsp; 🆔 Team ID: `GEN26-A0H-H052`
+
+<br />
+
 <img src="apps/web/public/brand/crossroads-mark.png" alt="Crossroads logo" width="120" />
 
 # Crossroads
@@ -10,6 +15,12 @@
 
 <br />
 
+[![Hackathon](https://img.shields.io/badge/Hackathon-GENESIS'26-6366F1?style=for-the-badge)](https://github.com/prajwal-priyadarshan/Amrita_Ascend)
+[![Team](https://img.shields.io/badge/Team-FAB4-F59E0B?style=for-the-badge)](https://github.com/prajwal-priyadarshan/Amrita_Ascend)
+[![Team ID](https://img.shields.io/badge/Team%20ID-GEN26--A0H--H052-10B981?style=for-the-badge)](https://github.com/prajwal-priyadarshan/Amrita_Ascend)
+
+<br /><br />
+
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
 ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
@@ -19,6 +30,21 @@
 ![Groq](https://img.shields.io/badge/Groq-F55036?style=for-the-badge&logo=groq&logoColor=white)
 ![Vercel](https://img.shields.io/badge/Vercel-000000?style=for-the-badge&logo=vercel&logoColor=white)
 ![Render](https://img.shields.io/badge/Render-46E3B7?style=for-the-badge&logo=render&logoColor=black)
+</div>
+
+---
+
+<div align="center">
+
+## 👥 Team: FAB4
+**Hackathon:** GENESIS'26 &nbsp;|&nbsp; **Team Name:** FAB4 &nbsp;|&nbsp; **Team ID:** `GEN26-A0H-H052`
+
+| Member | Roll No. |
+| :--- | :--- |
+| **G Prajwal Priyadarshan** | CB.SC.U4AIE24214 |
+| **Rithan S** | CB.SC.U4AIE24348 |
+| **Kabilan K** | CB.SC.U4AIE24224 |
+| **Kishore B** | CB.SC.U4AIE24227 |
 
 </div>
 
