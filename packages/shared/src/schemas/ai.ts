@@ -15,3 +15,16 @@ export const aiQuestionOut = z.object({
   rubric: z.array(z.object({ point: z.string().max(200), weight: z.number().min(1).max(5) })).min(3).max(6).optional(),
 });
 export const aiGradeOut = z.object({ scorePct: z.number().int().min(0).max(100), feedback: z.string().max(600), missing: z.array(z.string()).max(6) });
+
+export const aiPeopleSearchSchema = z.object({ query: z.string().trim().min(2).max(200) });
+
+export const aiPeopleFilterOut = z.object({
+  role: z.enum(['STUDENT', 'SENIOR', 'ALUMNI']).optional(),
+  department: z.string().max(40).optional(),
+  skills: z.array(z.string().max(40)).max(6).default([]),
+  interests: z.array(z.string().max(40)).max(6).default([]),
+  targetRole: z.string().max(60).optional(),
+  company: z.string().max(80).optional(),
+  mentorAvailable: z.boolean().default(false),
+  summary: z.string().max(160),
+});

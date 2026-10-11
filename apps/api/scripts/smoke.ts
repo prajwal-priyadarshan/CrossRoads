@@ -506,6 +506,13 @@ async function main() {
     if (!['ok', 'fallback', 'no_sources'].includes(r.status)) throw new Error(`status ${r.status}`);
     return `status ${r.status}, ${r.sources?.length ?? 0} sources`;
   });
+  await check('ai: natural-language people search returns ranked matches with explained filters', async () => {
+    const r = expectStatus(await ananya.post('/people/search/ai', { query: 'alumni mentor who knows machine learning' }), 200) as any;
+    if (!Array.isArray(r.people)) throw new Error('missing people array');
+    if (typeof r.usedAI !== 'boolean') throw new Error('missing usedAI flag');
+    if (!r.filters || typeof r.filters.summary !== 'string') throw new Error('missing filters.summary');
+    return `${r.people.length} people, usedAI=${r.usedAI}, filters=${JSON.stringify(r.filters)}`;
+  });
   await check('events: upcoming list shows seats and RSVP state', async () => {
     const events = expectStatus(await ananya.get('/events'), 200) as any[];
     if (!events.every((e) => typeof e.rsvpCount === 'number' && 'mine' in e)) throw new Error('bad event shape');

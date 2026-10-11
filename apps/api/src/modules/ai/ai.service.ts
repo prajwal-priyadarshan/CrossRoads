@@ -2,10 +2,10 @@ import { z } from 'zod';
 import { prisma } from '../../lib/prisma';
 import { AppError } from '../../lib/errors';
 import { cached } from '../../lib/cache';
-import { generateJSON } from '../../lib/ai';
+import { generateJSON, AIError } from '../../lib/ai';
 import { logger } from '../../lib/logger';
 import { getRelatedAnswers } from '../../services/retrieval';
-import { aiAnswerOut, aiSummaryOut } from '@crossroads/shared';
+import { aiAnswerOut, aiSummaryOut, aiPeopleFilterOut, SKILLS, INTERESTS, TARGET_ROLES, DEPARTMENTS } from '@crossroads/shared';
 import { env, aiEnabled } from '../../config/env';
 
 const ANSWER_SYSTEM_PROMPT = `You are a helpful campus assistant. Answer the student's question using ONLY the provided sources from seniors. Use citation format [n] to reference sources. Keep the answer under 300 words. Return only valid JSON with exactly two keys: "answer" (string) and "citations" (array of source numbers, empty if none).`;
@@ -159,4 +159,74 @@ export async function summary(viewerId: string, input: { postId?: string; compan
   }
 
   throw new AppError(400, 'VALIDATION', 'Provide postId or companySlug');
+}
+
+const PEOPLE_SEARCH_SYSTEM_PROMPT = `You are a search query parser for a college mentorship platform. Convert the user's free-text description of who they're looking for into structured filters.
+Only use values from these vocabularies (lowercase, exact strings), or omit the field if nothing fits:
+- role: one of STUDENT, SENIOR, ALUMNI (SENIOR = current final-year/penultimate student, ALUMNI = graduated)
+- department: one of ${DEPARTMENTS.join(', ')}
+- skills: up to 6 values from [${SKILLS.join(', ')}]
+- interests: up to 6 values from [${INTERESTS.join(', ')}]
+- targetRole: one of [${TARGET_ROLES.join(', ')}]
+- company: a free-text company name if one is mentioned (e.g. "Northwind Labs"), else omit
+- mentorAvailable: true only if the user is explicitly looking for a mentor or someone willing to help/guide them
+- summary: a short (<=15 words) human-readable restatement of what you understood, e.g. "Alumni mentors in machine learning at product companies"
+Return only valid JSON matching this shape exactly. Never invent a skill, interest or role that is not in the vocabulary above.`;
+
+const mentions = (haystack: string, term: string) => haystack.includes(term.toLowerCase());
+
+/** Deterministic keyword-match fallback used when AI is disabled or the call fails — same filters, no model required. */
+function deterministicPeopleFilters(query: string): z.infer<typeof aiPeopleFilterOut> {
+  const q = query.toLowerCase();
+  const skills = SKILLS.filter((s) => mentions(q, s)).slice(0, 6);
+  const interests = INTERESTS.filter((i) => mentions(q, i)).slice(0, 6);
+  const targetRole = TARGET_ROLES.find((r) => mentions(q, r));
+  const department = DEPARTMENTS.find((d) => mentions(q, d.toLowerCase()));
+  let role: 'STUDENT' | 'SENIOR' | 'ALUMNI' | undefined;
+  if (mentions(q, 'alumni') || mentions(q, 'alumnus') || mentions(q, 'graduate')) role = 'ALUMNI';
+  else if (mentions(q, 'senior')) role = 'SENIOR';
+  else if (mentions(q, 'junior') || mentions(q, 'student') || mentions(q, 'first year') || mentions(q, 'fresher')) role = 'STUDENT';
+  const mentorAvailable = mentions(q, 'mentor') || mentions(q, 'guide') || mentions(q, 'help me');
+
+  return {
+    role,
+    department,
+    skills,
+    interests,
+    targetRole,
+    mentorAvailable,
+    summary: `Keyword match for "${query.slice(0, 60)}"`,
+  };
+}
+
+/** Validate the model's output against our canonical vocabularies so a hallucinated value never reaches the DB query. */
+function sanitizePeopleFilters(out: z.infer<typeof aiPeopleFilterOut>): z.infer<typeof aiPeopleFilterOut> {
+  const lc = (s: string) => s.toLowerCase();
+  return {
+    ...out,
+    skills: out.skills.filter((s) => (SKILLS as readonly string[]).includes(lc(s))).map(lc),
+    interests: out.interests.filter((i) => (INTERESTS as readonly string[]).includes(lc(i))).map(lc),
+    targetRole: out.targetRole && (TARGET_ROLES as readonly string[]).includes(lc(out.targetRole)) ? lc(out.targetRole) : undefined,
+    department: out.department && (DEPARTMENTS as readonly string[]).includes(out.department) ? out.department : undefined,
+  };
+}
+
+export async function parsePeopleQuery(query: string): Promise<{ filters: z.infer<typeof aiPeopleFilterOut>; usedAI: boolean }> {
+  if (!aiEnabled) return { filters: deterministicPeopleFilters(query), usedAI: false };
+
+  try {
+    const out = await cached(`people-query:${query.toLowerCase().trim()}`, 60 * 60_000, () =>
+      generateJSON({
+        system: PEOPLE_SEARCH_SYSTEM_PROMPT,
+        user: `Find: ${query}`,
+        schema: aiPeopleFilterOut,
+        maxTokens: 300,
+      }),
+    );
+    return { filters: sanitizePeopleFilters(out), usedAI: true };
+  } catch (err) {
+    if (!(err instanceof AIError)) logger.warn({ err }, 'unexpected error parsing AI people query');
+    else logger.warn({ err }, 'AI call failed, serving the deterministic keyword fallback');
+    return { filters: deterministicPeopleFilters(query), usedAI: false };
+  }
 }

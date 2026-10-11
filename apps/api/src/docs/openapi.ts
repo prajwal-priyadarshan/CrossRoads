@@ -48,6 +48,7 @@ const ROUTES: Row[] = [
   // People and requests
   { method: 'get', path: '/people', tag: 'People', summary: 'Discover people with filters and explained match scores', auth: 'onboarded', query: S.peopleQuerySchema },
   { method: 'get', path: '/people/suggested', tag: 'People', summary: 'Top 3 suggested people', auth: 'onboarded' },
+  { method: 'post', path: '/people/search/ai', tag: 'People', summary: 'Natural-language people search (AI parses it into filters; falls back to keyword matching)', auth: 'onboarded', body: S.aiPeopleSearchSchema, status: 200 },
   { method: 'post', path: '/connections', tag: 'Requests', summary: 'Send a connect / mentorship / collab / peer request', auth: 'onboarded', body: S.connectionCreateSchema, status: 201 },
   { method: 'get', path: '/connections', tag: 'Requests', summary: 'Incoming, outgoing or completed requests', auth: 'onboarded', query: S.connectionsQuerySchema },
   { method: 'patch', path: '/connections/:id', tag: 'Requests', summary: 'Accept or decline (recipient only)', auth: 'onboarded', body: S.connectionRespondSchema },
