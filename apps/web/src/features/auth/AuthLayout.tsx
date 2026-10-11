@@ -34,7 +34,7 @@ export function AuthLayout({
         <div className="relative z-10 flex h-full flex-col justify-between">
           <Logo to="/" onDark />
           <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 space-y-10">
-            <figure className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
+            <figure className="rounded-2xl border border-primary-foreground/15 bg-primary-foreground/5 p-6 backdrop-blur-sm">
               <blockquote className="font-display text-xl font-semibold leading-snug">
                 &ldquo;I wish I had this in my first year.&rdquo;
               </blockquote>
@@ -42,7 +42,7 @@ export function AuthLayout({
             </figure>
             <ul className="space-y-4">
               {BENEFITS.map(({ icon: Icon, text }) => (
-                <li key={text} className="flex items-center gap-3 text-white/90">
+                <li key={text} className="flex items-center gap-3 text-primary-foreground/90">
                   <span className="grid size-9 shrink-0 place-items-center rounded-full bg-accent text-accent-foreground">
                     <Icon className="size-4.5" aria-hidden="true" />
                   </span>
@@ -51,7 +51,7 @@ export function AuthLayout({
               ))}
             </ul>
           </div>
-          <p className="text-sm text-white/60">No rankings. No pressure.</p>
+          <p className="text-sm text-primary-foreground/70">No rankings. No pressure.</p>
         </div>
       </div>
       <div className="flex flex-col justify-center bg-background px-4 py-10 sm:px-8">
