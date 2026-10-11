@@ -93,6 +93,8 @@ export const router = createBrowserRouter([
       { path: '/', ...page(() => import('@/features/landing/LandingPage'), 'LandingPage') },
       // Phase 10: /support (public)
       { path: '/support', ...page(() => import('@/features/support/SupportPage'), 'SupportPage') },
+      // Phase 12: /data-notice (public, linked from the sign-up consent checkbox)
+      { path: '/data-notice', ...page(() => import('@/features/legal/DataNoticePage'), 'DataNoticePage') },
       {
         element: <RequireAuth />,
         children: [

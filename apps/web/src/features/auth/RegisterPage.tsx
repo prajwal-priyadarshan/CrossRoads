@@ -99,8 +99,12 @@ export function RegisterPage() {
         <label className="flex items-start gap-3 text-sm text-muted-foreground">
           <input type="checkbox" className="mt-1 size-4 accent-primary" {...field('consent')} />
           <span>
-            I have read how my data is used. Profile details and messages are shared only with people I connect with,
-            and I can export or delete my data at any time.
+            I have read{' '}
+            <Link to="/data-notice" target="_blank" className="text-primary underline underline-offset-2">
+              how my data is used
+            </Link>
+            . Profile details and messages are shared only with people I connect with, and I can export or delete my
+            data at any time.
           </span>
         </label>
         {errors.consent && <p className="text-sm text-destructive">{errors.consent.message}</p>}
