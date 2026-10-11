@@ -107,7 +107,9 @@ export function LoginPage() {
                   })
                 }
               >
-                {a.fullName.split(' ')[0]} ({roleLabel(a.role, a.currentYear).toLowerCase()})
+                {a.role === 'ADMIN'
+                  ? 'Admin'
+                  : `${a.fullName.split(' ')[0]} (${roleLabel(a.role, a.currentYear).toLowerCase()})`}
               </Button>
             ))}
           </div>
