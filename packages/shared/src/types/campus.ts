@@ -100,6 +100,8 @@ export type Twin = {
   score: number;
   reasons: string[];
   milestonesByYear: Record<string, TwinMilestone[]>;
+  /** AI-written explanation of why this is a good path twin, grounded in `reasons`; null when AI is disabled or the call fails (the deterministic `reasons` chips still cover it). */
+  aiInsight: string | null;
 };
 
 export type PathTwins = {

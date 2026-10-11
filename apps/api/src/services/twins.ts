@@ -3,6 +3,11 @@ import { groupBy } from '../lib/collections';
 import { jaccard, titleCase } from '../lib/text';
 import { userLiteSelect } from '../modules/users/users.serializers';
 import { LIMITS } from '../config/constants';
+import { cached } from '../lib/cache';
+import { generateJSON, AIError } from '../lib/ai';
+import { logger } from '../lib/logger';
+import { aiEnabled } from '../config/env';
+import { aiTwinInsightsOut } from '@crossroads/shared';
 
 type Candidate = {
   company: string | null;
@@ -90,6 +95,14 @@ export async function findTwins(viewerId: string) {
     }))
     .sort((a, b) => b.count - a.count);
 
+  const twins = top.map(({ person: { milestones, ...person }, score, reasons }) => ({
+    person,
+    score,
+    reasons,
+    milestonesByYear: groupBy(milestones, (m) => String(m.yearOfStudy)),
+  }));
+  const insights = await aiTwinInsights(viewerId, { department: v.department, interests: v.interests, goalTrack: v.goalTrack }, twins);
+
   return {
     startingPoint: {
       department: v.department,
@@ -98,13 +111,54 @@ export async function findTwins(viewerId: string) {
       skills: v.skills,
       currentYear: v.currentYear,
     },
-    twins: top.map(({ person: { milestones, ...person }, score, reasons }) => ({
-      person,
-      score,
-      reasons,
-      milestonesByYear: groupBy(milestones, (m) => String(m.yearOfStudy)),
-    })),
+    twins: twins.map((t) => ({ ...t, aiInsight: insights.get(t.person.id) ?? null })),
     year1,
     poolSize: Math.min(5, scored.length),
   };
+}
+
+const TWIN_INSIGHT_PROMPT = `You explain to a student why a senior or alumni is a good "path twin" — someone who started in a similar place and can show them what's ahead. For each person given, write ONE warm, specific sentence, under 220 characters, grounded ONLY in the reasons and milestones provided — never invent facts or companies not mentioned. Mention one concrete thing the student could learn from or ask them about.
+Return only valid JSON with exactly one key "insights": an array with exactly one object per person listed, each object having exactly two keys — "personId" (copy the id exactly as given) and "insight" (the sentence, under 220 characters). Example shape: {"insights":[{"personId":"abc123","insight":"..."}]}`;
+
+type TwinForInsight = {
+  person: { id: string; fullName: string; role: string; company: string | null; jobTitle: string | null };
+  reasons: string[];
+  milestonesByYear: Record<string, { title: string }[]>;
+};
+
+/** Personalised one-liners on top of the (already final) deterministic ranking — AI explains, it never re-ranks. Cached per viewer + twin set. */
+async function aiTwinInsights(
+  viewerId: string,
+  startingPoint: { department: string | null; interests: string[]; goalTrack: string | null },
+  top: TwinForInsight[],
+): Promise<Map<string, string>> {
+  if (!aiEnabled || !top.length) return new Map();
+
+  const key = `twins:${viewerId}:${top.map((t) => `${t.person.id}:${t.reasons.length}`).join(',')}`;
+  try {
+    const out = await cached(key, 24 * 60 * 60_000, () => {
+      const people = top
+        .map((t) => {
+          const year1 = (t.milestonesByYear['1'] ?? []).map((m) => m.title).slice(0, 3);
+          const now = t.person.company ? `, now ${t.person.jobTitle ?? 'works'} at ${t.person.company}` : '';
+          return `- id=${t.person.id} name=${t.person.fullName} (${t.person.role}${now}) — reasons: ${
+            t.reasons.join('; ') || 'similar starting point'
+          }; first-year milestones: ${year1.join(', ') || 'none recorded'}`;
+        })
+        .join('\n');
+      return generateJSON({
+        system: TWIN_INSIGHT_PROMPT,
+        user: `Student: department ${startingPoint.department ?? 'unknown'}, interests ${
+          startingPoint.interests.join(', ') || 'none'
+        }, goal ${startingPoint.goalTrack ?? 'exploring'}.\n\nPath twins:\n${people}`,
+        schema: aiTwinInsightsOut,
+        maxTokens: 400,
+      });
+    });
+    return new Map(out.insights.map((i: { personId: string; insight: string }) => [i.personId, i.insight]));
+  } catch (err) {
+    if (!(err instanceof AIError)) logger.warn({ err }, 'unexpected error generating twin insights');
+    else logger.warn({ err }, 'AI call failed, path twins will show the deterministic reasons only');
+    return new Map();
+  }
 }

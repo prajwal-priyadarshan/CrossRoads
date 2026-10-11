@@ -4,6 +4,7 @@ import { prisma } from '../../lib/prisma';
 import { rankPeople } from '../../services/matching';
 import { userLiteSelect, asMatchProfile } from '../users/users.serializers';
 import { LIMITS } from '../../config/constants';
+import { parsePeopleQuery } from '../ai/ai.service';
 
 const matchSelect = {
   ...userLiteSelect,
@@ -106,3 +107,22 @@ export const suggestedPeople = (viewerId: string, limit = 3) =>
     interests: [],
     mentorAvailable: false,
   });
+
+/** Natural-language people search: AI (or a deterministic keyword fallback) turns free text into the same filters `discoverPeople` already understands. */
+export async function aiDiscoverPeople(viewerId: string, query: string) {
+  const { filters, usedAI } = await parsePeopleQuery(query);
+  const q: PeopleQuery = {
+    mode: filters.mentorAvailable ? 'mentor' : 'all',
+    sort: 'match',
+    limit: 30,
+    skills: filters.skills,
+    interests: filters.interests,
+    mentorAvailable: filters.mentorAvailable,
+    role: filters.role,
+    department: filters.department,
+    targetRole: filters.targetRole,
+    company: filters.company,
+  };
+  const people = await discoverPeople(viewerId, q);
+  return { people, filters, usedAI };
+}

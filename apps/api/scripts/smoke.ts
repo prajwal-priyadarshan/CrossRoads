@@ -202,7 +202,16 @@ async function main() {
     ['campus: company alumni', '/companies/northwind-labs/alumni', (d) => `${d.length}`],
     ['campus: clubs', '/clubs?sort=useful', (d) => `${d.length} clubs`],
     ['campus: club detail', '/clubs/code-circle', (d) => `${d.reviewCount} reviews`],
-    ['campus: path twins', '/path-twins', (d) => `${d.twins.length} twins`],
+    [
+      'campus: path twins',
+      '/path-twins',
+      (d) => {
+        if (!d.twins.every((t: any) => 'aiInsight' in t && (t.aiInsight === null || typeof t.aiInsight === 'string')))
+          throw new Error('twin missing aiInsight (should be a string or null)');
+        const withInsight = d.twins.filter((t: any) => t.aiInsight).length;
+        return `${d.twins.length} twins, ${withInsight} with an AI insight`;
+      },
+    ],
     ['campus: roadmaps', '/roadmaps', (d) => `${d.length} roadmaps`],
     ['campus: my roadmaps', '/roadmaps?mine=true', (d) => `${d.length}`],
     ['opportunities: closing soon', '/opportunities', (d) => `${d.items.length} open`],
@@ -505,6 +514,44 @@ async function main() {
     const r = expectStatus(await ananya.post('/ai/answer', { title: 'How should a first year start DSA?' }), 200) as any;
     if (!['ok', 'fallback', 'no_sources'].includes(r.status)) throw new Error(`status ${r.status}`);
     return `status ${r.status}, ${r.sources?.length ?? 0} sources`;
+  });
+  await check('ai: natural-language people search returns ranked matches with explained filters', async () => {
+    const r = expectStatus(await ananya.post('/people/search/ai', { query: 'alumni mentor who knows machine learning' }), 200) as any;
+    if (!Array.isArray(r.people)) throw new Error('missing people array');
+    if (typeof r.usedAI !== 'boolean') throw new Error('missing usedAI flag');
+    if (!r.filters || typeof r.filters.summary !== 'string') throw new Error('missing filters.summary');
+    return `${r.people.length} people, usedAI=${r.usedAI}, filters=${JSON.stringify(r.filters)}`;
+  });
+  await check('assistant: routes a people request to people_search', async () => {
+    const r = expectStatus(await ananya.post('/assistant/ask', { message: 'find me an alumni mentor who knows machine learning' }), 200) as any;
+    if (r.action !== 'people_search') throw new Error(`expected people_search, got ${r.action}`);
+    if (!Array.isArray(r.people)) throw new Error('missing people array');
+    if (typeof r.reply !== 'string' || !r.reply) throw new Error('missing reply');
+    return `action=${r.action}, ${r.people.length} people, usedAI=${r.usedAI}`;
+  });
+  await check('assistant: routes a question request to search', async () => {
+    const r = expectStatus(await ananya.post('/assistant/ask', { message: 'how should a first year start DSA?' }), 200) as any;
+    if (r.action !== 'search') throw new Error(`expected search, got ${r.action}`);
+    if (!r.results || !Array.isArray(r.results.questions)) throw new Error('missing results.questions');
+    return `action=${r.action}, ${r.results.questions.length} questions, usedAI=${r.usedAI}`;
+  });
+  await check('assistant: routes a feature request to navigate', async () => {
+    const r = expectStatus(await ananya.post('/assistant/ask', { message: 'take me to my placement prep dashboard' }), 200) as any;
+    if (r.action !== 'navigate') throw new Error(`expected navigate, got ${r.action}`);
+    if (r.destination !== 'prep') throw new Error(`expected destination prep, got ${r.destination}`);
+    return `action=${r.action}, destination=${r.destination}, usedAI=${r.usedAI}`;
+  });
+  await check('assistant: routes a how-is-this-built question to the project docs', async () => {
+    const r = expectStatus(await ananya.post('/assistant/ask', { message: 'what tech stack is Crossroads built with?' }), 200) as any;
+    if (r.action !== 'docs') throw new Error(`expected docs, got ${r.action}`);
+    if (!r.docs || !['ok', 'fallback', 'no_match'].includes(r.docs.status)) throw new Error('missing or bad docs.status');
+    return `action=${r.action}, docs.status=${r.docs.status}, usedAI=${r.usedAI}`;
+  });
+  await check('assistant: a plain greeting gets a conversational reply, not an action', async () => {
+    const r = expectStatus(await ananya.post('/assistant/ask', { message: 'hey, what can you help with?' }), 200) as any;
+    if (!['none', 'navigate', 'search', 'people_search'].includes(r.action)) throw new Error(`unexpected action ${r.action}`);
+    if (typeof r.reply !== 'string' || !r.reply) throw new Error('missing reply');
+    return `action=${r.action}, usedAI=${r.usedAI}`;
   });
   await check('events: upcoming list shows seats and RSVP state', async () => {
     const events = expectStatus(await ananya.get('/events'), 200) as any[];

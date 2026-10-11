@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { SEARCH_TYPES } from './search';
 
 export const aiAnswerOut = z.object({ answer: z.string().min(1).max(1500), citations: z.array(z.number().int()).max(6).default([]) });
 export const aiSummaryOut = z.object({ bullets: z.array(z.string()).max(5), citations: z.array(z.number().int()).default([]) });
@@ -15,3 +16,40 @@ export const aiQuestionOut = z.object({
   rubric: z.array(z.object({ point: z.string().max(200), weight: z.number().min(1).max(5) })).min(3).max(6).optional(),
 });
 export const aiGradeOut = z.object({ scorePct: z.number().int().min(0).max(100), feedback: z.string().max(600), missing: z.array(z.string()).max(6) });
+
+export const aiPeopleSearchSchema = z.object({ query: z.string().trim().min(2).max(200) });
+
+export const aiPeopleFilterOut = z.object({
+  role: z.enum(['STUDENT', 'SENIOR', 'ALUMNI']).optional(),
+  department: z.string().max(40).optional(),
+  skills: z.array(z.string().max(40)).max(6).default([]),
+  interests: z.array(z.string().max(40)).max(6).default([]),
+  targetRole: z.string().max(60).optional(),
+  company: z.string().max(80).optional(),
+  mentorAvailable: z.boolean().default(false),
+  summary: z.string().max(160),
+});
+export type AiPeopleFilters = z.infer<typeof aiPeopleFilterOut>;
+
+export const assistantAskSchema = z.object({
+  message: z.string().trim().min(1).max(400),
+  history: z
+    .array(z.object({ role: z.enum(['user', 'assistant']), content: z.string().max(1000) }))
+    .max(8)
+    .default([]),
+});
+
+export const ASSISTANT_DESTINATIONS = ['prep', 'roadmaps-generate', 'people-mentor', 'ask-new', 'sim-setup'] as const;
+
+export const aiAssistantOut = z.object({
+  reply: z.string().min(1).max(500),
+  action: z.enum(['search', 'people_search', 'navigate', 'docs', 'none']),
+  searchType: z.enum(SEARCH_TYPES).optional(),
+  query: z.string().max(200).optional(),
+  destination: z.enum(ASSISTANT_DESTINATIONS).optional(),
+});
+export type AiAssistantOut = z.infer<typeof aiAssistantOut>;
+
+export const aiTwinInsightsOut = z.object({
+  insights: z.array(z.object({ personId: z.string(), insight: z.string().min(1).max(320) })).max(3),
+});

@@ -1,5 +1,5 @@
-import { keepPreviousData, useQuery } from '@tanstack/react-query';
-import type { PersonCard } from '@crossroads/shared';
+import { keepPreviousData, useMutation, useQuery } from '@tanstack/react-query';
+import type { AiPeopleFilters, PersonCard } from '@crossroads/shared';
 import { api } from '@/lib/api';
 import { qk } from '@/lib/queryKeys';
 
@@ -22,4 +22,11 @@ export const useSuggestedPeople = (enabled = true) =>
     queryKey: qk.people({ suggested: true }),
     queryFn: () => api<PersonCard[]>('/people/suggested'),
     enabled,
+  });
+
+export type AiPeopleSearchResult = { people: PersonCard[]; filters: AiPeopleFilters; usedAI: boolean };
+
+export const useAiPeopleSearch = () =>
+  useMutation({
+    mutationFn: (query: string) => api<AiPeopleSearchResult>('/people/search/ai', { method: 'POST', json: { query } }),
   });

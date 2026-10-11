@@ -1,0 +1,230 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1116" viewBox="0 0 1600 1116" font-family="Helvetica, Arial, sans-serif">
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#333333"/></marker></defs>
+<rect x="0" y="0" width="1600" height="1116" fill="#FFFFFF"/>
+<text x="800" y="36" text-anchor="middle" font-size="28" font-weight="bold" fill="#1a1a1a">Crossroads: Full App Workflow and Feature Map</text>
+<text x="800" y="60" text-anchor="middle" font-size="15" fill="#555555">Top: the services around the app. Middle: how one request flows. Bottom: every feature. Solid = built, dashed = still to build.</text>
+<rect x="183" y="84" width="135" height="50" rx="10" fill="#FFFFFF" stroke="#999999" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="250.5" y="106" text-anchor="middle" font-size="14" font-weight="bold" fill="#555555">Vercel</text>
+<text x="250.5" y="123" text-anchor="middle" font-size="11" fill="#666666">hosts web app</text>
+<rect x="497" y="84" width="135" height="50" rx="10" fill="#FFFFFF" stroke="#999999" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="564.5" y="106" text-anchor="middle" font-size="14" font-weight="bold" fill="#555555">Render</text>
+<text x="564.5" y="123" text-anchor="middle" font-size="11" fill="#666666">hosts API</text>
+<rect x="1125" y="84" width="135" height="50" rx="10" fill="#FDECEC" stroke="#B03A2E" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="1192.5" y="106" text-anchor="middle" font-size="14" font-weight="bold" fill="#1a1a1a">AI Model</text>
+<text x="1192.5" y="123" text-anchor="middle" font-size="11" fill="#666666">optional, has fallback</text>
+<rect x="1439" y="84" width="135" height="50" rx="10" fill="#FFFFFF" stroke="#999999" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="1506.5" y="106" text-anchor="middle" font-size="14" font-weight="bold" fill="#555555">Seed Data</text>
+<text x="1506.5" y="123" text-anchor="middle" font-size="11" fill="#666666">demo content</text>
+<line x1="250.5" y1="134" x2="250.5" y2="180" stroke="#777777" stroke-width="2" stroke-dasharray="3 4"/>
+<line x1="564.5" y1="134" x2="564.5" y2="180" stroke="#777777" stroke-width="2" stroke-dasharray="3 4"/>
+<line x1="1192.5" y1="134" x2="1192.5" y2="178" stroke="#B03A2E" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrow)"/>
+<line x1="1506.5" y1="134" x2="1506.5" y2="178" stroke="#777777" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrow)"/>
+<rect x="26" y="180" width="135" height="64" rx="10" fill="#E8F1FB" stroke="#2F6DB5" stroke-width="2"/>
+<text x="93.5" y="207" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">Browser</text>
+<text x="93.5" y="226" text-anchor="middle" font-size="11" fill="#555555">user's screen</text>
+<line x1="161" y1="212" x2="181" y2="212" stroke="#333333" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="183" y="180" width="135" height="64" rx="10" fill="#E8F1FB" stroke="#2F6DB5" stroke-width="2"/>
+<text x="250.5" y="207" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">Web App</text>
+<text x="250.5" y="226" text-anchor="middle" font-size="11" fill="#555555">React pages</text>
+<line x1="318" y1="212" x2="338" y2="212" stroke="#333333" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="340" y="180" width="135" height="64" rx="10" fill="#E8F1FB" stroke="#2F6DB5" stroke-width="2"/>
+<text x="407.5" y="207" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">/api Proxy</text>
+<text x="407.5" y="226" text-anchor="middle" font-size="11" fill="#555555">same domain</text>
+<line x1="475" y1="212" x2="495" y2="212" stroke="#333333" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="497" y="180" width="135" height="64" rx="10" fill="#EEF7EE" stroke="#2E7D32" stroke-width="2"/>
+<text x="564.5" y="207" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">Express API</text>
+<text x="564.5" y="226" text-anchor="middle" font-size="11" fill="#555555">receives request</text>
+<line x1="632" y1="212" x2="652" y2="212" stroke="#333333" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="654" y="180" width="135" height="64" rx="10" fill="#EEF7EE" stroke="#2E7D32" stroke-width="2"/>
+<text x="721.5" y="207" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">Auth Check</text>
+<text x="721.5" y="226" text-anchor="middle" font-size="11" fill="#555555">logged in?</text>
+<line x1="789" y1="212" x2="809" y2="212" stroke="#333333" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="811" y="180" width="135" height="64" rx="10" fill="#EEF7EE" stroke="#2E7D32" stroke-width="2"/>
+<text x="878.5" y="207" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">Validation</text>
+<text x="878.5" y="226" text-anchor="middle" font-size="11" fill="#555555">input correct?</text>
+<line x1="946" y1="212" x2="966" y2="212" stroke="#333333" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="968" y="180" width="135" height="64" rx="10" fill="#EEF7EE" stroke="#2E7D32" stroke-width="2"/>
+<text x="1035.5" y="207" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">Route</text>
+<text x="1035.5" y="226" text-anchor="middle" font-size="11" fill="#555555">picks handler</text>
+<line x1="1103" y1="212" x2="1123" y2="212" stroke="#333333" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="1125" y="180" width="135" height="64" rx="10" fill="#FFF4E0" stroke="#C77700" stroke-width="2"/>
+<text x="1192.5" y="207" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">Service</text>
+<text x="1192.5" y="226" text-anchor="middle" font-size="11" fill="#555555">business rules</text>
+<line x1="1260" y1="212" x2="1280" y2="212" stroke="#333333" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="1282" y="180" width="135" height="64" rx="10" fill="#F3ECFA" stroke="#6A3FA0" stroke-width="2"/>
+<text x="1349.5" y="207" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">Prisma</text>
+<text x="1349.5" y="226" text-anchor="middle" font-size="11" fill="#555555">database client</text>
+<line x1="1417" y1="212" x2="1437" y2="212" stroke="#333333" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="1439" y="180" width="135" height="64" rx="10" fill="#F3ECFA" stroke="#6A3FA0" stroke-width="2"/>
+<text x="1506.5" y="207" text-anchor="middle" font-size="15" font-weight="bold" fill="#1a1a1a">PostgreSQL</text>
+<text x="1506.5" y="226" text-anchor="middle" font-size="11" fill="#555555">main database</text>
+<line x1="1035.5" y1="244" x2="1035.5" y2="298" stroke="#333333" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="26" y="300" width="1548" height="32" rx="8" fill="#EEF2F7" stroke="#B8C4D6" stroke-width="1.5"/>
+<text x="800" y="321" text-anchor="middle" font-size="14" font-weight="bold" fill="#1a1a1a">FEATURE MODULES: each small box is one feature. Every feature goes through Route, then Service, then Prisma.</text>
+<rect x="26" y="350" width="373.5" height="210" rx="10" fill="#FFFFFF" stroke="#B8C4D6" stroke-width="1.5"/>
+<text x="38" y="372" font-size="14" font-weight="bold" fill="#1a1a1a">Identity and Onboarding</text>
+<rect x="38" y="384" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="123" y="406" text-anchor="middle" font-size="12" fill="#1a1a1a">Verified Sign-up</text>
+<rect x="216" y="384" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="301" y="406" text-anchor="middle" font-size="12" fill="#1a1a1a">Onboarding Wizard</text>
+<rect x="38" y="426" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="123" y="448" text-anchor="middle" font-size="12" fill="#1a1a1a">Consent and Data Rights</text>
+<rect x="417.5" y="350" width="373.5" height="210" rx="10" fill="#FFFFFF" stroke="#B8C4D6" stroke-width="1.5"/>
+<text x="429.5" y="372" font-size="14" font-weight="bold" fill="#1a1a1a">People and Mentorship</text>
+<rect x="429.5" y="384" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="514.5" y="406" text-anchor="middle" font-size="12" fill="#1a1a1a">People Profiles</text>
+<rect x="607.5" y="384" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="692.5" y="406" text-anchor="middle" font-size="12" fill="#1a1a1a">Alumni Profiles</text>
+<rect x="429.5" y="426" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="514.5" y="448" text-anchor="middle" font-size="12" fill="#1a1a1a">Discover People</text>
+<rect x="607.5" y="426" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="692.5" y="448" text-anchor="middle" font-size="12" fill="#1a1a1a">Smart Matching</text>
+<rect x="429.5" y="468" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="514.5" y="490" text-anchor="middle" font-size="12" fill="#1a1a1a">Find My Mentor</text>
+<rect x="607.5" y="468" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="692.5" y="490" text-anchor="middle" font-size="12" fill="#1a1a1a">Connection Requests</text>
+<rect x="429.5" y="510" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="514.5" y="532" text-anchor="middle" font-size="12" fill="#1a1a1a">Mentorship Sessions</text>
+<rect x="607.5" y="510" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="692.5" y="532" text-anchor="middle" font-size="12" fill="#1a1a1a">Direct Messages</text>
+<rect x="809" y="350" width="373.5" height="210" rx="10" fill="#FFFFFF" stroke="#B8C4D6" stroke-width="1.5"/>
+<text x="821" y="372" font-size="14" font-weight="bold" fill="#1a1a1a">Community and Q&amp;A</text>
+<rect x="821" y="384" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="906" y="406" text-anchor="middle" font-size="12" fill="#1a1a1a">Ask a Senior</text>
+<rect x="999" y="384" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="1084" y="406" text-anchor="middle" font-size="12" fill="#1a1a1a">Community Feed</text>
+<rect x="821" y="426" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="906" y="448" text-anchor="middle" font-size="12" fill="#1a1a1a">Topic Communities</text>
+<rect x="999" y="426" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="1084" y="448" text-anchor="middle" font-size="12" fill="#1a1a1a">Connect with Authors</text>
+<rect x="821" y="468" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="906" y="490" text-anchor="middle" font-size="12" fill="#1a1a1a">Similar Questions</text>
+<rect x="1200.5" y="350" width="373.5" height="210" rx="10" fill="#FFFFFF" stroke="#B8C4D6" stroke-width="1.5"/>
+<text x="1212.5" y="372" font-size="14" font-weight="bold" fill="#1a1a1a">Home and Discovery</text>
+<rect x="1212.5" y="384" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="1297.5" y="406" text-anchor="middle" font-size="12" fill="#1a1a1a">Personalized Home</text>
+<rect x="1390.5" y="384" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="1475.5" y="406" text-anchor="middle" font-size="12" fill="#1a1a1a">This Week</text>
+<rect x="1212.5" y="426" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="1297.5" y="448" text-anchor="middle" font-size="12" fill="#1a1a1a">Year 1 Quests</text>
+<rect x="1390.5" y="426" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="1475.5" y="448" text-anchor="middle" font-size="12" fill="#1a1a1a">Bookmarks</text>
+<rect x="1212.5" y="468" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="1297.5" y="490" text-anchor="middle" font-size="12" fill="#1a1a1a">Trending Topics</text>
+<rect x="1390.5" y="468" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="1475.5" y="490" text-anchor="middle" font-size="12" fill="#1a1a1a">Search</text>
+<rect x="26" y="578" width="373.5" height="210" rx="10" fill="#FFFFFF" stroke="#B8C4D6" stroke-width="1.5"/>
+<text x="38" y="600" font-size="14" font-weight="bold" fill="#1a1a1a">Career and Companies</text>
+<rect x="38" y="612" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="123" y="634" text-anchor="middle" font-size="12" fill="#1a1a1a">Company Pages</text>
+<rect x="216" y="612" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="301" y="634" text-anchor="middle" font-size="12" fill="#1a1a1a">Interview Experiences</text>
+<rect x="38" y="654" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="123" y="676" text-anchor="middle" font-size="12" fill="#1a1a1a">Clubs with Ratings</text>
+<rect x="216" y="654" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="301" y="676" text-anchor="middle" font-size="12" fill="#1a1a1a">Path Twins</text>
+<rect x="38" y="696" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="123" y="718" text-anchor="middle" font-size="12" fill="#1a1a1a">Career Roadmaps</text>
+<rect x="216" y="696" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="301" y="718" text-anchor="middle" font-size="12" fill="#1a1a1a">Roadmaps by Goal</text>
+<rect x="38" y="738" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="123" y="760" text-anchor="middle" font-size="12" fill="#1a1a1a">Placement Dashboard</text>
+<rect x="216" y="738" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="301" y="760" text-anchor="middle" font-size="12" fill="#1a1a1a">Interview Simulator</text>
+<rect x="417.5" y="578" width="373.5" height="210" rx="10" fill="#FFFFFF" stroke="#B8C4D6" stroke-width="1.5"/>
+<text x="429.5" y="600" font-size="14" font-weight="bold" fill="#1a1a1a">Opportunities and Teams</text>
+<rect x="429.5" y="612" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="514.5" y="634" text-anchor="middle" font-size="12" fill="#1a1a1a">Opportunities Board</text>
+<rect x="607.5" y="612" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="692.5" y="634" text-anchor="middle" font-size="12" fill="#1a1a1a">Opportunity Alerts</text>
+<rect x="429.5" y="654" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="514.5" y="676" text-anchor="middle" font-size="12" fill="#1a1a1a">Team Finder</text>
+<rect x="607.5" y="654" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="692.5" y="676" text-anchor="middle" font-size="12" fill="#1a1a1a">Cross-Department Teams</text>
+<rect x="429.5" y="696" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="514.5" y="718" text-anchor="middle" font-size="12" fill="#1a1a1a">Founder Track</text>
+<rect x="607.5" y="696" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="692.5" y="718" text-anchor="middle" font-size="12" fill="#1a1a1a">Study Circles</text>
+<rect x="809" y="578" width="373.5" height="210" rx="10" fill="#FFFFFF" stroke="#B8C4D6" stroke-width="1.5"/>
+<text x="821" y="600" font-size="14" font-weight="bold" fill="#1a1a1a">Trust and Growth</text>
+<rect x="821" y="612" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="906" y="634" text-anchor="middle" font-size="12" fill="#1a1a1a">Gamification</text>
+<rect x="999" y="612" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="1084" y="634" text-anchor="middle" font-size="12" fill="#1a1a1a">Trust System</text>
+<rect x="821" y="654" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="906" y="676" text-anchor="middle" font-size="12" fill="#1a1a1a">Mentor Wall</text>
+<rect x="999" y="654" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="1084" y="676" text-anchor="middle" font-size="12" fill="#1a1a1a">Success Stories</text>
+<rect x="821" y="696" width="170" height="34" rx="6" fill="#FFFFFF" stroke="#999999" stroke-width="1.5" stroke-dasharray="5 3"/>
+<text x="906" y="718" text-anchor="middle" font-size="12" fill="#666666">Alumni Engagement Record</text>
+<rect x="1200.5" y="578" width="373.5" height="210" rx="10" fill="#FFFFFF" stroke="#B8C4D6" stroke-width="1.5"/>
+<text x="1212.5" y="600" font-size="14" font-weight="bold" fill="#1a1a1a">Events and Giving</text>
+<rect x="1212.5" y="612" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="1297.5" y="634" text-anchor="middle" font-size="12" fill="#1a1a1a">Events and RSVP</text>
+<rect x="1390.5" y="612" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="1475.5" y="634" text-anchor="middle" font-size="12" fill="#1a1a1a">Donation Campaigns</text>
+<rect x="1212.5" y="654" width="170" height="34" rx="6" fill="#FFFFFF" stroke="#999999" stroke-width="1.5" stroke-dasharray="5 3"/>
+<text x="1297.5" y="676" text-anchor="middle" font-size="12" fill="#666666">Payment Gateway</text>
+<rect x="26" y="806" width="373.5" height="210" rx="10" fill="#FFFFFF" stroke="#B8C4D6" stroke-width="1.5"/>
+<text x="38" y="828" font-size="14" font-weight="bold" fill="#1a1a1a">AI Features</text>
+<rect x="38" y="840" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#B03A2E" stroke-width="1.5"/>
+<text x="123" y="862" text-anchor="middle" font-size="12" fill="#1a1a1a">AI Answer Assistant</text>
+<rect x="216" y="840" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#B03A2E" stroke-width="1.5"/>
+<text x="301" y="862" text-anchor="middle" font-size="12" fill="#1a1a1a">AI Summaries</text>
+<rect x="38" y="882" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#B03A2E" stroke-width="1.5"/>
+<text x="123" y="904" text-anchor="middle" font-size="12" fill="#1a1a1a">Smart People Search</text>
+<rect x="216" y="882" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#B03A2E" stroke-width="1.5"/>
+<text x="301" y="904" text-anchor="middle" font-size="12" fill="#1a1a1a">Crossroads Assistant</text>
+<rect x="38" y="924" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#B03A2E" stroke-width="1.5"/>
+<text x="123" y="946" text-anchor="middle" font-size="12" fill="#1a1a1a">Project Guide Answers</text>
+<rect x="216" y="924" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#B03A2E" stroke-width="1.5"/>
+<text x="301" y="946" text-anchor="middle" font-size="12" fill="#1a1a1a">AI Roadmap Generator</text>
+<rect x="38" y="966" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#B03A2E" stroke-width="1.5"/>
+<text x="123" y="988" text-anchor="middle" font-size="12" fill="#1a1a1a">AI Interview Questions</text>
+<rect x="216" y="966" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#B03A2E" stroke-width="1.5"/>
+<text x="301" y="988" text-anchor="middle" font-size="12" fill="#1a1a1a">Path Twins Insights</text>
+<rect x="417.5" y="806" width="373.5" height="210" rx="10" fill="#FFFFFF" stroke="#B8C4D6" stroke-width="1.5"/>
+<text x="429.5" y="828" font-size="14" font-weight="bold" fill="#1a1a1a">Safety and Moderation</text>
+<rect x="429.5" y="840" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="514.5" y="862" text-anchor="middle" font-size="12" fill="#1a1a1a">Reporting and Moderation</text>
+<rect x="607.5" y="840" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="692.5" y="862" text-anchor="middle" font-size="12" fill="#1a1a1a">Admin Tools</text>
+<rect x="429.5" y="882" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="514.5" y="904" text-anchor="middle" font-size="12" fill="#1a1a1a">Safeguarding Escalation</text>
+<rect x="809" y="806" width="373.5" height="210" rx="10" fill="#FFFFFF" stroke="#B8C4D6" stroke-width="1.5"/>
+<text x="821" y="828" font-size="14" font-weight="bold" fill="#1a1a1a">Institution</text>
+<rect x="821" y="840" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="906" y="862" text-anchor="middle" font-size="12" fill="#1a1a1a">Institution Analytics</text>
+<rect x="999" y="840" width="170" height="34" rx="6" fill="#FFFFFF" stroke="#999999" stroke-width="1.5" stroke-dasharray="5 3"/>
+<text x="1084" y="862" text-anchor="middle" font-size="12" fill="#666666">Official Channel</text>
+<rect x="821" y="882" width="170" height="34" rx="6" fill="#FFFFFF" stroke="#999999" stroke-width="1.5" stroke-dasharray="5 3"/>
+<text x="906" y="904" text-anchor="middle" font-size="12" fill="#666666">Placement Cell Data</text>
+<rect x="999" y="882" width="170" height="34" rx="6" fill="#FFFFFF" stroke="#999999" stroke-width="1.5" stroke-dasharray="5 3"/>
+<text x="1084" y="904" text-anchor="middle" font-size="12" fill="#666666">Faculty and Staff Role</text>
+<rect x="821" y="924" width="170" height="34" rx="6" fill="#FFFFFF" stroke="#999999" stroke-width="1.5" stroke-dasharray="5 3"/>
+<text x="906" y="946" text-anchor="middle" font-size="12" fill="#666666">Pilot Scorecard</text>
+<rect x="1200.5" y="806" width="373.5" height="210" rx="10" fill="#FFFFFF" stroke="#B8C4D6" stroke-width="1.5"/>
+<text x="1212.5" y="828" font-size="14" font-weight="bold" fill="#1a1a1a">Platform and Support</text>
+<rect x="1212.5" y="840" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="1297.5" y="862" text-anchor="middle" font-size="12" fill="#1a1a1a">Notifications</text>
+<rect x="1390.5" y="840" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="1475.5" y="862" text-anchor="middle" font-size="12" fill="#1a1a1a">Support Page</text>
+<rect x="1212.5" y="882" width="170" height="34" rx="6" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="1.5"/>
+<text x="1297.5" y="904" text-anchor="middle" font-size="12" fill="#1a1a1a">Project Guide</text>
+<rect x="1390.5" y="882" width="170" height="34" rx="6" fill="#FFFFFF" stroke="#999999" stroke-width="1.5" stroke-dasharray="5 3"/>
+<text x="1475.5" y="904" text-anchor="middle" font-size="12" fill="#666666">Polished UI</text>
+<rect x="26" y="1060" width="18" height="18" rx="4" fill="#E8F1FB" stroke="#2F6DB5" stroke-width="2"/>
+<text x="52" y="1074" font-size="13" fill="#333333">Frontend</text>
+<rect x="226" y="1060" width="18" height="18" rx="4" fill="#EEF7EE" stroke="#2E7D32" stroke-width="2"/>
+<text x="252" y="1074" font-size="13" fill="#333333">API layers</text>
+<rect x="426" y="1060" width="18" height="18" rx="4" fill="#FFF4E0" stroke="#C77700" stroke-width="2"/>
+<text x="452" y="1074" font-size="13" fill="#333333">Business logic</text>
+<rect x="626" y="1060" width="18" height="18" rx="4" fill="#F3ECFA" stroke="#6A3FA0" stroke-width="2"/>
+<text x="652" y="1074" font-size="13" fill="#333333">Data</text>
+<rect x="826" y="1060" width="18" height="18" rx="4" fill="#FDECEC" stroke="#B03A2E" stroke-width="2"/>
+<text x="852" y="1074" font-size="13" fill="#333333">AI (has fallback)</text>
+<rect x="1026" y="1060" width="18" height="18" rx="4" fill="#F7FAFF" stroke="#2F6DB5" stroke-width="2"/>
+<text x="1052" y="1074" font-size="13" fill="#333333">Built</text>
+<rect x="1226" y="1060" width="18" height="18" rx="4" fill="#FFFFFF" stroke="#999999" stroke-width="1.5" stroke-dasharray="4 3"/>
+<text x="1252" y="1074" font-size="13" fill="#333333">Still to build</text>
+</svg>

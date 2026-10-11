@@ -7,6 +7,12 @@ vi.mock('../../src/lib/prisma', () => ({
   prisma: { user: { findUniqueOrThrow: vi.fn(), findMany: vi.fn() } },
 }));
 
+// Keep this suite deterministic and offline: findTwins' AI insight step must never hit the network in unit tests.
+vi.mock('../../src/lib/ai', () => ({
+  generateJSON: vi.fn().mockRejectedValue(new Error('no network in unit tests')),
+  AIError: class AIError extends Error {},
+}));
+
 const db = prisma as unknown as { user: { findUniqueOrThrow: Mock; findMany: Mock } };
 
 type M = { id: string; yearOfStudy: number; category: string; title: string; description: string | null };
@@ -104,6 +110,11 @@ describe('findTwins', () => {
     // The milestone list moves under milestonesByYear and leaves the person object
     expect(Object.keys(t.milestonesByYear)).toEqual(['1', '2']);
     expect('milestones' in t.person).toBe(false);
+  });
+
+  it('falls back to a null aiInsight (and the deterministic reasons still carry it) when AI fails', async () => {
+    const { twins } = await run(viewer(), [candidate({ id: 'full' })]);
+    expect(twins[0]!.aiInsight).toBeNull();
   });
 
   it('gives no reasons to someone with nothing in common, only the first-year head start', async () => {

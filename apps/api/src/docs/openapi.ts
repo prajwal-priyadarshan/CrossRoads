@@ -48,6 +48,7 @@ const ROUTES: Row[] = [
   // People and requests
   { method: 'get', path: '/people', tag: 'People', summary: 'Discover people with filters and explained match scores', auth: 'onboarded', query: S.peopleQuerySchema },
   { method: 'get', path: '/people/suggested', tag: 'People', summary: 'Top 3 suggested people', auth: 'onboarded' },
+  { method: 'post', path: '/people/search/ai', tag: 'People', summary: 'Natural-language people search (AI parses it into filters; falls back to keyword matching)', auth: 'onboarded', body: S.aiPeopleSearchSchema, status: 200 },
   { method: 'post', path: '/connections', tag: 'Requests', summary: 'Send a connect / mentorship / collab / peer request', auth: 'onboarded', body: S.connectionCreateSchema, status: 201 },
   { method: 'get', path: '/connections', tag: 'Requests', summary: 'Incoming, outgoing or completed requests', auth: 'onboarded', query: S.connectionsQuerySchema },
   { method: 'patch', path: '/connections/:id', tag: 'Requests', summary: 'Accept or decline (recipient only)', auth: 'onboarded', body: S.connectionRespondSchema },
@@ -167,6 +168,7 @@ const ROUTES: Row[] = [
   // AI (Phase 09) — no-op without ANTHROPIC_API_KEY; see the non-AI fallback in each service
   { method: 'post', path: '/ai/answer', tag: 'AI', summary: 'AI answer to a question, grounded in past answers with citations', auth: 'onboarded' },
   { method: 'post', path: '/ai/summary', tag: 'AI', summary: 'AI summary of a thread or a company\'s interview experiences', auth: 'onboarded' },
+  { method: 'post', path: '/assistant/ask', tag: 'AI', summary: 'Crossroads Assistant: routes a chat message to people search, platform search, a feature, or the project docs, with a deterministic fallback', auth: 'onboarded', body: S.assistantAskSchema, status: 200 },
 
   // Placement prep dashboard (Phase 09)
   { method: 'get', path: '/prep/dashboard', tag: 'Prep', summary: 'Readiness per target company and the four prep tracks', auth: 'onboarded' },
