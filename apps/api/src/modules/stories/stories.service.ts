@@ -45,5 +45,5 @@ export async function getStory(slug: string) {
     include: { featuredUser: { select: userLiteSelect } }
   }) : [];
 
-  return { story, related };
+  return { ...story, story, related };
 }
