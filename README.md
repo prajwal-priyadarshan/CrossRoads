@@ -357,13 +357,20 @@ Disabled in production unless `API_DOCS_ENABLED=true`.
 
 ## <img src="https://api.iconify.design/lucide/image.svg?color=%2371717a" width="22" valign="middle" /> &nbsp;Screenshots
 
-<img src="docs/screenshots/landing-page.webp" width="140" alt="Landing page" />
-<img src="docs/screenshots/home-feed.webp" width="140" alt="Home feed" />
-<img src="docs/screenshots/everything-in-one-place.webp" width="140" alt="Feature map" />
-<img src="docs/screenshots/ask-a-senior.webp" width="140" alt="Ask a Senior" />
-<img src="docs/screenshots/companies.webp" width="140" alt="Companies" />
-<img src="docs/screenshots/path-twins.webp" width="140" alt="Path Twins" />
-<img src="docs/screenshots/teams.webp" width="140" alt="Teams" />
+<table>
+<tr>
+<td align="center" width="25%"><img src="docs/screenshots/landing-page.webp" width="180" alt="Landing page" /><br /><sub>Landing page</sub></td>
+<td align="center" width="25%"><img src="docs/screenshots/home-feed.webp" width="180" alt="Home feed" /><br /><sub>Home feed</sub></td>
+<td align="center" width="25%"><img src="docs/screenshots/everything-in-one-place.webp" width="180" alt="Feature map" /><br /><sub>Feature map</sub></td>
+<td align="center" width="25%"><img src="docs/screenshots/ask-a-senior.webp" width="180" alt="Ask a Senior" /><br /><sub>Ask a Senior</sub></td>
+</tr>
+<tr>
+<td align="center" width="25%"><img src="docs/screenshots/companies.webp" width="180" alt="Companies" /><br /><sub>Companies</sub></td>
+<td align="center" width="25%"><img src="docs/screenshots/path-twins.webp" width="180" alt="Path Twins" /><br /><sub>Path Twins</sub></td>
+<td align="center" width="25%"><img src="docs/screenshots/teams.webp" width="180" alt="Teams" /><br /><sub>Teams</sub></td>
+<td width="25%"></td>
+</tr>
+</table>
 
 </div>
 
