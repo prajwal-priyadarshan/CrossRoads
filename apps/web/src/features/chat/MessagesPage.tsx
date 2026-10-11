@@ -30,7 +30,7 @@ function ConversationList({ activeId, items }: { activeId?: string; items: ChatC
             <UserAvatar user={c.other} size="md" />
             <div className="min-w-0 flex-1">
               <div className="flex items-center justify-between gap-2">
-                <span className={cn('truncate text-sm', c.unread > 0 ? 'font-semibold' : 'font-medium')}>{c.other.fullName}</span>
+                <span className={cn('min-w-0 truncate text-sm', c.unread > 0 ? 'font-semibold' : 'font-medium')}>{c.other.fullName}</span>
                 {c.lastMessageAt && (
                   <span className="shrink-0 text-xs text-muted-foreground">
                     <RelativeTime iso={c.lastMessageAt} />
@@ -38,7 +38,7 @@ function ConversationList({ activeId, items }: { activeId?: string; items: ChatC
                 )}
               </div>
               <div className="flex items-center justify-between gap-2">
-                <p className={cn('truncate text-xs', c.unread > 0 ? 'text-foreground' : 'text-muted-foreground')}>
+                <p className={cn('min-w-0 truncate text-xs', c.unread > 0 ? 'text-foreground' : 'text-muted-foreground')}>
                   {c.lastMessageMine ? 'You: ' : ''}
                   {c.lastMessagePreview || 'Say hello'}
                 </p>

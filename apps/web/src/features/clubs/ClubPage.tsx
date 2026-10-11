@@ -226,7 +226,7 @@ export function ClubPage() {
                 <li key={m.id}>
                   <Link to={`/u/${m.handle}`} className="flex items-center gap-2.5 rounded-lg p-1 hover:bg-muted">
                     <UserAvatar user={m} size="sm" />
-                    <span className="flex-1 truncate text-sm font-medium">{m.fullName}</span>
+                    <span className="min-w-0 flex-1 truncate text-sm font-medium">{m.fullName}</span>
                     <RoleBadge role={m.role} currentYear={m.currentYear} />
                   </Link>
                 </li>

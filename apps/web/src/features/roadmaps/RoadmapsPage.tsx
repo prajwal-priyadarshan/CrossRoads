@@ -32,7 +32,7 @@ export function RoadmapCard({ r }: { r: RoadmapSummary }) {
           r.author && (
             <>
               <UserAvatar user={r.author} size="sm" />
-              <span className="truncate font-medium text-foreground">{r.author.fullName}</span>
+              <span className="min-w-0 truncate font-medium text-foreground">{r.author.fullName}</span>
               <RoleBadge role={r.author.role} currentYear={r.author.currentYear} />
             </>
           )

@@ -53,7 +53,7 @@ export function AuthorCard({
         <UserAvatar user={author} size="lg" />
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5">
-            <Link to={`/u/${author.handle}`} className="truncate font-semibold hover:underline">
+            <Link to={`/u/${author.handle}`} className="min-w-0 truncate font-semibold hover:underline">
               {author.fullName}
             </Link>
             {author.isVerified && <VerifiedBadge />}

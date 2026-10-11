@@ -262,7 +262,13 @@ export function PrepDashboardPage() {
                     <Badge variant="outline" className="shrink-0 text-xs">
                       {new Date(d.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
                     </Badge>
-                    {d.href ? <Link to={d.href} className="hover:underline truncate">{d.label}</Link> : <span className="truncate">{d.label}</span>}
+                    {d.href ? (
+                      <Link to={d.href} className="min-w-0 truncate hover:underline">
+                        {d.label}
+                      </Link>
+                    ) : (
+                      <span className="min-w-0 truncate">{d.label}</span>
+                    )}
                   </li>
                 ))}
               </ul>

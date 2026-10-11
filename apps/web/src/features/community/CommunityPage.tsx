@@ -22,7 +22,7 @@ export function YourTopics() {
         {topics.map((t) => (
           <li key={t.id} className="flex items-center gap-2">
             <AppIcon name={t.icon} className="size-4 text-primary" />
-            <Link to={`/community/${t.slug}`} className="flex-1 truncate text-sm hover:underline">
+            <Link to={`/community/${t.slug}`} className="min-w-0 flex-1 truncate text-sm hover:underline">
               {t.name}
             </Link>
             <Button
