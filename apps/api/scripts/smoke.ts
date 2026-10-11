@@ -513,6 +513,31 @@ async function main() {
     if (!r.filters || typeof r.filters.summary !== 'string') throw new Error('missing filters.summary');
     return `${r.people.length} people, usedAI=${r.usedAI}, filters=${JSON.stringify(r.filters)}`;
   });
+  await check('assistant: routes a people request to people_search', async () => {
+    const r = expectStatus(await ananya.post('/assistant/ask', { message: 'find me an alumni mentor who knows machine learning' }), 200) as any;
+    if (r.action !== 'people_search') throw new Error(`expected people_search, got ${r.action}`);
+    if (!Array.isArray(r.people)) throw new Error('missing people array');
+    if (typeof r.reply !== 'string' || !r.reply) throw new Error('missing reply');
+    return `action=${r.action}, ${r.people.length} people, usedAI=${r.usedAI}`;
+  });
+  await check('assistant: routes a question request to search', async () => {
+    const r = expectStatus(await ananya.post('/assistant/ask', { message: 'how should a first year start DSA?' }), 200) as any;
+    if (r.action !== 'search') throw new Error(`expected search, got ${r.action}`);
+    if (!r.results || !Array.isArray(r.results.questions)) throw new Error('missing results.questions');
+    return `action=${r.action}, ${r.results.questions.length} questions, usedAI=${r.usedAI}`;
+  });
+  await check('assistant: routes a feature request to navigate', async () => {
+    const r = expectStatus(await ananya.post('/assistant/ask', { message: 'take me to my placement prep dashboard' }), 200) as any;
+    if (r.action !== 'navigate') throw new Error(`expected navigate, got ${r.action}`);
+    if (r.destination !== 'prep') throw new Error(`expected destination prep, got ${r.destination}`);
+    return `action=${r.action}, destination=${r.destination}, usedAI=${r.usedAI}`;
+  });
+  await check('assistant: a plain greeting gets a conversational reply, not an action', async () => {
+    const r = expectStatus(await ananya.post('/assistant/ask', { message: 'hey, what can you help with?' }), 200) as any;
+    if (!['none', 'navigate', 'search', 'people_search'].includes(r.action)) throw new Error(`unexpected action ${r.action}`);
+    if (typeof r.reply !== 'string' || !r.reply) throw new Error('missing reply');
+    return `action=${r.action}, usedAI=${r.usedAI}`;
+  });
   await check('events: upcoming list shows seats and RSVP state', async () => {
     const events = expectStatus(await ananya.get('/events'), 200) as any[];
     if (!events.every((e) => typeof e.rsvpCount === 'number' && 'mine' in e)) throw new Error('bad event shape');

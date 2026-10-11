@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { SEARCH_TYPES } from './search';
 
 export const aiAnswerOut = z.object({ answer: z.string().min(1).max(1500), citations: z.array(z.number().int()).max(6).default([]) });
 export const aiSummaryOut = z.object({ bullets: z.array(z.string()).max(5), citations: z.array(z.number().int()).default([]) });
@@ -29,3 +30,22 @@ export const aiPeopleFilterOut = z.object({
   summary: z.string().max(160),
 });
 export type AiPeopleFilters = z.infer<typeof aiPeopleFilterOut>;
+
+export const assistantAskSchema = z.object({
+  message: z.string().trim().min(1).max(400),
+  history: z
+    .array(z.object({ role: z.enum(['user', 'assistant']), content: z.string().max(1000) }))
+    .max(8)
+    .default([]),
+});
+
+export const ASSISTANT_DESTINATIONS = ['prep', 'roadmaps-generate', 'people-mentor', 'ask-new', 'sim-setup'] as const;
+
+export const aiAssistantOut = z.object({
+  reply: z.string().min(1).max(500),
+  action: z.enum(['search', 'people_search', 'navigate', 'none']),
+  searchType: z.enum(SEARCH_TYPES).optional(),
+  query: z.string().max(200).optional(),
+  destination: z.enum(ASSISTANT_DESTINATIONS).optional(),
+});
+export type AiAssistantOut = z.infer<typeof aiAssistantOut>;

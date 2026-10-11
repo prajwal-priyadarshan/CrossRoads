@@ -168,6 +168,7 @@ const ROUTES: Row[] = [
   // AI (Phase 09) — no-op without ANTHROPIC_API_KEY; see the non-AI fallback in each service
   { method: 'post', path: '/ai/answer', tag: 'AI', summary: 'AI answer to a question, grounded in past answers with citations', auth: 'onboarded' },
   { method: 'post', path: '/ai/summary', tag: 'AI', summary: 'AI summary of a thread or a company\'s interview experiences', auth: 'onboarded' },
+  { method: 'post', path: '/assistant/ask', tag: 'AI', summary: 'Crossroads Assistant: routes a chat message to people search, platform search or a feature, with a deterministic fallback', auth: 'onboarded', body: S.assistantAskSchema, status: 200 },
 
   // Placement prep dashboard (Phase 09)
   { method: 'get', path: '/prep/dashboard', tag: 'Prep', summary: 'Readiness per target company and the four prep tracks', auth: 'onboarded' },
