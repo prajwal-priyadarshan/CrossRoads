@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { Check, Code2, Database, Lightbulb, Layers, GraduationCap, Briefcase, FlaskConical } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { api } from '@/lib/api';
 import { cn } from '@/lib/utils';
+import { useCompanies } from '@/features/companies/api';
 
 const GOAL_TRACKS = [
   { value: 'PRODUCT', label: 'Product Company (SDE)', icon: Code2, desc: 'SDE, AI & product roles' },
@@ -46,11 +47,7 @@ export function RoadmapGeneratePage() {
   const [loadStep, setLoadStep] = useState(0);
   const stepTimer = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const { data: companiesData } = useQuery({
-    queryKey: ['companies'],
-    queryFn: () => api<{ items: Array<{ id: string; slug: string; name: string }> }>('/companies'),
-  });
-  const companies = companiesData?.items ?? [];
+  const { data: companies = [] } = useCompanies();
 
   const mut = useMutation({
     mutationFn: () =>
