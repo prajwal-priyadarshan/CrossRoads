@@ -82,6 +82,11 @@ export function LoginPage() {
             </button>
           </div>
         </FormField>
+        <div className="-mt-2 flex justify-end">
+          <Link to="/forgot-password" className="text-xs font-medium text-primary hover:underline">
+            Forgot password?
+          </Link>
+        </div>
         <Button type="submit" className="w-full" disabled={login.isPending}>
           {login.isPending && <Loader2 className="animate-spin" />} Log in
         </Button>

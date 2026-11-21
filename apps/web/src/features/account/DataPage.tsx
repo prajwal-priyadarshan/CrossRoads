@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input';
 import { useLogoutEverywhere } from '@/hooks/useMe';
 import { ApiError, api } from '@/lib/api';
 import { qk } from '@/lib/queryKeys';
+import { ChangePasswordCard } from './ChangePasswordCard';
 
 /** Your data: download everything the platform holds about you, or delete the account. */
 export function DataPage() {
@@ -48,6 +49,8 @@ export function DataPage() {
           </Button>
         </CardContent>
       </Card>
+
+      <ChangePasswordCard />
 
       <Card>
         <CardHeader>

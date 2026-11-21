@@ -83,6 +83,8 @@ export const router = createBrowserRouter([
           { path: '/login', ...page(() => import('@/features/auth/LoginPage'), 'LoginPage') },
           { path: '/register', ...page(() => import('@/features/auth/RegisterPage'), 'RegisterPage') },
           { path: '/verify', ...page(() => import('@/features/auth/VerifyPage'), 'VerifyPage') },
+          { path: '/forgot-password', ...page(() => import('@/features/auth/ForgotPasswordPage'), 'ForgotPasswordPage') },
+          { path: '/reset-password', ...page(() => import('@/features/auth/ResetPasswordPage'), 'ResetPasswordPage') },
         ],
       },
       // The landing page lists every feature; open to everyone, signed in or not

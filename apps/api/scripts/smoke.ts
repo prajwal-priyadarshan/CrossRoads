@@ -659,6 +659,37 @@ async function main() {
     if (list.items.length < 4) throw new Error(`only ${list.items.length} stories`);
     return `${list.items.length} stories`;
   });
+  await check('auth: forgot-password answers the same for real and unknown emails', async () => {
+    const email = (expectStatus(await ananya.get('/auth/me'), 200) as any).email as string;
+    const real = expectStatus(await anon.post('/auth/forgot-password', { email }), 200) as any;
+    const unknown = expectStatus(await anon.post('/auth/forgot-password', { email: 'nobody-here@amrita.edu' }), 200) as any;
+    if (!real?.ok || !unknown?.ok) throw new Error('expected { ok: true } for both');
+    await prisma.emailCode.deleteMany({ where: { email, purpose: 'RESET_PASSWORD' } });
+    return 'ok for both';
+  });
+  await check('auth: password change and logout-all revoke other sessions', async () => {
+    const email = `smokepw${Date.now().toString(36)}@gmail.com`;
+    const phone = new Client();
+    expectStatus(await phone.post('/auth/register', { fullName: 'Smoke Password', email, password: 'secret123', consent: true }), 201);
+    await prisma.user.update({ where: { email }, data: { emailVerified: true, onboarded: true } });
+    expectStatus(await phone.post('/auth/login', { email, password: 'secret123' }), 200);
+    const laptop = new Client();
+    laptop.cookie = phone.cookie; // a second device holding the same session
+    try {
+      expectStatus(await laptop.post('/auth/change-password', { currentPassword: 'wrong-pass1', password: 'newsecret456' }), 401);
+      expectStatus(await laptop.post('/auth/change-password', { currentPassword: 'secret123', password: 'newsecret456' }), 200);
+      if ((expectStatus(await phone.get('/auth/me'), 200) as any) !== null) throw new Error('other device still signed in after a password change');
+      if (!(expectStatus(await laptop.get('/auth/me'), 200) as any)) throw new Error('the device that changed the password was signed out');
+
+      const copied = laptop.cookie;
+      expectStatus(await laptop.post('/auth/logout-all'), 200);
+      laptop.cookie = copied;
+      if ((expectStatus(await laptop.get('/auth/me'), 200) as any) !== null) throw new Error('a copied cookie still works after logout-all');
+      return 'wrong password refused; other sessions revoked twice';
+    } finally {
+      await prisma.user.delete({ where: { email } }).catch(() => undefined);
+    }
+  });
   await check('auth: logout clears the session', async () => {
     const c = await login('meera');
     expectStatus(await c.post('/auth/logout'), 200);

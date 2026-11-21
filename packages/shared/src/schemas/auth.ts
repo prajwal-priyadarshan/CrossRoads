@@ -22,6 +22,18 @@ export const verifySchema = z.object({
 export const loginSchema = z.object({ email: emailSchema, password: z.string().min(1, 'Enter your password') });
 export const emailOnlySchema = z.object({ email: emailSchema });
 export const demoLoginSchema = z.object({ handle: z.string().min(1) });
+export const forgotPasswordSchema = z.object({ email: emailSchema });
+export const resetPasswordSchema = z.object({
+  email: emailSchema,
+  code: z.string().regex(/^\d{6}$/, 'Enter the 6-digit code'),
+  password: passwordSchema,
+});
+export const changePasswordSchema = z.object({
+  currentPassword: z.string().min(1, 'Enter your current password'),
+  password: passwordSchema,
+});
 
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type LoginInput = z.infer<typeof loginSchema>;
+export type ResetPasswordInput = z.infer<typeof resetPasswordSchema>;
+export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;

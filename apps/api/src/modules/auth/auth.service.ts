@@ -2,7 +2,7 @@ import { prisma } from '../../lib/prisma';
 import { env } from '../../config/env';
 import { hashPassword, verifyPassword } from '../../lib/password';
 import { createVerificationCode, checkVerificationCode } from '../../lib/codes';
-import { sendVerificationEmail } from '../../lib/mailer';
+import { sendPasswordResetEmail, sendVerificationEmail } from '../../lib/mailer';
 import { badRequest, conflict, unauthorized, forbidden, AppError } from '../../lib/errors';
 import { slugify } from '../../lib/text';
 
@@ -67,13 +67,17 @@ export async function register(input: { fullName: string; email: string; passwor
   return { email: input.email, verified: false };
 }
 
-export async function verify(email: string, code: string) {
-  const result = await checkVerificationCode(email, code);
+/** Turns a failed code check into the API error the user sees. */
+function assertCodeOk(result: Awaited<ReturnType<typeof checkVerificationCode>>) {
   if (result === 'locked') throw new AppError(429, 'RATE_LIMITED', 'Too many wrong codes. Request a new code.');
   if (result === 'expired') throw badRequest('This code has expired. Request a new one.', { code: 'Expired' });
   if (result === 'invalid') {
     throw badRequest('That code is not right. Check your email and try again.', { code: 'Incorrect code' });
   }
+}
+
+export async function verify(email: string, code: string) {
+  assertCodeOk(await checkVerificationCode(email, code));
   return prisma.user.update({ where: { email }, data: { emailVerified: true } });
 }
 
@@ -112,4 +116,36 @@ export async function demoLogin(handle: string) {
 /** Invalidates every session the user has (see sessionVersion in the schema). */
 export async function revokeAllSessions(userId: string) {
   await prisma.user.update({ where: { id: userId }, data: { sessionVersion: { increment: 1 } } });
+}
+
+/** Emails a reset code to verified, active accounts. Callers always answer "ok" so emails can't be probed. */
+export async function forgotPassword(email: string) {
+  const user = await prisma.user.findUnique({ where: { email }, select: { emailVerified: true, isSuspended: true } });
+  if (!user?.emailVerified || user.isSuspended) return;
+  const code = await createVerificationCode(email, 'RESET_PASSWORD');
+  await sendPasswordResetEmail(email, code);
+}
+
+/** Sets a new password from an emailed code and signs the account out everywhere. Does not start a session. */
+export async function resetPassword(input: { email: string; code: string; password: string }) {
+  assertCodeOk(await checkVerificationCode(input.email, input.code, 'RESET_PASSWORD'));
+  // A code is only issued to an existing account, but it could have been deleted since
+  const user = await prisma.user.findUnique({ where: { email: input.email }, select: { id: true } });
+  if (!user) throw badRequest('This code has expired. Request a new one.', { code: 'Expired' });
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { passwordHash: await hashPassword(input.password), sessionVersion: { increment: 1 } },
+  });
+}
+
+/** Changes the password of a signed-in user and revokes their other sessions. Returns the updated user. */
+export async function changePassword(userId: string, currentPassword: string, password: string) {
+  const user = await prisma.user.findUniqueOrThrow({ where: { id: userId }, select: { passwordHash: true } });
+  if (!(await verifyPassword(currentPassword, user.passwordHash))) {
+    throw unauthorized('Your current password is not right');
+  }
+  return prisma.user.update({
+    where: { id: userId },
+    data: { passwordHash: await hashPassword(password), sessionVersion: { increment: 1 } },
+  });
 }

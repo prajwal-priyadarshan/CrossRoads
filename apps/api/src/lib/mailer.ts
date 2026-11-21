@@ -16,6 +16,23 @@ export async function sendVerificationEmail(to: string, code: string) {
   });
 }
 
+export async function sendPasswordResetEmail(to: string, code: string) {
+  if (env.EMAIL_MODE === 'console' || !env.RESEND_API_KEY) {
+    logger.info(`[DEV] Password reset code for ${to}: ${code}`);
+    return;
+  }
+  const { Resend } = await import('resend');
+  const resend = new Resend(env.RESEND_API_KEY);
+  await resend.emails.send({
+    from: env.EMAIL_FROM,
+    to,
+    subject: `${code} is your ${env.APP_NAME} password reset code`,
+    text:
+      `Your ${env.APP_NAME} password reset code is ${code}. It expires in 10 minutes.\n\n` +
+      'If you did not ask to reset your password, ignore this email: your password stays the same.',
+  });
+}
+
 /**
  * Harassment / safety report alert, sent to the college's configured safeguarding contact (phase-12 §5).
  * Deliberately does not include the flagged message content — a coordinator reviews that inside the app,

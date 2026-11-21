@@ -36,6 +36,9 @@ const ROUTES: Row[] = [
   { method: 'post', path: '/auth/login', tag: 'Auth', summary: 'Log in and set the session cookie', auth: 'public', body: S.loginSchema },
   { method: 'post', path: '/auth/logout', tag: 'Auth', summary: 'Clear the session cookie', auth: 'auth' },
   { method: 'post', path: '/auth/logout-all', tag: 'Auth', summary: 'Sign out on every device (invalidates all existing session cookies)', auth: 'auth' },
+  { method: 'post', path: '/auth/forgot-password', tag: 'Auth', summary: 'Email a password reset code to a verified account; always returns ok so emails cannot be probed', auth: 'public', body: S.forgotPasswordSchema },
+  { method: 'post', path: '/auth/reset-password', tag: 'Auth', summary: 'Set a new password from the emailed code; signs out every session and does not sign in', auth: 'public', body: S.resetPasswordSchema },
+  { method: 'post', path: '/auth/change-password', tag: 'Auth', summary: 'Change the password; signs out other devices and refreshes this session', auth: 'auth', body: S.changePasswordSchema },
   { method: 'get', path: '/auth/me', tag: 'Auth', summary: 'The signed-in user, or null', auth: 'public' },
   { method: 'post', path: '/auth/demo-login', tag: 'Auth', summary: 'Sign in as a demo account (DEMO_MODE only)', auth: 'public', body: S.demoLoginSchema },
 

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import type { Me, RegisterInput, LoginInput } from '@crossroads/shared';
+import type { Me, RegisterInput, LoginInput, ResetPasswordInput, ChangePasswordInput } from '@crossroads/shared';
 import { api } from '@/lib/api';
 import { qk } from '@/lib/queryKeys';
 
@@ -8,6 +8,24 @@ export const useRegister = () =>
 
 export const useResend = () =>
   useMutation({ mutationFn: (email: string) => api('/auth/resend-code', { method: 'POST', json: { email } }) });
+
+export const useForgotPassword = () =>
+  useMutation({ mutationFn: (email: string) => api('/auth/forgot-password', { method: 'POST', json: { email } }) });
+
+/** Resetting signs out every session, so drop anything cached for a previous user. */
+export function useResetPassword() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (b: ResetPasswordInput) => api('/auth/reset-password', { method: 'POST', json: b }),
+    onSuccess: () => {
+      qc.clear();
+      qc.setQueryData(qk.me, null);
+    },
+  });
+}
+
+export const useChangePassword = () =>
+  useMutation({ mutationFn: (b: ChangePasswordInput) => api('/auth/change-password', { method: 'POST', json: b }) });
 
 export function useVerify() {
   const qc = useQueryClient();

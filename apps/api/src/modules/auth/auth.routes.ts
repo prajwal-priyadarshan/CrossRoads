@@ -1,5 +1,14 @@
 import { Router } from 'express';
-import { registerSchema, verifySchema, loginSchema, emailOnlySchema, demoLoginSchema } from '@crossroads/shared';
+import {
+  registerSchema,
+  verifySchema,
+  loginSchema,
+  emailOnlySchema,
+  demoLoginSchema,
+  forgotPasswordSchema,
+  resetPasswordSchema,
+  changePasswordSchema,
+} from '@crossroads/shared';
 import { validate } from '../../middleware/validate';
 import { authLimiter } from '../../middleware/rateLimits';
 import { requireAuth } from '../../middleware/auth';
@@ -41,6 +50,27 @@ authRouter.post('/logout', requireAuth, (_req, res) => {
 authRouter.post('/logout-all', requireAuth, async (req, res) => {
   await auth.revokeAllSessions(req.user!.id);
   clearSessionCookie(res);
+  res.json({ data: { ok: true } });
+});
+
+/** Always ok, whether or not the email has an account, so the endpoint can't be used to find accounts. */
+authRouter.post('/forgot-password', authLimiter, validate({ body: forgotPasswordSchema }), async (req, res) => {
+  await auth.forgotPassword(req.valid.body.email);
+  res.json({ data: { ok: true } });
+});
+
+/** Sets a new password from the emailed code. Signs out every session and does not sign in. */
+authRouter.post('/reset-password', authLimiter, validate({ body: resetPasswordSchema }), async (req, res) => {
+  await auth.resetPassword(req.valid.body);
+  clearSessionCookie(res);
+  res.json({ data: { ok: true } });
+});
+
+/** Changes the password; other devices are signed out, this one gets a fresh cookie. */
+authRouter.post('/change-password', requireAuth, authLimiter, validate({ body: changePasswordSchema }), async (req, res) => {
+  const { currentPassword, password } = req.valid.body;
+  const user = await auth.changePassword(req.user!.id, currentPassword, password);
+  setSessionCookie(res, signSession(user.id, user.role, user.sessionVersion));
   res.json({ data: { ok: true } });
 });
 

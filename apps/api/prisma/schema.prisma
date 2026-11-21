@@ -178,6 +178,7 @@ enum CampaignCategory {
 
 enum CodePurpose {
   VERIFY_EMAIL
+  RESET_PASSWORD
 }
 
 // ───────────── Auth helpers ─────────────
