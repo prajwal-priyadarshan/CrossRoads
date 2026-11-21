@@ -35,6 +35,7 @@ const ROUTES: Row[] = [
   { method: 'post', path: '/auth/resend-code', tag: 'Auth', summary: 'Resend the verification code', auth: 'public', body: S.emailOnlySchema },
   { method: 'post', path: '/auth/login', tag: 'Auth', summary: 'Log in and set the session cookie', auth: 'public', body: S.loginSchema },
   { method: 'post', path: '/auth/logout', tag: 'Auth', summary: 'Clear the session cookie', auth: 'auth' },
+  { method: 'post', path: '/auth/logout-all', tag: 'Auth', summary: 'Sign out on every device (invalidates all existing session cookies)', auth: 'auth' },
   { method: 'get', path: '/auth/me', tag: 'Auth', summary: 'The signed-in user, or null', auth: 'public' },
   { method: 'post', path: '/auth/demo-login', tag: 'Auth', summary: 'Sign in as a demo account (DEMO_MODE only)', auth: 'public', body: S.demoLoginSchema },
 

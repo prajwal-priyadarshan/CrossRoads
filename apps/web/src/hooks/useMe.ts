@@ -7,11 +7,12 @@ import { qk } from '@/lib/queryKeys';
 export const useMe = () =>
   useQuery({ queryKey: qk.me, queryFn: () => api<Me | null>('/auth/me'), staleTime: 60_000 });
 
-export function useLogout() {
+/** Signs out this device (/auth/logout) or every device (/auth/logout-all, which bumps the session version). */
+function useSignOut(path: '/auth/logout' | '/auth/logout-all') {
   const qc = useQueryClient();
   const navigate = useNavigate();
   return useMutation({
-    mutationFn: () => api('/auth/logout', { method: 'POST', json: {} }),
+    mutationFn: () => api(path, { method: 'POST', json: {} }),
     onSuccess: () => {
       qc.clear();
       qc.setQueryData(qk.me, null);
@@ -19,3 +20,6 @@ export function useLogout() {
     },
   });
 }
+
+export const useLogout = () => useSignOut('/auth/logout');
+export const useLogoutEverywhere = () => useSignOut('/auth/logout-all');

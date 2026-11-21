@@ -206,6 +206,8 @@ model User {
   passwordHash              String
   emailVerified             Boolean    @default(false)
   isSuspended               Boolean    @default(false)
+  /// Must match the `ver` claim of the session JWT. Incrementing it signs the user out everywhere.
+  sessionVersion            Int        @default(0)
   /// Can review safeguarding (HARASSMENT) reports and the flagged conversation content. Separate from ADMIN: most admins should not see this.
   isSafeguardingCoordinator Boolean    @default(false)
   handle                    String     @unique

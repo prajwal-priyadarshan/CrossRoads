@@ -108,3 +108,8 @@ export async function demoLogin(handle: string) {
   if (!user || !isDemo) throw forbidden('Not a demo account');
   return user;
 }
+
+/** Invalidates every session the user has (see sessionVersion in the schema). */
+export async function revokeAllSessions(userId: string) {
+  await prisma.user.update({ where: { id: userId }, data: { sessionVersion: { increment: 1 } } });
+}

@@ -17,7 +17,7 @@ authRouter.post('/register', authLimiter, validate({ body: registerSchema }), as
 
 authRouter.post('/verify', authLimiter, validate({ body: verifySchema }), async (req, res) => {
   const user = await auth.verify(req.valid.body.email, req.valid.body.code);
-  setSessionCookie(res, signSession(user.id, user.role));
+  setSessionCookie(res, signSession(user.id, user.role, user.sessionVersion));
   res.json({ data: toMe(user) });
 });
 
@@ -28,11 +28,18 @@ authRouter.post('/resend-code', authLimiter, validate({ body: emailOnlySchema })
 
 authRouter.post('/login', authLimiter, validate({ body: loginSchema }), async (req, res) => {
   const user = await auth.login(req.valid.body.email, req.valid.body.password);
-  setSessionCookie(res, signSession(user.id, user.role));
+  setSessionCookie(res, signSession(user.id, user.role, user.sessionVersion));
   res.json({ data: toMe(user) });
 });
 
 authRouter.post('/logout', requireAuth, (_req, res) => {
+  clearSessionCookie(res);
+  res.json({ data: { ok: true } });
+});
+
+/** Signs the user out on every device: bumping sessionVersion invalidates every cookie issued so far. */
+authRouter.post('/logout-all', requireAuth, async (req, res) => {
+  await auth.revokeAllSessions(req.user!.id);
   clearSessionCookie(res);
   res.json({ data: { ok: true } });
 });
@@ -45,6 +52,6 @@ authRouter.get('/me', async (req, res) => {
 
 authRouter.post('/demo-login', validate({ body: demoLoginSchema }), async (req, res) => {
   const user = await auth.demoLogin(req.valid.body.handle);
-  setSessionCookie(res, signSession(user.id, user.role));
+  setSessionCookie(res, signSession(user.id, user.role, user.sessionVersion));
   res.json({ data: toMe(user) });
 });

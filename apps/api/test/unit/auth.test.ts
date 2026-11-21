@@ -39,13 +39,13 @@ describe('isAllowedDomain', () => {
 });
 
 describe('session tokens', () => {
-  it('round-trips the user id and role', () => {
-    const payload = verifySession(signSession('user-1', 'SENIOR'));
-    expect(payload).toMatchObject({ sub: 'user-1', role: 'SENIOR', ver: 1 });
+  it('round-trips the user id, role and session version', () => {
+    const payload = verifySession(signSession('user-1', 'SENIOR', 3));
+    expect(payload).toMatchObject({ sub: 'user-1', role: 'SENIOR', ver: 3 });
   });
 
   it('returns null for a tampered or unparseable token', () => {
-    const token = signSession('user-1', 'STUDENT');
+    const token = signSession('user-1', 'STUDENT', 0);
     expect(verifySession(`${token}x`)).toBeNull();
     expect(verifySession('not-a-token')).toBeNull();
     expect(verifySession('')).toBeNull();

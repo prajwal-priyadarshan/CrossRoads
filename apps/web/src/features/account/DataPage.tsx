@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Download, Trash2 } from 'lucide-react';
+import { Download, LogOut, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { useLogoutEverywhere } from '@/hooks/useMe';
 import { ApiError, api } from '@/lib/api';
 import { qk } from '@/lib/queryKeys';
 
@@ -14,6 +15,7 @@ export function DataPage() {
   const qc = useQueryClient();
   const navigate = useNavigate();
   const [password, setPassword] = useState('');
+  const signOutEverywhere = useLogoutEverywhere();
   const remove = useMutation({
     mutationFn: () => api('/me', { method: 'DELETE', json: { password } }),
     onSuccess: () => {
@@ -43,6 +45,29 @@ export function DataPage() {
             <a href="/api/me/export" download>
               <Download /> Download my data
             </a>
+          </Button>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Sign out of all devices</CardTitle>
+          <CardDescription>
+            Ends every session, including this one and any browser you forgot to sign out of. You will need your password to sign in again.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button
+            variant="outline"
+            onClick={() =>
+              signOutEverywhere.mutate(undefined, {
+                onSuccess: () => toast.success('Signed out of all devices'),
+                onError: () => toast.error('Could not sign out of all devices'),
+              })
+            }
+            disabled={signOutEverywhere.isPending}
+          >
+            <LogOut /> Sign out everywhere
           </Button>
         </CardContent>
       </Card>
