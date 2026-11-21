@@ -1,5 +1,5 @@
 import { createApp } from './app';
-import { docsEnabled, env } from './config/env';
+import { demoShortcutsOn, docsEnabled, env } from './config/env';
 import { logger } from './lib/logger';
 import { prisma } from './lib/prisma';
 
@@ -7,6 +7,13 @@ const server = createApp().listen(env.PORT, () => {
   logger.info(`API listening on http://localhost:${env.PORT}`);
   if (docsEnabled) logger.info(`API docs on http://localhost:${env.PORT}/api/docs`);
 });
+
+if (env.ALLOW_DEMO_SHORTCUTS) {
+  logger.warn(
+    `ALLOW_DEMO_SHORTCUTS is on (active: ${demoShortcutsOn.join(', ') || 'none'}). ` +
+      'Never use this on a deployment real users can reach.',
+  );
+}
 
 if (!env.SAFEGUARDING_CONTACT_EMAIL) {
   // Deploy blocker, not a TODO (phase-12 §5): without a real contact, harassment reports only reach the

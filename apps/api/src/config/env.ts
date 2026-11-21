@@ -30,6 +30,9 @@ const schema = z.object({
   ALUMNI_OPEN_SIGNUP: bool('false'),
   // Dev/demo only: skip the emailed 6-digit code and mark new accounts verified. Refused in production (see below)
   AUTO_VERIFY_EMAIL: bool('false'),
+  // Explicit opt-in for the demo shortcuts above and DEMO_MODE. Never set on a deployment real users can reach:
+  // NODE_ENV alone is not a safe signal, because a staging box often runs as development.
+  ALLOW_DEMO_SHORTCUTS: bool('false'),
 
   // Email
   EMAIL_MODE: z.enum(['console', 'resend']).default('console'),
@@ -69,6 +72,17 @@ if (env.ALUMNI_OPEN_SIGNUP && env.NODE_ENV === 'production') {
   // Production alumni come in through the admin invite list (AllowedEmail), not open sign-up
   throw new Error('ALUMNI_OPEN_SIGNUP must be false in production; invite alumni from the admin panel');
 }
+
+/** Demo shortcuts that are switched on. Each lets people skip a real check, so each needs ALLOW_DEMO_SHORTCUTS. */
+export const demoShortcutsOn = (['AUTO_VERIFY_EMAIL', 'ALUMNI_OPEN_SIGNUP', 'DEMO_MODE'] as const).filter((k) => env[k]);
+if (demoShortcutsOn.length && !env.ALLOW_DEMO_SHORTCUTS) {
+  throw new Error(
+    `${demoShortcutsOn.join(', ')} ${demoShortcutsOn.length > 1 ? 'are' : 'is'} on, but ALLOW_DEMO_SHORTCUTS is not set. ` +
+      'These shortcuts let anyone skip email verification, sign up as an alumnus or sign in as a demo user. ' +
+      'Turn them off, or set ALLOW_DEMO_SHORTCUTS=true on a local or demo machine that real users cannot reach.',
+  );
+}
+
 export const isProd = env.NODE_ENV === 'production';
 export const aiEnabled = Boolean(env.AI_API_KEY);
 export const docsEnabled = env.API_DOCS_ENABLED ? env.API_DOCS_ENABLED === 'true' : !isProd;

@@ -35,7 +35,7 @@ Claude Code keeps this up to date. One box per task.
 - [x] 13.3 Revocable sessions
 - [x] 13.4 Forgot / reset / change password
 - [x] 13.5 Chat inbox N+1 fix
-- [ ] 13.6 Explicit demo-shortcut flag
+- [x] 13.6 Explicit demo-shortcut flag
 - [ ] 13.7 Harden the AI wrapper
 - [ ] 13.8 Error monitoring and health check
 - [ ] 13.9 Deployment config in the repo
