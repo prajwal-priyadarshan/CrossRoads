@@ -46,6 +46,8 @@ const schema = z.object({
   AI_MODEL: z.string().default('openai/gpt-oss-120b'),
   AI_MAX_TOKENS: z.coerce.number().int().positive().default(4_000),
   AI_TIMEOUT_MS: z.coerce.number().default(60_000),
+  // Retries on 429 / 5xx / timeouts, with the SDK's backoff. A reply that fails the schema is never retried.
+  AI_RETRIES: z.coerce.number().int().min(0).max(5).default(1),
 
   // Project guide (RAG chatbot): folder of the project's own docs, relative to apps/api. README.md sits one level above it.
   PROJECT_DOCS_DIR: z.string().default('../../docs'),

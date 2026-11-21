@@ -147,6 +147,7 @@ async function aiTwinInsights(
         })
         .join('\n');
       return generateJSON({
+        feature: 'twins',
         system: TWIN_INSIGHT_PROMPT,
         user: `Student: department ${startingPoint.department ?? 'unknown'}, interests ${
           startingPoint.interests.join(', ') || 'none'

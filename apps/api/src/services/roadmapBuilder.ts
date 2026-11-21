@@ -174,6 +174,7 @@ export async function aiRoadmap(ctx: Ctx, goalTrack: string) {
   ].join('\n\n');
 
   const out = await generateJSON({
+    feature: 'roadmap',
     system: ROADMAP_SYSTEM_PROMPT.replace('<current semester>', String(ctx.semester)),
     user,
     schema: aiRoadmapOut,

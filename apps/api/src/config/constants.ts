@@ -1,5 +1,7 @@
 /** Tuning constants for algorithms and lists. Product behaviour, not deployment config. */
 export const LIMITS = {
+  /** AI: completion-token floor per call. Reasoning models think before answering, so small budgets come back empty */
+  AI_MIN_COMPLETION_TOKENS: 1500,
   /** Default and maximum page sizes for cursor lists */
   PAGE_SIZE: 20,
   /** Chat: messages per page (newest first) and conversations shown in the inbox */

@@ -35,6 +35,7 @@ export async function answer(viewerId: string, input: { questionId?: string; tit
   try {
     const out = await cached(key, 60 * 60_000, () =>
       generateJSON({
+        feature: 'answer',
         system: ANSWER_SYSTEM_PROMPT,
         user:
           `Question: ${title}\nDetails: ${body || 'none'}\nSources:\n` +
@@ -106,6 +107,7 @@ export async function summary(viewerId: string, input: { postId?: string; compan
           return `[${i + 1}] ${e.year} ${e.role}: ${rounds}. Tips: ${e.tips || 'none'}`;
         });
         return generateJSON({
+          feature: 'company-summary',
           system: SUMMARY_SYSTEM_PROMPT,
           user: `Summarise these ${company.name} interview experiences:\n${numbered.join('\n')}`,
           schema: aiSummaryOut,
@@ -145,6 +147,7 @@ export async function summary(viewerId: string, input: { postId?: string; compan
       const out = await cached(key, 60 * 60_000, () => {
         const numbered = post.comments.map((c, i) => `[${i + 1}] ${c.body.slice(0, 400)}`);
         return generateJSON({
+          feature: 'thread-summary',
           system: SUMMARY_SYSTEM_PROMPT,
           user: `Thread: "${post.title}"\n\nComments:\n${numbered.join('\n')}`,
           schema: aiSummaryOut,
@@ -217,6 +220,7 @@ export async function parsePeopleQuery(query: string): Promise<{ filters: z.infe
   try {
     const out = await cached(`people-query:${query.toLowerCase().trim()}`, 60 * 60_000, () =>
       generateJSON({
+        feature: 'people-search',
         system: PEOPLE_SEARCH_SYSTEM_PROMPT,
         user: `Find: ${query}`,
         schema: aiPeopleFilterOut,

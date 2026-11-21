@@ -117,6 +117,7 @@ export async function askGuide(question: string): Promise<GuideAnswer> {
 
   try {
     const out = await generateJSON({
+      feature: 'guide',
       system: ANSWER_PROMPT,
       user: `Question: ${question}\n\nSources:\n${sources.map((s) => `[${s.n}] (${s.file} › ${s.heading}) ${s.excerpt}`).join('\n\n')}`,
       schema: answerOut,

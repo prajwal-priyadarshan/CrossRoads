@@ -44,6 +44,7 @@ export async function generateQuestion(session: { roundType: string; difficulty:
   if (aiEnabled && source) {
     try {
       const q = await generateJSON({
+        feature: 'sim-question',
         system: SIM_QUESTION_SYSTEM_PROMPT,
         user: `Company: ${company.name}. Round: ${session.roundType}. Difficulty: ${session.difficulty}/5.\nTopic reported by a senior: ${source.topic} (from a ${source.year} ${source.role} experience).\nOther topics reported for this round: ${[...new Set(pool.map((p) => p.topic))].slice(0, 10).join(', ')}.`,
         schema: aiQuestionOut,
@@ -66,6 +67,7 @@ export async function gradeWritten(q: { prompt: string; rubric: unknown }, answe
   if (aiEnabled) {
     try {
       return await generateJSON({
+        feature: 'sim-grade',
         system: SIM_GRADE_SYSTEM_PROMPT,
         user: `Question: ${q.prompt}\nRubric:\n${rubric.map((r, i) => `${i + 1}. ${r.point} (weight ${r.weight})`).join('\n')}\nStudent answer:\n${answer}`,
         schema: aiGradeOut,

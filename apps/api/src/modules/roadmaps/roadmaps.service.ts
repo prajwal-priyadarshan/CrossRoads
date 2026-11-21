@@ -118,7 +118,8 @@ export async function toggleStep(userId: string, roadmapId: string, stepId: stri
 export async function generateRoadmap(userId: string, input: { goalTrack: string; targetRole?: string; targetCompanySlugs?: string[] }) {
   const { gatherContext, deterministicRoadmap, aiRoadmap, computeGaps, aiEnabled } = await import('../../services/roadmapBuilder');
   const ctx = await gatherContext(userId, input);
-  let out: Awaited<ReturnType<typeof deterministicRoadmap>>;
+  // Either builder can produce it; the AI one may also rank a gap 'low'
+  let out: Awaited<ReturnType<typeof deterministicRoadmap>> | Awaited<ReturnType<typeof aiRoadmap>>;
   let usedAI = false;
   if (aiEnabled) {
     try {

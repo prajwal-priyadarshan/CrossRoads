@@ -66,6 +66,7 @@ export async function askAssistant(viewerId: string, message: string, history: H
     try {
       const convo = history.map((h) => `${h.role}: ${h.content}`).join('\n');
       parsed = await generateJSON({
+        feature: 'assistant',
         system: SYSTEM_PROMPT,
         user: `${convo ? `Conversation so far:\n${convo}\n\n` : ''}User: ${message}`,
         schema: aiAssistantOut,
