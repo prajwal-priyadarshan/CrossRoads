@@ -15,6 +15,8 @@
 
 <br />
 
+[![CI](https://github.com/prajwal-priyadarshan/CrossRoads/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/prajwal-priyadarshan/CrossRoads/actions/workflows/ci.yml)
+
 [![Hackathon](https://img.shields.io/badge/Hackathon-GENESIS'26-6366F1?style=for-the-badge)](https://github.com/prajwal-priyadarshan/Amrita_Ascend)
 [![Team](https://img.shields.io/badge/Team-FAB4-F59E0B?style=for-the-badge)](https://github.com/prajwal-priyadarshan/Amrita_Ascend)
 [![Team ID](https://img.shields.io/badge/Team%20ID-GEN26--A0H--H052-10B981?style=for-the-badge)](https://github.com/prajwal-priyadarshan/Amrita_Ascend)
