@@ -1,4 +1,5 @@
 import type { ChatConversation, ChatMessage, ChatMessagePage, ChatSendInput } from '@crossroads/shared';
+import { Prisma } from '../../generated/prisma/client';
 import { prisma } from '../../lib/prisma';
 import { decodeCursor, encodeCursor } from '../../lib/pagination';
 import { badRequest, forbidden, notFound } from '../../lib/errors';
@@ -38,6 +39,28 @@ const otherIdFor = (c: { userAId: string; userBId: string }, viewerId: string) =
 const readAtFor = (c: { userAId: string; readAtA: Date | null; readAtB: Date | null }, viewerId: string) =>
   c.userAId === viewerId ? c.readAtA : c.readAtB;
 
+/**
+ * Unread counts for the viewer across many conversations in one query: messages from the other person
+ * newer than the viewer's read time on their side of the thread (no read time yet = all unread).
+ * Conversations without unread messages are absent from the map.
+ */
+async function unreadCounts(viewerId: string, conversationIds: string[]) {
+  if (!conversationIds.length) return new Map<string, number>();
+  const rows = await prisma.$queryRaw<Array<{ conversationId: string; unread: number }>>(Prisma.sql`
+    SELECT m."conversationId", COUNT(*)::int AS unread
+    FROM "Message" m
+    JOIN "Conversation" c ON c.id = m."conversationId"
+    WHERE m."conversationId" IN (${Prisma.join(conversationIds)})
+      AND m."senderId" <> ${viewerId}
+      AND m."createdAt" > COALESCE(
+        CASE WHEN c."userAId" = ${viewerId} THEN c."readAtA" ELSE c."readAtB" END,
+        '-infinity'::timestamp
+      )
+    GROUP BY m."conversationId"
+  `);
+  return new Map(rows.map((r) => [r.conversationId, r.unread]));
+}
+
 export async function listConversations(me: SessionUser): Promise<ChatConversation[]> {
   const rows = await prisma.conversation.findMany({
     where: { OR: [{ userAId: me.id }, { userBId: me.id }] },
@@ -45,22 +68,15 @@ export async function listConversations(me: SessionUser): Promise<ChatConversati
     take: LIMITS.CHAT_LIST_MAX,
     include: { userA: { select: userLiteSelect }, userB: { select: userLiteSelect } },
   });
-  return Promise.all(
-    rows.map(async (c) => {
-      const readAt = readAtFor(c, me.id);
-      const unread = await prisma.message.count({
-        where: { conversationId: c.id, senderId: { not: me.id }, ...(readAt ? { createdAt: { gt: readAt } } : {}) },
-      });
-      return {
-        id: c.id,
-        other: c.userAId === me.id ? c.userB : c.userA,
-        lastMessagePreview: c.lastMessagePreview,
-        lastMessageAt: c.lastMessageAt?.toISOString() ?? null,
-        lastMessageMine: c.lastMessageSenderId === me.id,
-        unread,
-      };
-    }),
-  );
+  const unread = await unreadCounts(me.id, rows.map((c) => c.id));
+  return rows.map((c) => ({
+    id: c.id,
+    other: c.userAId === me.id ? c.userB : c.userA,
+    lastMessagePreview: c.lastMessagePreview,
+    lastMessageAt: c.lastMessageAt?.toISOString() ?? null,
+    lastMessageMine: c.lastMessageSenderId === me.id,
+    unread: unread.get(c.id) ?? 0,
+  }));
 }
 
 /** Opens (or returns) the one thread between two connected people. */
