@@ -30,7 +30,7 @@ This folder is the work plan after the hackathon build (Phases 00–12). It turn
 Claude Code keeps this up to date. One box per task.
 
 **Phase 13 — Harden**
-- [ ] 13.1 Unit tests run without a database
+- [x] 13.1 Unit tests run without a database
 - [ ] 13.2 Continuous integration
 - [ ] 13.3 Revocable sessions
 - [ ] 13.4 Forgot / reset / change password
